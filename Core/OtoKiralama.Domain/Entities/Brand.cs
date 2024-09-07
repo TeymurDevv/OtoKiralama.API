@@ -6,5 +6,6 @@ namespace OtoKiralama.Domain.Entities
     {
         public string Name { get; set; }
         public ICollection<Model> Models { get; set; }
+        public ICollection<Car> Cars { get; set; }
     }
 }
