@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OtoKiralama.Domain.Common;
 
 namespace OtoKiralama.Domain.Entities
 {
-    internal class Model
+    public class Model : BaseEntity
     {
+        public string Name { get; set; }
+        public int BrandId { get; set; }
+        public Brand Brand { get; set; }
     }
 }

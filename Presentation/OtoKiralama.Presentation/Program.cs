@@ -1,4 +1,10 @@
+using OtoKiralama.Application;
+using OtoKiralama.Presentation;
+using OtoKiralama.Presentation.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Register(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 // Add services to the container.
 
@@ -17,6 +23,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

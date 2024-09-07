@@ -3,9 +3,58 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{1FD26BBC-643E-45CC-8D73-01941472AF45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtoKiralama.Domain", "Core\OtoKiralama.Domain\OtoKiralama.Domain.csproj", "{80436AC3-05F6-4245-AE3C-2A17B218A703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtoKiralama.Application", "Core\OtoKiralama.Application\OtoKiralama.Application.csproj", "{482194FE-F1D8-42A5-B13D-7D58154D989B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastracture", "Infrastracture", "{29727E0A-8A66-47D2-8ACB-56DA79353FE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtoKiralama.Persistance", "Infrastructure\OtoKiralama.Persistance\OtoKiralama.Persistance.csproj", "{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtoKiralama.Infrastructure", "Infrastructure\OtoKiralama.Infrastructure\OtoKiralama.Infrastructure.csproj", "{DD7B72E9-374C-4999-A1A7-A69632B75E78}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{D9BDB9FF-9529-4FCD-9CD5-C1F06017FD10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtoKiralama.Presentation", "Presentation\OtoKiralama.Presentation\OtoKiralama.Presentation.csproj", "{C7738F4C-5264-46E1-AD34-DDB1E06C4119}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80436AC3-05F6-4245-AE3C-2A17B218A703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80436AC3-05F6-4245-AE3C-2A17B218A703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80436AC3-05F6-4245-AE3C-2A17B218A703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80436AC3-05F6-4245-AE3C-2A17B218A703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{482194FE-F1D8-42A5-B13D-7D58154D989B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{482194FE-F1D8-42A5-B13D-7D58154D989B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{482194FE-F1D8-42A5-B13D-7D58154D989B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{482194FE-F1D8-42A5-B13D-7D58154D989B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7B72E9-374C-4999-A1A7-A69632B75E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7B72E9-374C-4999-A1A7-A69632B75E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7B72E9-374C-4999-A1A7-A69632B75E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7B72E9-374C-4999-A1A7-A69632B75E78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7738F4C-5264-46E1-AD34-DDB1E06C4119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7738F4C-5264-46E1-AD34-DDB1E06C4119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7738F4C-5264-46E1-AD34-DDB1E06C4119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7738F4C-5264-46E1-AD34-DDB1E06C4119}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80436AC3-05F6-4245-AE3C-2A17B218A703} = {1FD26BBC-643E-45CC-8D73-01941472AF45}
+		{482194FE-F1D8-42A5-B13D-7D58154D989B} = {1FD26BBC-643E-45CC-8D73-01941472AF45}
+		{B8F84FE4-ED11-4DA9-828D-3AFDC90384D8} = {29727E0A-8A66-47D2-8ACB-56DA79353FE3}
+		{DD7B72E9-374C-4999-A1A7-A69632B75E78} = {29727E0A-8A66-47D2-8ACB-56DA79353FE3}
+		{C7738F4C-5264-46E1-AD34-DDB1E06C4119} = {D9BDB9FF-9529-4FCD-9CD5-C1F06017FD10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5E83C23-3E79-44F9-82F1-4E2542C1D248}
