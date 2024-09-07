@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Domain.Entities;
+using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Persistance.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarDetail> CarDetails { get; set; }

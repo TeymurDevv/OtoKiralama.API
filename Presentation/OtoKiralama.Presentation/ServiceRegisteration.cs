@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Profiles;
 using OtoKiralama.Persistance.Data;
+using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Presentation
 {
@@ -17,7 +18,7 @@ namespace OtoKiralama.Presentation
                                      sqlOptions => sqlOptions.MigrationsAssembly("OtoKiralama.Persistance"));
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = true;
