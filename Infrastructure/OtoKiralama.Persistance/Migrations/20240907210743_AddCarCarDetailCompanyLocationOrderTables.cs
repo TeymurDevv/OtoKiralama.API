@@ -11,7 +11,7 @@ namespace OtoKiralama.Persistance.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Class",
+                name: "Classes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,11 +21,11 @@ namespace OtoKiralama.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Class", x => x.Id);
+                    table.PrimaryKey("PK_Classes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Company",
+                name: "Companies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -36,11 +36,11 @@ namespace OtoKiralama.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Company", x => x.Id);
+                    table.PrimaryKey("PK_Companies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -49,11 +49,11 @@ namespace OtoKiralama.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Car",
+                name: "Cars",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -71,32 +71,32 @@ namespace OtoKiralama.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Car", x => x.Id);
+                    table.PrimaryKey("PK_Cars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Car_Brands_BrandId",
+                        name: "FK_Cars_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Car_Class_ClassId",
+                        name: "FK_Cars_Classes_ClassId",
                         column: x => x.ClassId,
-                        principalTable: "Class",
+                        principalTable: "Classes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Car_Company_CompanyId",
+                        name: "FK_Cars_Companies_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Company",
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Car_Location_LocationId",
+                        name: "FK_Cars_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Car_Models_ModelId",
+                        name: "FK_Cars_Models_ModelId",
                         column: x => x.ModelId,
                         principalTable: "Models",
                         principalColumn: "Id",
@@ -104,7 +104,7 @@ namespace OtoKiralama.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarDetail",
+                name: "CarDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -116,64 +116,93 @@ namespace OtoKiralama.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarDetail", x => x.Id);
+                    table.PrimaryKey("PK_CarDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarDetail_Car_CarId",
+                        name: "FK_CarDetails_Cars_CarId",
                         column: x => x.CarId,
-                        principalTable: "Car",
+                        principalTable: "Cars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Cars_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Cars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_BrandId",
-                table: "Car",
+                name: "IX_CarDetails_CarId",
+                table: "CarDetails",
+                column: "CarId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cars_BrandId",
+                table: "Cars",
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_ClassId",
-                table: "Car",
+                name: "IX_Cars_ClassId",
+                table: "Cars",
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_CompanyId",
-                table: "Car",
+                name: "IX_Cars_CompanyId",
+                table: "Cars",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_LocationId",
-                table: "Car",
+                name: "IX_Cars_LocationId",
+                table: "Cars",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_ModelId",
-                table: "Car",
+                name: "IX_Cars_ModelId",
+                table: "Cars",
                 column: "ModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarDetail_CarId",
-                table: "CarDetail",
-                column: "CarId",
-                unique: true);
+                name: "IX_Orders_CarId",
+                table: "Orders",
+                column: "CarId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CarDetail");
+                name: "CarDetails");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Class");
+                name: "Cars");
 
             migrationBuilder.DropTable(
-                name: "Company");
+                name: "Classes");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Companies");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }
