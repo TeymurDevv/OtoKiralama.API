@@ -1,10 +1,13 @@
 ﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OtoKiralama.Application.Profiles;
 using OtoKiralama.Persistance.Data;
 using OtoKiralama.Persistance.Entities;
+using System.Text;
 
 namespace OtoKiralama.Presentation
 {
@@ -59,6 +62,24 @@ namespace OtoKiralama.Presentation
                 opt.AddProfile(new MapperProfile());
             });
             services.AddFluentValidationRulesToSwagger();
+            services.AddAuthentication(x =>
+            {
+
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration.GetSection("Jwt:Issuer").Value,
+                    ValidAudience = configuration.GetSection("Jwt:Audience").Value,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Jwt:SecretKey").Value))
+                };
+            });
         }
     }
 
