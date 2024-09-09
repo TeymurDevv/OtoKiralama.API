@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Interfaces;
 
@@ -24,6 +25,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _brandService.GetBrandByIdAsync(id));
         }
+        [Authorize(Roles ="admin")]
         [HttpPost("")]
         public async Task<IActionResult> CreateBrand([FromForm] BrandCreateDto brandCreateDto)
         {
@@ -36,8 +38,9 @@ namespace OtoKiralama.Presentation.Controllers
         //    await _categoryService.UpdateCategoryAsync(id, categoryUpdateDto);
         //    return StatusCode(StatusCodes.Status200OK);
         //}
+        [Authorize(Roles ="admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategoryById(int id)
+        public async Task<IActionResult> DeleteBrandById(int id)
         {
             await _brandService.DeleteBrandAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
