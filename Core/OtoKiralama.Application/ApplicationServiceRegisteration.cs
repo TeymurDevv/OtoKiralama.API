@@ -12,7 +12,6 @@ namespace OtoKiralama.Application
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IBrandService, BrandService>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
