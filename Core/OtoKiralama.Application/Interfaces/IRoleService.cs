@@ -4,6 +4,6 @@ namespace OtoKiralama.Application.Interfaces
 {
     public interface IRoleService
     {
-        Task<IEnumerable<RoleReturnDto>> GetAllRoles();
+        Task<IEnumerable<RoleReturnDto>> GetAllRolesAsync();
     }
 }
