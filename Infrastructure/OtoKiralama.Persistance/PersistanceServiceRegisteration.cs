@@ -11,7 +11,7 @@ namespace OtoKiralama.Persistance
 {
     public static class PersistanceServiceRegisteration
     {
-        public static void Register(this IServiceCollection services, string connectionString)
+        public static void AddPersistanceServices(this IServiceCollection services, string connectionString)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ILocationRepository, LocationRepository>();
