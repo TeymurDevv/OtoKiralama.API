@@ -14,7 +14,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             _roleService = roleService;
         }
-
+        [HttpGet("")]
         public async Task<IActionResult> Get()
         {
             return Ok(await _roleService.GetAllRolesAsync());
