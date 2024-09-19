@@ -14,6 +14,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
