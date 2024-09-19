@@ -1,4 +1,4 @@
-﻿namespace OtoKiralama.Domain.Common
+﻿namespace OtoKiralama.Domain.Entities.Common
 {
     public class BaseEntity
     {

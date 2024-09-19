@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Application.Services;
-
 namespace OtoKiralama.Presentation.Controllers
 {
     [Route("api/[controller]")]

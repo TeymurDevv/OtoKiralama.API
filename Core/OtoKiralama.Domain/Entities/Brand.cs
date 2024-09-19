@@ -1,4 +1,4 @@
-﻿using OtoKiralama.Domain.Common;
+﻿using OtoKiralama.Domain.Entities.Common;
 
 namespace OtoKiralama.Domain.Entities
 {
