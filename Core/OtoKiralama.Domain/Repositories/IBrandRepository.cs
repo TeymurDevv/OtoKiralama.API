@@ -2,7 +2,7 @@
 
 namespace OtoKiralama.Domain.Repositories
 {
-    public interface IBrandService:IRepository<Brand>
+    public interface IBrandRepository:IRepository<Brand>
     {
     }
 }
