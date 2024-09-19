@@ -6,6 +6,7 @@ using OtoKiralama.Application.Settings;
 using OtoKiralama.Presentation;
 using OtoKiralama.Presentation.Middlewares;
 using System.Text;
+using OtoKiralama.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -63,6 +64,7 @@ builder.Services.AddSwaggerGen(c => {
     });
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddPersistanceServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
