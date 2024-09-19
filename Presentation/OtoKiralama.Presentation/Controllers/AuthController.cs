@@ -58,5 +58,13 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(new { token = _tokenService.GetToken(SecretKey, Audience, Issuer, existUser, roles) });
 
         }
+        [HttpGet]
+        public async Task<IActionResult> CreateRole()
+        {
+
+            await _roleManager.CreateAsync(new IdentityRole("admin"));
+            await _roleManager.CreateAsync(new IdentityRole("member"));
+            return Ok();
+        }
     }
 }
