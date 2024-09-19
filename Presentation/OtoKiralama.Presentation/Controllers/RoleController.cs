@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -7,5 +8,16 @@ namespace OtoKiralama.Presentation.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
+        private readonly IRoleService _roleService;
+
+        public RoleController(IRoleService roleService)
+        {
+            _roleService = roleService;
+        }
+
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await _roleService.GetAllRolesAsync());
+        }
     }
 }
