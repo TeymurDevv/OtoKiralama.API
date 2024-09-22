@@ -27,7 +27,7 @@ namespace OtoKiralama.Presentation.Controllers
         }
         [Authorize(Roles ="admin")]
         [HttpPost("")]
-        public async Task<IActionResult> CreateBrand([FromForm] BrandCreateDto brandCreateDto)
+        public async Task<IActionResult> CreateBrand(BrandCreateDto brandCreateDto)
         {
             await _brandService.CreateBrandAsync(brandCreateDto);
             return StatusCode(StatusCodes.Status201Created);
