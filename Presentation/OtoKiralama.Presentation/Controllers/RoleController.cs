@@ -19,5 +19,10 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _roleService.GetAllRolesAsync());
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRoleById(string id)
+        {
+            return Ok(await _roleService.GetRoleByIdAsync(id));
+        }
     }
 }
