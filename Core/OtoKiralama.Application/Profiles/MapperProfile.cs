@@ -16,6 +16,7 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Location, LocationReturnDto>();
             CreateMap<LocationCreateDto, Location>();
             CreateMap<IdentityRole, RoleReturnDto>();
+            CreateMap<RoleCreateDto, IdentityRole>();
         }
     }
 }
