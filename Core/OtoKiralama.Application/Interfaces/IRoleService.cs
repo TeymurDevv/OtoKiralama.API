@@ -6,5 +6,6 @@ namespace OtoKiralama.Application.Interfaces
     {
         Task<IEnumerable<RoleReturnDto>> GetAllRolesAsync();
         Task<RoleReturnDto> GetRoleByIdAsync(string id);
+        Task CreateRoleAsync(RoleCreateDto roleCreateDto);
     }
 }
