@@ -30,5 +30,13 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Role not found with this Id");
             return _mapper.Map<RoleReturnDto>(role);
         }
+        public async Task CreateRoleAsync(RoleCreateDto roleCreateDto)
+        {
+            var role = _mapper.Map<IdentityRole>(roleCreateDto);
+            var existRole = await _roleManager.FindByNameAsync(role.Name);
+            if (existRole is not null)
+                throw new CustomException(400, "Name", "Role already exist with this name");
+            await _roleManager.CreateAsync(role);
+        }
     }
 }
