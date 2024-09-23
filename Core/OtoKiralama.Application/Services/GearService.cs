@@ -21,11 +21,11 @@ namespace OtoKiralama.Application.Services
 
         public async Task CreateGearAsync(GearCreateDto gearCreateDto)
         {
-            var gear = _mapper.Map<Location>(gearCreateDto);
+            var gear = _mapper.Map<Gear>(gearCreateDto);
             var existGear = await _unitOfWork.GearRepository.isExists(g => g.Name == g.Name);
             if (existGear)
                 throw new CustomException(400, "Name", "Gear already exist with this name");
-            await _unitOfWork.LocationRepository.Create(gear);
+            await _unitOfWork.GearRepository.Create(gear);
             _unitOfWork.Commit();
         }
 
