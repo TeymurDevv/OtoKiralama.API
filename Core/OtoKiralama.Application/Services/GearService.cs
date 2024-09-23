@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Dtos.Location;
+using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
+using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
 
 namespace OtoKiralama.Application.Services
 {
-    [Authorize(Roles = "admin")]
     public class GearService : IGearService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -18,24 +19,37 @@ namespace OtoKiralama.Application.Services
             _mapper = mapper;
         }
 
-        public Task CreateGearAsync(GearCreateDto gearCreateDto)
+        public async Task CreateGearAsync(GearCreateDto gearCreateDto)
         {
-            throw new NotImplementedException();
+            var gear = _mapper.Map<Location>(gearCreateDto);
+            var existGear = await _unitOfWork.GearRepository.isExists(g => g.Name == g.Name);
+            if (existGear)
+                throw new CustomException(400, "Name", "Gear already exist with this name");
+            await _unitOfWork.LocationRepository.Create(gear);
+            _unitOfWork.Commit();
         }
 
-        public Task DeleteGearAsync(int id)
+        public async Task DeleteGearAsync(int id)
         {
-            throw new NotImplementedException();
+            var gear = await _unitOfWork.GearRepository.GetEntity(g => g.Id == id);
+            if (gear is null)
+                throw new CustomException(404, "Id", "Gear not found with this Id");
+            await _unitOfWork.GearRepository.Delete(gear);
+            _unitOfWork.Commit();
         }
 
-        public Task<List<GearReturnDto>> GetAllGearsAsync()
+        public async Task<List<GearReturnDto>> GetAllGearsAsync()
         {
-            throw new NotImplementedException();
+            var gears = await _unitOfWork.GearRepository.GetAll();
+            return _mapper.Map<List<GearReturnDto>>(gears);
         }
 
-        public Task<GearReturnDto> GetGearByIdAsync(int id)
+        public async Task<GearReturnDto> GetGearByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var gear = await _unitOfWork.GearRepository.GetEntity(g => g.Id == id);
+            if (gear is null)
+                throw new CustomException(404, "Id", "Gear not found with this Id");
+            return _mapper.Map<GearReturnDto>(gear);
         }
     }
 }
