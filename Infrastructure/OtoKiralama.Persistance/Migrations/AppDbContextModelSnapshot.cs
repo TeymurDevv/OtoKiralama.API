@@ -168,7 +168,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Gear", b =>
@@ -184,7 +184,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gears");
+                    b.ToTable("Gears", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Location", b =>
@@ -200,7 +200,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Persistance.Entities.AppUser", b =>
