@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.Gear;
-using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -22,7 +21,7 @@ namespace OtoKiralama.Application.Services
         public async Task CreateGearAsync(GearCreateDto gearCreateDto)
         {
             var gear = _mapper.Map<Gear>(gearCreateDto);
-            var existGear = await _unitOfWork.GearRepository.isExists(g => g.Name == g.Name);
+            var existGear = await _unitOfWork.GearRepository.isExists(g => g.Name == gearCreateDto.Name);
             if (existGear)
                 throw new CustomException(400, "Name", "Gear already exist with this name");
             await _unitOfWork.GearRepository.Create(gear);
