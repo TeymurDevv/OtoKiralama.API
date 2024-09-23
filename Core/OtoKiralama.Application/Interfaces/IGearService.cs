@@ -1,4 +1,6 @@
-﻿namespace OtoKiralama.Application.Interfaces
+﻿using OtoKiralama.Application.Dtos.Gear;
+
+namespace OtoKiralama.Application.Interfaces
 {
     public interface IGearService
     {
