@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Persistance.Data.Implementations;
 
 namespace OtoKiralama.Application.Services
 {
+    [Authorize(Roles = "admin")]
     public class GearService : IGearService
     {
         private readonly IUnitOfWork _unitOfWork;
