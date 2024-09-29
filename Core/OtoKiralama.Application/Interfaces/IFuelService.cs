@@ -1,12 +1,13 @@
-﻿using OtoKiralama.Application.Dtos.Gear;
+﻿
+using OtoKiralama.Application.Dtos.Fuel;
 
 namespace OtoKiralama.Application.Interfaces
 {
     public interface IFuelService
     {
-        Task<List<GearReturnDto>> GetAllFuelsAsync();
-        Task<GearReturnDto> GetFuelByIdAsync(int id);
-        Task CreateFuelAsync(GearCreateDto gearCreateDto);
+        Task<List<FuelReturnDto>> GetAllFuelsAsync();
+        Task<FuelReturnDto> GetFuelByIdAsync(int id);
+        Task CreateFuelAsync(FuelCreateDto fuelCreateDto);
         Task DeleteFuelAsync(int id);
     }
 }
