@@ -11,6 +11,7 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Body> Bodies { get; set; }
+        public DbSet<Fuel> Fuels { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
