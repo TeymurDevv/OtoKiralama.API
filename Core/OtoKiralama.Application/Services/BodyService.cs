@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.Body;
+using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
+using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
 
 namespace OtoKiralama.Application.Services
@@ -16,24 +19,38 @@ namespace OtoKiralama.Application.Services
             _mapper = mapper;
         }
 
-        public Task CreateGearAsync(BodyCreateDto bodyCreateDto)
+        public async Task CreateBodyAsync(BodyCreateDto bodyCreateDto)
         {
-            throw new NotImplementedException();
+            var body = _mapper.Map<Body>(bodyCreateDto);
+            var existBody =await  _unitOfWork.BodyRepository.isExists(b=>b.Name == bodyCreateDto.Name);
+            if (existBody)
+                throw new CustomException(400, "Name", "Body already exist with this name");
+            await _unitOfWork.BodyRepository.Create(body);
+            _unitOfWork.Commit();
+
         }
 
-        public Task DeleteGearAsync(int id)
+        public async Task DeleteBodyAsync(int id)
         {
-            throw new NotImplementedException();
+            var body = await _unitOfWork.BodyRepository.GetEntity(b => b.Id == id);
+            if (body is null)
+                throw new CustomException(404, "Id", "Body not found with this Id");
+            await _unitOfWork.BodyRepository.Delete(body);
+            _unitOfWork.Commit();
         }
 
-        public Task<List<BodyReturnDto>> GetAllGearsAsync()
+        public async Task<List<BodyReturnDto>> GetAllBodiesAsync()
         {
-            throw new NotImplementedException();
+            var bodies = await _unitOfWork.BodyRepository.GetAll();
+            return _mapper.Map<List<BodyReturnDto>>(bodies);
         }
 
-        public Task<BodyReturnDto> GetGearByIdAsync(int id)
+        public async Task<BodyReturnDto> GetBodyByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var body = await _unitOfWork.BodyRepository.GetEntity(b => b.Id == id);
+            if (body is null)
+                throw new CustomException(404, "Id", "Body not found with this Id");
+            return _mapper.Map<BodyReturnDto>(body);
         }
     }
 }
