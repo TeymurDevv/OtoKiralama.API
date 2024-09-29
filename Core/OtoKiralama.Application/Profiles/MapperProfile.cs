@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
+using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Role;
@@ -23,7 +24,8 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Gear, GearReturnDto>();
             CreateMap<BodyCreateDto, Body>();
             CreateMap<Body, BodyReturnDto>();
-
+            CreateMap<FuelCreateDto, Fuel>();
+            CreateMap<Fuel, FuelReturnDto>();
         }
     }
 }
