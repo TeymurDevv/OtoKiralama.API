@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
@@ -20,6 +21,9 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<RoleCreateDto, IdentityRole>();
             CreateMap<GearCreateDto, Gear>();
             CreateMap<Gear, GearReturnDto>();
+            CreateMap<BodyCreateDto, Body>();
+            CreateMap<Body, BodyReturnDto>();
+
         }
     }
 }
