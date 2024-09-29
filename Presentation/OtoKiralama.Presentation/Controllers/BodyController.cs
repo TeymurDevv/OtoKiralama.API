@@ -1,0 +1,42 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using OtoKiralama.Application.Dtos.Body;
+using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Interfaces;
+using OtoKiralama.Application.Services;
+
+namespace OtoKiralama.Presentation.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BodyController : ControllerBase
+    {
+        private readonly IBodyService _bodyService;
+
+        public BodyController(IBodyService bodyService)
+        {
+            _bodyService = bodyService;
+        }
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllBodies()
+        {
+            return Ok(await _bodyService.GetAllBodiesAsync());
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBodyById(int id)
+        {
+            return Ok(await _bodyService.GetBodyByIdAsync(id));
+        }
+        [HttpPost("")]
+        public async Task<IActionResult> CreateBody(BodyCreateDto bodyCreateDto)
+        {
+            await _bodyService.CreateBodyAsync(bodyCreateDto);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGearById(int id)
+        {
+            await _bodyService.DeleteBodyAsync(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+    }
+}
