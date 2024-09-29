@@ -5,9 +5,9 @@ namespace OtoKiralama.Application.Interfaces
 {
     public interface IBodyService
     {
-        Task<List<BodyReturnDto>> GetAllGearsAsync();
-        Task<BodyReturnDto> GetGearByIdAsync(int id);
-        Task CreateGearAsync(BodyCreateDto bodyCreateDto);
-        Task DeleteGearAsync(int id);
+        Task<List<BodyReturnDto>> GetAllBodiesAsync();
+        Task<BodyReturnDto> GetBodyByIdAsync(int id);
+        Task CreateBodyAsync(BodyCreateDto bodyCreateDto);
+        Task DeleteBodyAsync(int id);
     }
 }
