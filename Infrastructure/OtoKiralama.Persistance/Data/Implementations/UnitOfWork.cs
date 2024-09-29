@@ -10,13 +10,15 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public IBrandRepository BrandRepository { get; private set; }
         public IGearRepository GearRepository { get; private set; }
         public IBodyRepository BodyRepository { get; private set; }
-        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository)
+        public IFuelRepository FuelRepository { get; private set; }
+        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository)
         {
             _context = context;
             LocationRepository = locationRepository;
             BrandRepository = brandRepository;
             GearRepository = gearRepository;
             BodyRepository = bodyRepository;
+            FuelRepository = fuelRepository;
         }
 
         public void Commit()
