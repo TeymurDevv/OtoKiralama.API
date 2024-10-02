@@ -1,0 +1,41 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using OtoKiralama.Application.Dtos.Class;
+using OtoKiralama.Application.Interfaces;
+
+namespace OtoKiralama.Presentation.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ClassController : ControllerBase
+    {
+        private readonly IClassService _classService;
+
+        public ClassController(IClassService classService)
+        {
+            _classService = classService;
+        }
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllClasses()
+        {
+            return Ok(await _classService.GetAllClassesAsync());
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetClassById(int id)
+        {
+            return Ok(await _classService.GetClassByIdAsync(id));
+        }
+        [HttpPost("")]
+        public async Task<IActionResult> CreateClass(ClassCreateDto classCreateDto)
+        {
+            await _classService.CreateClassAsync(classCreateDto);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClassById(int id)
+        {
+            await _classService.DeleteClassAsync(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+    }
+}

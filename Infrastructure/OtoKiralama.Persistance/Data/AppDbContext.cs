@@ -7,6 +7,7 @@ namespace OtoKiralama.Persistance.Data
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
+        public DbSet<Class> Classes { get; set; }
         public DbSet<Gear> Gears { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Brand> Brands { get; set; }
