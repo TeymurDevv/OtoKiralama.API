@@ -25,14 +25,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _locationService.GetLocationByIdAsync(id));
         }
-        [Authorize(Roles ="admin")]
         [HttpPost]
         public async Task<IActionResult> CreateLocation([FromBody] LocationCreateDto locationCreateDto)
         {
             await _locationService.CreateLocationAsync(locationCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
-        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocationById(int id)
         {

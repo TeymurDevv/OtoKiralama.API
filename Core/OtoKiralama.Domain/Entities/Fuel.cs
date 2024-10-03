@@ -5,5 +5,6 @@ namespace OtoKiralama.Domain.Entities
     public class Fuel:BaseEntity
     {
         public string Name { get; set; }
+        public List<Car> Cars { get; set; }
     }
 }

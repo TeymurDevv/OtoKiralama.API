@@ -6,5 +6,7 @@ namespace OtoKiralama.Persistance.Entities
     public class AppUser : IdentityUser, IAppUser
     {
         public string FullName { get; set; }
+        public int? CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }

@@ -6,7 +6,6 @@ using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers
 {
-    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class GearController : ControllerBase

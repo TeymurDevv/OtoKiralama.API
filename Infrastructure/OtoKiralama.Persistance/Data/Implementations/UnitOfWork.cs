@@ -12,7 +12,9 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public IBodyRepository BodyRepository { get; private set; }
         public IFuelRepository FuelRepository { get; private set; }
         public IClassRepository ClassRepository { get; private set; }
-        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository, IClassRepository classRepository)
+        public ICarRepository CarRepository { get; private set; }
+        public ICompanyRepository CompanyRepository { get; private set; }
+        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository, IClassRepository classRepository, ICarRepository carRepository, ICompanyRepository companyRepository)
         {
             _context = context;
             LocationRepository = locationRepository;
@@ -21,6 +23,8 @@ namespace OtoKiralama.Persistance.Data.Implementations
             BodyRepository = bodyRepository;
             FuelRepository = fuelRepository;
             ClassRepository = classRepository;
+            CarRepository = carRepository;
+            CompanyRepository = companyRepository;
         }
 
         public void Commit()

@@ -19,6 +19,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IBodyService, BodyService>();
             services.AddScoped<IFuelService, FuelService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<ICarService, CarService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();

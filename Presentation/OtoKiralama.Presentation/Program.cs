@@ -7,11 +7,12 @@ using OtoKiralama.Presentation;
 using OtoKiralama.Presentation.Middlewares;
 using System.Text;
 using OtoKiralama.Persistance;
-
+using OtoKiralama.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 builder.Services.Register(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
 
 // Add services to the container.
 
