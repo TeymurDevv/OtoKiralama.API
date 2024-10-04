@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -62,7 +61,7 @@ namespace OtoKiralama.Presentation.Controllers
             appUser.FullName = registerCompanyUserDto.FullName;
             var result = await _userManager.CreateAsync(appUser, registerCompanyUserDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
-            await _userManager.AddToRoleAsync(appUser, "agentPersonel");
+            await _userManager.AddToRoleAsync(appUser, "companyPersonel");
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("CompanyAdminRegister")]
@@ -70,7 +69,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             var existCompany = await _unitOfWork.CompanyRepository.GetEntity(c => c.Id == registerCompanyUserDto.CompanyId);
             if (existCompany is null)
-                throw new CustomException(400, "CompanyId", "Company does not exist with this name");
+                throw new CustomException(400, "CompanyId", "Company does not exist with this Id");
             var existUser = await _userManager.FindByNameAsync(registerCompanyUserDto.UserName);
             if (existUser != null) return BadRequest();
             AppUser appUser = new AppUser();
@@ -79,7 +78,7 @@ namespace OtoKiralama.Presentation.Controllers
             appUser.FullName = registerCompanyUserDto.FullName;
             var result = await _userManager.CreateAsync(appUser, registerCompanyUserDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
-            await _userManager.AddToRoleAsync(appUser, "agentAdmin");
+            await _userManager.AddToRoleAsync(appUser, "companyAdmin");
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -103,7 +102,7 @@ namespace OtoKiralama.Presentation.Controllers
 
             await _roleManager.CreateAsync(new IdentityRole("admin"));
             await _roleManager.CreateAsync(new IdentityRole("member"));
-            await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
+            await _roleManager.CreateAsync(new IdentityRole("companyAdmin"));
             await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
             return Ok();
         }

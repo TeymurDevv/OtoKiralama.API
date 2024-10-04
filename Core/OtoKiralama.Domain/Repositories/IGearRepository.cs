@@ -4,5 +4,6 @@ namespace OtoKiralama.Domain.Repositories
 {
     public interface IGearRepository:IRepository<Gear>
     {
+        Task<int> CountAsync();
     }
 }

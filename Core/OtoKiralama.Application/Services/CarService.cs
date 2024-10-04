@@ -29,9 +29,15 @@ namespace OtoKiralama.Application.Services
             var existLocation = await _unitOfWork.LocationRepository.isExists(l => l.Id == carCreateDto.LocationId);
             if (!existLocation)
                 throw new CustomException(404, "LocationId", "Location not found with this Id");
+            var existCompany = await _unitOfWork.CompanyRepository.isExists(c => c.Id == carCreateDto.CompanyId);
+            if (!existCompany)
+                throw new CustomException(404, "CompanyId", "Company not found with this Id");
             var existBrand = await _unitOfWork.BrandRepository.isExists(b => b.Id == carCreateDto.BrandId);
             if (!existBrand)
                 throw new CustomException(404, "BrandId", "Brand not found with this Id");
+            var existModel = await _unitOfWork.ModelRepository.isExists(m => m.Id == carCreateDto.ModelId);
+            if (!existModel)
+                throw new CustomException(404, "ModelId", "Model not found with this Id");
             var existGear = await _unitOfWork.GearRepository.isExists(g => g.Id == carCreateDto.GearId);
             if (!existGear)
                 throw new CustomException(404, "GearId", "Gear not found with this Id");
@@ -64,11 +70,13 @@ namespace OtoKiralama.Application.Services
             var cars = await _unitOfWork.CarRepository.GetAll(
                 includes: query => query
                     .Include(c => c.Brand)
+                    .Include(c => c.Model)
                     .Include(c => c.Body)
                     .Include(c => c.Class)
                     .Include(c => c.Fuel)
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
+                    .Include(c => c.Company)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
             );
@@ -87,11 +95,13 @@ namespace OtoKiralama.Application.Services
                 c => c.Id == id,
                 includes: query => query
                     .Include(c => c.Brand)
+                    .Include(c => c.Model)
                     .Include(c => c.Body)
                     .Include(c => c.Class)
                     .Include(c => c.Fuel)
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
+                    .Include(c => c.Company)
             );
 
             if (car is null)

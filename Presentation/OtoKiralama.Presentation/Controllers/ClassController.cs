@@ -16,9 +16,10 @@ namespace OtoKiralama.Presentation.Controllers
             _classService = classService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> GetAllClasses()
+        public async Task<IActionResult> GetAllClasses(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _classService.GetAllClassesAsync());
+            var classes = await _classService.GetAllClassesAsync(pageNumber, pageSize);
+            return Ok(classes);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClassById(int id)

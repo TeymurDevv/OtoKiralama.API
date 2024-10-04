@@ -4,5 +4,6 @@ namespace OtoKiralama.Domain.Repositories
 {
     public interface ICompanyRepository:IRepository<Company>
     {
+        Task<int> CountAsync();
     }
 }

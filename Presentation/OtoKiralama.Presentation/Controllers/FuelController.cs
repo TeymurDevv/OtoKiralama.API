@@ -15,9 +15,10 @@ namespace OtoKiralama.Presentation.Controllers
             _fuelService = fuelService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> GetAllFuels()
+        public async Task<IActionResult> GetAllFuels(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _fuelService.GetAllFuelsAsync());
+            var fuels = await _fuelService.GetAllFuelsAsync(pageNumber, pageSize);
+            return Ok(fuels);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFuelById(int id)

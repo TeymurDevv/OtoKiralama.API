@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Brand;
+using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Location;
+using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -38,10 +40,21 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.LocationRepository.Delete(location);
             _unitOfWork.Commit();
         }
-        public async Task<List<LocationReturnDto>> GetAllLocationsAsync()
+        public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsAsync(int pageNumber, int pageSize)
         {
-            var locations = await _unitOfWork.LocationRepository.GetAll();
-            return _mapper.Map<List<LocationReturnDto>>(locations);
+            int totalLocations = await _unitOfWork.LocationRepository.CountAsync();
+            var locations = await _unitOfWork.LocationRepository.GetAll(
+                includes: query => query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                );
+            return new PagedResponse<LocationListItemDto>
+            {
+                Data = _mapper.Map<List<LocationListItemDto>>(locations),
+                TotalCount = totalLocations,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
         }
         public async Task<LocationReturnDto> GetLocationByIdAsync(int id)
         {

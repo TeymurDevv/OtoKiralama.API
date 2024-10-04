@@ -16,9 +16,10 @@ namespace OtoKiralama.Presentation.Controllers
             _brandService = brandService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAllBrands(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _brandService.GetAllBrandsAsync());
+            var brands = await _brandService.GetAllBrandsAsync(pageNumber, pageSize);
+            return Ok(brands);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBrandById(int id)

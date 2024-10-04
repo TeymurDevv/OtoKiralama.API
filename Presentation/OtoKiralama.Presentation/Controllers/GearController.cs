@@ -17,9 +17,10 @@ namespace OtoKiralama.Presentation.Controllers
             _gearService = gearService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> GetAllGears()
+        public async Task<IActionResult> GetAllGears(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _gearService.GetAllGearsAsync());
+            var gears = await _gearService.GetAllGearsAsync(pageNumber, pageSize);
+            return Ok(gears);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGearById(int id)

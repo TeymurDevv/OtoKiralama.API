@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
+using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
+using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -33,17 +35,42 @@ namespace OtoKiralama.Application.Services
 
         public async Task DeleteBrandAsync(int id)
         {
-            var brand = await _unitOfWork.BrandRepository.GetEntity(b => b.Id == id);
+            var brand = await _unitOfWork.BrandRepository.GetEntity(b => b.Id == id,
+                includes: query => query
+                    .Include(b => b.Models)
+                    .ThenInclude(m => m.Cars));
             if (brand is null)
                 throw new CustomException(404, "Id", "Brand not found with this Id");
+            foreach (var model in brand.Models)
+            {
+                if (model.Cars != null && model.Cars.Any())
+                {
+                    foreach (var car in model.Cars)
+                    {
+                        await _unitOfWork.CarRepository.Delete(car);
+                    }
+                }
+            }
             await _unitOfWork.BrandRepository.Delete(brand);
             _unitOfWork.Commit();
         }
 
-        public async Task<List<BrandReturnDto>> GetAllBrandsAsync()
+
+        public async Task<PagedResponse<BrandListItemDto>> GetAllBrandsAsync(int pageNumber, int pageSize)
         {
-            var brands = await _unitOfWork.BrandRepository.GetAll();
-            return _mapper.Map<List<BrandReturnDto>>(brands);
+            int totalBrands = await _unitOfWork.BrandRepository.CountAsync();
+            var brands = await _unitOfWork.BrandRepository.GetAll(
+                includes: query => query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                );
+            return new PagedResponse<BrandListItemDto>
+            {
+                Data = _mapper.Map<List<BrandListItemDto>>(brands),
+                TotalCount = totalBrands,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
         }
 
         public async Task<BrandReturnDto> GetBrandByIdAsync(int id)

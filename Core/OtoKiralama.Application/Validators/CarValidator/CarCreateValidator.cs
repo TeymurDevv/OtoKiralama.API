@@ -12,9 +12,9 @@ namespace OtoKiralama.Application.Validators.CarValidator
                 .NotEmpty().WithMessage("Plate is required.")
                 .Length(6, 10).WithMessage("Plate must be between 6 and 10 characters.");
 
-            // Model validation: Must not be empty
-            RuleFor(x => x.Model)
-                .NotEmpty().WithMessage("Model is required.");
+            // CompanyId validation: Must be greater than 0
+            RuleFor(x => x.ModelId)
+                .GreaterThan(0).WithMessage("ModelId must be greater than 0.");
 
             // SeatCount validation: Must be between 1 and 9
             RuleFor(x => x.SeatCount)
@@ -33,6 +33,10 @@ namespace OtoKiralama.Application.Validators.CarValidator
             RuleFor(x => x.BrandId)
                 .GreaterThan(0).WithMessage("BrandId must be greater than 0.");
 
+            // CompanyId validation: Must be greater than 0
+            RuleFor(x => x.CompanyId)
+                .GreaterThan(0).WithMessage("CompanyId must be greater than 0.");
+
             // ClassId validation: Must be greater than 0
             RuleFor(x => x.ClassId)
                 .GreaterThan(0).WithMessage("ClassId must be greater than 0.");
@@ -44,6 +48,10 @@ namespace OtoKiralama.Application.Validators.CarValidator
             // GearId validation: Must be greater than 0
             RuleFor(x => x.GearId)
                 .GreaterThan(0).WithMessage("GearId must be greater than 0.");
+
+            // BodyId validation: Must be greater than 0
+            RuleFor(x => x.BodyId)
+                .GreaterThan(0).WithMessage("BodyId must be greater than 0.");
 
             // LocationId validation: Must be greater than 0
             RuleFor(x => x.LocationId)

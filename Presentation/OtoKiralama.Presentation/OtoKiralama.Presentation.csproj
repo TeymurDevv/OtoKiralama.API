@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\OtoKiralama.Application\OtoKiralama.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\OtoKiralama.Infrastructure\OtoKiralama.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\OtoKiralama.Persistance\OtoKiralama.Persistance.csproj" />
   </ItemGroup>
 

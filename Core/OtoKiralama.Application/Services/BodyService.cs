@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Body;
+using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -39,10 +42,21 @@ namespace OtoKiralama.Application.Services
             _unitOfWork.Commit();
         }
 
-        public async Task<List<BodyReturnDto>> GetAllBodiesAsync()
+        public async Task<PagedResponse<BodyListItemDto>> GetAllBodiesAsync(int pageNumber, int pageSize)
         {
-            var bodies = await _unitOfWork.BodyRepository.GetAll();
-            return _mapper.Map<List<BodyReturnDto>>(bodies);
+            int totalBodies = await _unitOfWork.BodyRepository.CountAsync();
+            var bodies = await _unitOfWork.BodyRepository.GetAll(
+                includes: query => query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                );
+            return new PagedResponse<BodyListItemDto>
+            {
+                Data = _mapper.Map<List<BodyListItemDto>>(bodies),
+                TotalCount = totalBodies,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
         }
 
         public async Task<BodyReturnDto> GetBodyByIdAsync(int id)

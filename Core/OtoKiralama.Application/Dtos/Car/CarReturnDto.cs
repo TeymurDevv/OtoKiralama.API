@@ -1,19 +1,29 @@
-﻿namespace OtoKiralama.Application.Dtos.Car
+﻿using OtoKiralama.Application.Dtos.Body;
+using OtoKiralama.Application.Dtos.Brand;
+using OtoKiralama.Application.Dtos.Class;
+using OtoKiralama.Application.Dtos.Company;
+using OtoKiralama.Application.Dtos.Fuel;
+using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Dtos.Location;
+using OtoKiralama.Application.Dtos.Model;
+
+namespace OtoKiralama.Application.Dtos.Car
 {
     public class CarReturnDto
     {
         public string Plate { get; set; }
-        public string Model { get; set; }
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }
         public int Year { get; set; }
         public bool IsInstantConfirm { get; set; }
         public bool IsFreeRefund { get; set; }
-        public string BodyName { get; set; }
-        public string BrandName { get; set; }
-        public string ClassName { get; set; }
-        public string FuelName { get; set; }
-        public string GearName { get; set; }
-        public string LocationName { get; set; }
+        public BrandReturnDto Brand { get; set; }
+        public ModelReturnDto Model { get; set; }
+        public BodyReturnDto Body { get; set; }
+        public ClassReturnDto Class { get; set; }
+        public FuelReturnDto Fuel { get; set; }
+        public GearReturnDto Gear { get; set; }
+        public CompanyReturnDto Company { get; set; }
+        public LocationReturnDto Location { get; set; }
     }
 }

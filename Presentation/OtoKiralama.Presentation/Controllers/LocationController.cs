@@ -16,9 +16,10 @@ namespace OtoKiralama.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAllLocations(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _locationService.GetAllLocationsAsync());
+            var locations = await _locationService.GetAllLocationsAsync(pageNumber, pageSize);
+            return Ok(locations);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetLocationById(int id)

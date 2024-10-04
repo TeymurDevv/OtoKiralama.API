@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.Body;
+using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.Fuel;
+using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -38,10 +40,21 @@ namespace OtoKiralama.Application.Services
             _unitOfWork.Commit();
         }
 
-        public async Task<List<FuelReturnDto>> GetAllFuelsAsync()
+        public async Task<PagedResponse<FuelListItemDto>> GetAllFuelsAsync(int pageNumber, int pageSize)
         {
-            var fuels = await _unitOfWork.FuelRepository.GetAll();
-            return _mapper.Map<List<FuelReturnDto>>(fuels);
+            int totalFuels = await _unitOfWork.FuelRepository.CountAsync();
+            var fuels = await _unitOfWork.FuelRepository.GetAll(
+                includes: query => query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                );
+            return new PagedResponse<FuelListItemDto>
+            {
+                Data = _mapper.Map<List<FuelListItemDto>>(fuels),
+                TotalCount = totalFuels,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
         }
 
         public async Task<FuelReturnDto> GetFuelByIdAsync(int id)

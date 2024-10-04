@@ -17,9 +17,10 @@ namespace OtoKiralama.Presentation.Controllers
             _bodyService = bodyService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> GetAllBodies()
+        public async Task<IActionResult> GetAllBodies(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _bodyService.GetAllBodiesAsync());
+            var bodies = await _bodyService.GetAllBodiesAsync(pageNumber, pageSize);
+            return Ok(bodies);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBodyById(int id)

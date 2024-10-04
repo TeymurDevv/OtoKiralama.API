@@ -8,16 +8,36 @@ using OtoKiralama.Presentation.Middlewares;
 using System.Text;
 using OtoKiralama.Persistance;
 using OtoKiralama.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 builder.Services.Register(builder.Configuration);
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(config);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-builder.Services.AddAuthentication(options =>
+builder.Services.AddControllersWithViews()
+     .ConfigureApiBehaviorOptions(opt =>
+     {
+         opt.InvalidModelStateResponseFactory = context =>
+         {
+             var errors = context.ModelState
+                 .Where(e => e.Value?.Errors.Count > 0)
+                 .ToDictionary(
+                     x => x.Key,
+                     x => x.Value.Errors.First().ErrorMessage
+                 );
+
+             var response = new
+             {
+                 message = "Validation errors occurred.",
+                 errors
+             };
+
+             return new BadRequestObjectResult(response);
+         };
+     }); builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -40,7 +60,7 @@ builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "JWTToken_Auth_API",
+        Title = "OtoKiralama.Presentation",
         Version = "v1"
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

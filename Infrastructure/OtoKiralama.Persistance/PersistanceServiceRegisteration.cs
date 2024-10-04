@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OtoKiralama.Domain.Repositories;
 using OtoKiralama.Persistance.Data.Implementations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OtoKiralama.Persistance
 {
@@ -22,6 +17,7 @@ namespace OtoKiralama.Persistance
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
         }
     }
 }

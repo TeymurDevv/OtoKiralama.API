@@ -4,5 +4,6 @@ namespace OtoKiralama.Domain.Repositories
 {
     public interface IBodyRepository:IRepository<Body>
     {
+        Task<int> CountAsync();
     }
 }

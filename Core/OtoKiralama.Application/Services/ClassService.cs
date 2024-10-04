@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Class;
+using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
@@ -37,10 +39,21 @@ namespace OtoKiralama.Application.Services
             _unitOfWork.Commit();
         }
 
-        public async Task<List<ClassReturnDto>> GetAllClassesAsync()
+        public async Task<PagedResponse<ClassListItemDto>> GetAllClassesAsync(int pageNumber, int pageSize)
         {
-            var classes = await _unitOfWork.ClassRepository.GetAll();
-            return _mapper.Map<List<ClassReturnDto>>(classes);
+            int totalClasses = await _unitOfWork.ClassRepository.CountAsync();
+            var classes = await _unitOfWork.ClassRepository.GetAll(
+                includes: query => query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                );
+            return new PagedResponse<ClassListItemDto>
+            {
+                Data = _mapper.Map<List<ClassListItemDto>>(classes),
+                TotalCount = totalClasses,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
         }
 
         public async Task<ClassReturnDto> GetClassByIdAsync(int id)

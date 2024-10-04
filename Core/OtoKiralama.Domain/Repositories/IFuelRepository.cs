@@ -4,5 +4,6 @@ namespace OtoKiralama.Domain.Repositories
 {
     public interface IFuelRepository:IRepository<Fuel>
     {
+        Task<int> CountAsync();
     }
 }
