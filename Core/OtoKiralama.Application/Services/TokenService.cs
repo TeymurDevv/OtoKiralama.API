@@ -36,7 +36,31 @@ namespace OtoKiralama.Application.Services
             var Token = handler.WriteToken(tokenHandiling);
             return Token;
         }
+        public ClaimsPrincipal ValidateToken(string token)
+        {
+            // Implementation for validating the token
+            // For example, using JwtSecurityTokenHandler to validate the token
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4250034f-c024-41f3-a10e-f7fd5ccc0671")),
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:7140",
+                    ValidateAudience = true,
+                    ValidAudience = "http://localhost:7140",
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
 
-
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
+

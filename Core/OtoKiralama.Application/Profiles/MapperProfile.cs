@@ -10,7 +10,9 @@ using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Model;
 using OtoKiralama.Application.Dtos.Role;
+using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Domain.Entities;
+using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Application.Profiles
 {
@@ -66,6 +68,10 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Model, ModelReturnDto>();
             CreateMap<Model, ModelListItemDto>();
             CreateMap<ModelCreateDto, Model>();
+            CreateMap<AppUser,UserReturnDto>()
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company));
+            CreateMap<AppUser,UserListItemDto>()
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company));
         }
     }
 }

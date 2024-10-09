@@ -17,6 +17,7 @@ namespace OtoKiralama.Presentation.Controllers
             _gearService = gearService;
         }
         [HttpGet("")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllGears(int pageNumber = 1, int pageSize = 10)
         {
             var gears = await _gearService.GetAllGearsAsync(pageNumber, pageSize);
@@ -28,6 +29,7 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(await _gearService.GetGearByIdAsync(id));
         }
         [HttpPost("")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateGear(GearCreateDto gearCreateDto)
         {
             await _gearService.CreateGearAsync(gearCreateDto);

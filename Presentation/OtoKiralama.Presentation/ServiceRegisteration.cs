@@ -34,7 +34,7 @@ namespace OtoKiralama.Presentation
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                //options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = true;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(opt =>

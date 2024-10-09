@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Model;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -46,6 +47,7 @@ namespace OtoKiralama.Application.Services
             int totalModels = await _unitOfWork.ModelRepository.CountAsync();
             var models = await _unitOfWork.ModelRepository.GetAll(
                 includes: query => query
+                    .Include(m => m.Brand)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                 );

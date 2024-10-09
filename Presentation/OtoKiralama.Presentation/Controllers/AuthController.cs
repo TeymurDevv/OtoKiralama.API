@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -8,6 +9,7 @@ using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Settings;
 using OtoKiralama.Persistance.Data.Implementations;
 using OtoKiralama.Persistance.Entities;
+using System.Security.Claims;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -50,7 +52,7 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("CompanyPersonelRegister")]
         public async Task<IActionResult> CompanyPersonelRegister(RegisterCompanyUserDto registerCompanyUserDto)
         {
-            var existCompany = await _unitOfWork.CompanyRepository.GetEntity(c=>c.Id==registerCompanyUserDto.CompanyId);
+            var existCompany = await _unitOfWork.CompanyRepository.GetEntity(c => c.Id == registerCompanyUserDto.CompanyId);
             if (existCompany is null)
                 throw new CustomException(400, "CompanyId", "Company does not exist with this name");
             var existUser = await _userManager.FindByNameAsync(registerCompanyUserDto.UserName);
@@ -59,6 +61,7 @@ namespace OtoKiralama.Presentation.Controllers
             appUser.UserName = registerCompanyUserDto.UserName;
             appUser.Email = registerCompanyUserDto.Email;
             appUser.FullName = registerCompanyUserDto.FullName;
+            appUser.CompanyId = registerCompanyUserDto.CompanyId;
             var result = await _userManager.CreateAsync(appUser, registerCompanyUserDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
             await _userManager.AddToRoleAsync(appUser, "companyPersonel");
@@ -71,11 +74,13 @@ namespace OtoKiralama.Presentation.Controllers
             if (existCompany is null)
                 throw new CustomException(400, "CompanyId", "Company does not exist with this Id");
             var existUser = await _userManager.FindByNameAsync(registerCompanyUserDto.UserName);
-            if (existUser != null) return BadRequest();
+            if (existUser != null)
+                throw new CustomException(400, "UserName", "User already exist with this name");
             AppUser appUser = new AppUser();
             appUser.UserName = registerCompanyUserDto.UserName;
             appUser.Email = registerCompanyUserDto.Email;
             appUser.FullName = registerCompanyUserDto.FullName;
+            appUser.CompanyId = registerCompanyUserDto.CompanyId;
             var result = await _userManager.CreateAsync(appUser, registerCompanyUserDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
             await _userManager.AddToRoleAsync(appUser, "companyAdmin");
@@ -106,5 +111,45 @@ namespace OtoKiralama.Presentation.Controllers
             await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
             return Ok();
         }
+        [HttpPost("ValidateToken")]
+        [Authorize(Roles ="admin")]
+        public IActionResult ValidateToken([FromHeader] string Authorization)
+        {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = "Invalid token format." });
+            }
+
+            var token = Authorization.Substring("Bearer ".Length).Trim();
+            var principal = _tokenService.ValidateToken(token);
+
+            if (principal == null)
+            {
+                return Unauthorized(new { message = "Invalid or expired token." });
+            }
+
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "User ID not found in token." });
+            }
+
+            var user = _userManager.Users.FirstOrDefault(u=>u.Id==userId);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found." });
+            }
+
+            return Ok(new
+            {
+                id = user.Id,
+                username = user.UserName,
+                first_name = user.FullName,
+                last_name = user.FullName,
+                email = user.Email,
+                roles = "admin",
+            });
+        }
     }
 }
+

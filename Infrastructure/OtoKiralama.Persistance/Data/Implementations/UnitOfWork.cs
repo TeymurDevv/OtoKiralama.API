@@ -2,7 +2,7 @@
 
 namespace OtoKiralama.Persistance.Data.Implementations
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork,IDisposable
     {
         private readonly AppDbContext _context;
 
