@@ -1,5 +1,6 @@
 ﻿using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
+using OtoKiralama.Application.Dtos.CarPhoto;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.Fuel;
@@ -26,5 +27,6 @@ namespace OtoKiralama.Application.Dtos.Car
         public GearReturnDto Gear { get; set; }
         public CompanyReturnDto Company { get; set; }
         public LocationReturnDto Location { get; set; }
+        public CarPhotoReturnDto CarPhoto { get; set; }
     }
 }

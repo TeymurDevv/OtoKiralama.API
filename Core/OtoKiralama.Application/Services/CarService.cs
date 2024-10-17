@@ -50,6 +50,13 @@ namespace OtoKiralama.Application.Services
             var existCar = await _unitOfWork.CarRepository.isExists(c => c.Plate == carCreateDto.Plate);
             if (existCar)
                 throw new CustomException(400, "Plate", "Car already exist with this plate");
+            var model = await _unitOfWork.ModelRepository.GetEntity(
+                includes: query => query.Include(m => m.CarPhotos),
+                predicate: m => m.Id == carCreateDto.ModelId);
+
+            var carPhotoInModel = model.CarPhotos.Any(cp => cp.Id == carCreateDto.CarPhotoId);
+            if (!carPhotoInModel)
+                throw new CustomException(404, "CarPhotoId", "CarPhoto not found in this model");
             var car = _mapper.Map<Car>(carCreateDto);
             await _unitOfWork.CarRepository.Create(car);
             _unitOfWork.Commit();

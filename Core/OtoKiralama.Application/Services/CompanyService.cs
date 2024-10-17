@@ -39,6 +39,7 @@ namespace OtoKiralama.Application.Services
             if (company is null)
                 throw new CustomException(404, "Id", "Company not found with this Id");
             await _unitOfWork.CompanyRepository.Delete(company);
+            await _photoService.DeletePhotoAsync(company.ImageUrl);
             _unitOfWork.Commit();
         }
 

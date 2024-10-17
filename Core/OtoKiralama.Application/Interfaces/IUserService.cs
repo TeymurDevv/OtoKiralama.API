@@ -11,6 +11,6 @@ namespace OtoKiralama.Application.Interfaces
         //IEnumerable<User> GetAllCompanyAdmins(int companyId);
         //IEnumerable<User> GetAllCompanyAgents(int companyId);
         //IEnumerable<User> GetUsersByCompanyId(int companyId);
-        void DeleteUser(string userId);
+        Task DeleteUser(string userId);
     }
 }

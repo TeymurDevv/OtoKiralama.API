@@ -18,6 +18,8 @@ namespace OtoKiralama.Persistance
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
+            services.AddScoped<ICarPhotoRepository, CarPhotoRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
         }
     }
 }

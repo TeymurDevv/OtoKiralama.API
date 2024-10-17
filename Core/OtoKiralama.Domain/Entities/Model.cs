@@ -8,5 +8,6 @@ namespace OtoKiralama.Domain.Entities
         public Brand Brand { get; set; }
         public string Name { get; set; }
         public List<Car> Cars { get; set; }
+        public List<CarPhoto> CarPhotos { get; set; }
     }
 }

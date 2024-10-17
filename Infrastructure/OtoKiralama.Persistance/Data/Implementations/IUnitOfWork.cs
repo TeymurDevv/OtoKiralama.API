@@ -13,6 +13,8 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public ICarRepository CarRepository { get; }
         public ICompanyRepository CompanyRepository { get; }
         public IModelRepository ModelRepository { get; }
+        public ICarPhotoRepository CarPhotoRepository { get; }
+        public ISettingRepository SettingRepository { get; }
         public void Commit();
 
     }

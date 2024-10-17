@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Dtos.Car;
+using OtoKiralama.Application.Dtos.CarPhoto;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.Fuel;
@@ -10,6 +11,7 @@ using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Model;
 using OtoKiralama.Application.Dtos.Role;
+using OtoKiralama.Application.Dtos.Setting;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Entities;
@@ -72,6 +74,20 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company));
             CreateMap<AppUser,UserListItemDto>()
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company));
+            CreateMap<CarPhoto, CarPhotoReturnDto>()
+               .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+               .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model));
+
+            CreateMap<CarPhoto, CarPhotoListItemDto>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model));
+
+            CreateMap<CarPhotoCreateDto, CarPhoto>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
+            CreateMap<Setting, SettingReturnDto>();
+            CreateMap<Setting, SettingListItemDto>();
+            CreateMap<SettingCreateDto, Setting>();
         }
     }
 }

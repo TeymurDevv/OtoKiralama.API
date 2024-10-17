@@ -41,6 +41,8 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Body> Bodies { get; set; }
         public DbSet<Fuel> Fuels { get; set; }
+        public DbSet<CarPhoto> CarPhotos { get; set; }
+        public DbSet<Setting> Settings { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }

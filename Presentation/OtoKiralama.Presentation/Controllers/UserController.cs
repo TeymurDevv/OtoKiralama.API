@@ -24,10 +24,10 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _userService.GetUserById(id));
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(string userId)
         {
-            _userService.DeleteUser(id);
+            await _userService.DeleteUser(userId);
             return StatusCode(StatusCodes.Status204NoContent);
         }
     }

@@ -29,7 +29,6 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(await _gearService.GetGearByIdAsync(id));
         }
         [HttpPost("")]
-        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateGear(GearCreateDto gearCreateDto)
         {
             await _gearService.CreateGearAsync(gearCreateDto);

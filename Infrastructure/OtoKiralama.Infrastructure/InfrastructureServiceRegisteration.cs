@@ -1,10 +1,7 @@
-﻿using FluentValidation.AspNetCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Application.Services;
 using OtoKiralama.Application.Settings;
-using OtoKiralama.Application.Validators.BrandValidator;
 using OtoKiralama.Infrastructure.Concretes;
 
 namespace OtoKiralama.Infrastructure

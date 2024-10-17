@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Interfaces;
+using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -10,10 +13,12 @@ namespace OtoKiralama.Presentation.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CompanyController(ICompanyService companyService)
+        public CompanyController(ICompanyService companyService, UserManager<AppUser> userManager)
         {
             _companyService = companyService;
+            _userManager = userManager;
         }
         [HttpGet("")]
         public async Task<IActionResult> GetAllCompanies(int pageNumber = 1, int pageSize = 10)
@@ -35,6 +40,14 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompanyById(int id)
         {
+            List<AppUser> companyUsers = await _userManager
+                .Users
+                .Where(u => u.CompanyId == id)
+                .ToListAsync();
+            foreach (var user in companyUsers)
+            {
+                await _userManager.DeleteAsync(user);
+            }
             await _companyService.DeleteCompanyAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }

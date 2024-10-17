@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Exceptions;
@@ -21,19 +20,24 @@ namespace OtoKiralama.Application.Services
             _mapper = mapper;
         }
 
-        public async void DeleteUser(string userId)
+        public async Task DeleteUser(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user is null)
                 throw new CustomException(400, "userId", "User not found with this Id");
-            await _userManager.DeleteAsync(user);
+
+            IdentityResult result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+                throw new CustomException(400, "userId", "User could not be deleted");
         }
 
         public async Task<PagedResponse<UserListItemDto>> GetAllUsers(int pageNumber, int pageSize)
         {
-            List < AppUser > users  = await _userManager
+            List<AppUser> users = await _userManager
                 .Users
                 .Include(u => u.Company)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
             var totalUsers = await _userManager.Users.CountAsync();
             

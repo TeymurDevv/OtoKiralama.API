@@ -8,6 +8,7 @@ namespace OtoKiralama.Domain.Entities
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }
         public int Year { get; set; }
+        public string ImageUrl { get; set; }
         public bool IsInstantConfirm { get; set; }
         public bool IsFreeRefund { get; set; }
         public int BodyId { get; set; }

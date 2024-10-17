@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241015202457_AddSettingNameProperty")]
+    partial class AddSettingNameProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,9 +219,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("GearId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsFreeRefund")
                         .HasColumnType("bit");
 
@@ -275,12 +275,10 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("ModelId")
+                        .IsUnique();
 
                     b.ToTable("CarPhotos");
                 });
@@ -611,8 +609,8 @@ namespace OtoKiralama.Persistance.Migrations
             modelBuilder.Entity("OtoKiralama.Domain.Entities.CarPhoto", b =>
                 {
                     b.HasOne("OtoKiralama.Domain.Entities.Model", "Model")
-                        .WithMany("CarPhotos")
-                        .HasForeignKey("ModelId")
+                        .WithOne("CarPhoto")
+                        .HasForeignKey("OtoKiralama.Domain.Entities.CarPhoto", "ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -673,7 +671,7 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Model", b =>
                 {
-                    b.Navigation("CarPhotos");
+                    b.Navigation("CarPhoto");
 
                     b.Navigation("Cars");
                 });
