@@ -16,6 +16,5 @@
         public int FuelId { get; set; }
         public int GearId { get; set; }
         public int LocationId { get; set; }
-        public int CarPhotoId { get; set; }
     }
 }

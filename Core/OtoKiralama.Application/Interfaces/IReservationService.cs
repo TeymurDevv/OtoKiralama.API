@@ -1,0 +1,14 @@
+﻿using OtoKiralama.Application.Dtos.Pagination;
+using OtoKiralama.Application.Dtos.Reservation;
+
+namespace OtoKiralama.Application.Interfaces
+{
+    public interface IReservationService
+    {
+        Task<PagedResponse<ReservationListItemDto>> GetAllReservationsAsync(int pageNumber, int pageSize);
+        Task<ReservationReturnDto> GetReservationByIdAsync(int id);
+        Task CreateReservationAsync(ReservationCreateDto reservationCreateDto);
+        Task DeleteReservationAsync(int id);
+        Task<bool> IsCarAvailable(int carId, DateTime startDate, DateTime endDate);
+    }
+}

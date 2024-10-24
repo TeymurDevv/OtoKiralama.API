@@ -25,6 +25,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _modelService.GetModelByIdAsync(id));
         }
+        [HttpGet("brand/{brandId}")]
+        public async Task<IActionResult> GetAllModelsByBrandId(int brandId, int pageNumber = 1, int pageSize = 10)
+        {
+            var models = await _modelService.GetAllModelsByBrandId(brandId, pageNumber, pageSize);
+            return Ok(models);
+        }
         [HttpPost("")]
         public async Task<IActionResult> CreateModel(ModelCreateDto modelCreateDto)
         {

@@ -7,7 +7,7 @@ namespace OtoKiralama.Domain.Entities
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public string Name { get; set; }
+        public CarPhoto CarPhoto { get; set; }
         public List<Car> Cars { get; set; }
-        public List<CarPhoto> CarPhotos { get; set; }
     }
 }

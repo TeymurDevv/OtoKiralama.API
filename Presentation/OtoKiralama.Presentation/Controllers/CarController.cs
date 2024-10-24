@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Car;
-using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Application.Services;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -38,6 +35,12 @@ namespace OtoKiralama.Presentation.Controllers
         public async Task<IActionResult> DeleteCarById(int id)
         {
             await _carService.DeleteCarAsync(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> ChangeCarStatus(int id)
+        {
+            await _carService.ChangeCarStatus(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
     }

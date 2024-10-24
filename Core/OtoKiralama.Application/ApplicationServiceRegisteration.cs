@@ -25,6 +25,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICarPhotoService, CarPhotoService>();
             services.AddScoped<ISettingService, SettingService>();
+            services.AddScoped<IReservationService, ReservationService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020200527_AddReservationRelationBetweenUser")]
+    partial class AddReservationRelationBetweenUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,11 +219,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("GearId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<bool>("IsFreeRefund")
                         .HasColumnType("bit");
 
@@ -406,7 +404,10 @@ namespace OtoKiralama.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AppUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CarId")
@@ -416,14 +417,10 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCanceled")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPaid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -433,7 +430,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("AppUserId1");
 
                     b.HasIndex("CarId");
 
@@ -677,17 +674,15 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", "AppUser")
+                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", null)
                         .WithMany("Reservations")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId1");
 
                     b.HasOne("OtoKiralama.Domain.Entities.Car", "Car")
                         .WithMany("Reservations")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Car");
                 });

@@ -10,6 +10,7 @@ using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Model;
+using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.Role;
 using OtoKiralama.Application.Dtos.Setting;
 using OtoKiralama.Application.Dtos.User;
@@ -51,6 +52,7 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
                 .ReverseMap();
             CreateMap<Car, CarReturnDto>()
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
@@ -88,6 +90,20 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Setting, SettingReturnDto>();
             CreateMap<Setting, SettingListItemDto>();
             CreateMap<SettingCreateDto, Setting>();
+            CreateMap<SettingUpdateDto, Setting>();
+            CreateMap<CarPhoto, CarPhotoReturnDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+            CreateMap<Reservation, ReservationListItemDto>()
+                .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
+                .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser));
+            CreateMap<Reservation, ReservationReturnDto>()
+                .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
+                .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser));
+            CreateMap<ReservationCreateDto, Reservation>();
         }
     }
 }

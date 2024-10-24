@@ -19,9 +19,4 @@
     <ProjectReference Include="..\..\Core\OtoKiralama.Domain\OtoKiralama.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Configurations\" />
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

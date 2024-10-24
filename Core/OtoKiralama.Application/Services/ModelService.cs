@@ -60,6 +60,25 @@ namespace OtoKiralama.Application.Services
             };
         }
 
+        public async Task<PagedResponse<ModelListItemDto>> GetAllModelsByBrandId(int brandId, int pageNumber, int pageSize)
+        {
+            var models = await _unitOfWork.ModelRepository.GetAll(
+                includes: query => query
+                 .Include(m => m.Brand)
+                 .Skip((pageNumber - 1) * pageSize)
+                 .Take(pageSize),
+                predicate: m => m.Brand.Id == brandId
+                );
+            int totalModels = models.Count();
+            return new PagedResponse<ModelListItemDto>
+            {
+                Data = _mapper.Map<List<ModelListItemDto>>(models),
+                TotalCount = totalModels,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
+        }
+
         public async Task<ModelReturnDto> GetModelByIdAsync(int id)
         {
             var model = await _unitOfWork.ModelRepository.GetEntity(m => m.Id == id);

@@ -6,7 +6,6 @@ using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase

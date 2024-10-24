@@ -10,7 +10,7 @@ namespace OtoKiralama.Application.Validators.BodyValidator
             RuleFor(c => c.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
-            .MinimumLength(3)
+            .MinimumLength(2)
             .WithMessage("Name must be at least 3 characters long");
         }
     }

@@ -21,9 +21,16 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(settings);
         }
         [HttpGet("{key}")]
-        public async Task<IActionResult> GetSettingByIdAsync(string key)
+        public async Task<IActionResult> GetSettingByKeyAsync(string key)
         {
-            var setting = await _settingService.GetSettingByIdAsync(key);
+            var setting = await _settingService.GetSettingByKeyAsync(key);
+            return Ok(setting);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetSettingByIdAsync(int id)
+        {
+            var setting = await _settingService.GetSettingByIdAsync(id);
             return Ok(setting);
         }
         [HttpPost("")]
@@ -32,5 +39,12 @@ namespace OtoKiralama.Presentation.Controllers
             await _settingService.CreateSettingAsync(settingCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSettingAsync(int id, [FromBody] SettingUpdateDto settingUpdateDto)
+        {
+            await _settingService.UpdateSettingAsync(id,settingUpdateDto);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
     }
 }

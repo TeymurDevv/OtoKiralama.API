@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020193758_AddReservationsToCar")]
+    partial class AddReservationsToCar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,11 +219,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("GearId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<bool>("IsFreeRefund")
                         .HasColumnType("bit");
 
@@ -406,9 +404,6 @@ namespace OtoKiralama.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
@@ -416,14 +411,10 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCanceled")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPaid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -432,8 +423,6 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CarId");
 
@@ -677,17 +666,11 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", "AppUser")
-                        .WithMany("Reservations")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("OtoKiralama.Domain.Entities.Car", "Car")
                         .WithMany("Reservations")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Car");
                 });
@@ -743,11 +726,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Navigation("CarPhoto");
 
                     b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("OtoKiralama.Persistance.Entities.AppUser", b =>
-                {
-                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

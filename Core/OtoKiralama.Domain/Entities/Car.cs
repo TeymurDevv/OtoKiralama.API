@@ -2,15 +2,15 @@
 
 namespace OtoKiralama.Domain.Entities
 {
-    public class Car:BaseEntity
+    public class Car : BaseEntity
     {
         public string Plate { get; set; }
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }
         public int Year { get; set; }
-        public string ImageUrl { get; set; }
         public bool IsInstantConfirm { get; set; }
         public bool IsFreeRefund { get; set; }
+        public bool IsActive { get; set; }
         public int BodyId { get; set; }
         public Body Body { get; set; }
         public int BrandId { get; set; }
@@ -27,5 +27,6 @@ namespace OtoKiralama.Domain.Entities
         public Location Location { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
+        public List<Reservation> Reservations { get; set; }
     }
 }

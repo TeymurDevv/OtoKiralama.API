@@ -49,12 +49,29 @@ namespace OtoKiralama.Application.Services
             };
         }
 
-        public async Task<SettingReturnDto> GetSettingByIdAsync(string key)
+        public async Task<SettingReturnDto> GetSettingByKeyAsync(string key)
         {
             var setting = await _unitOfWork.SettingRepository.GetEntity(s => s.Key == key);
             if (setting is null)
                 throw new CustomException(404, "Key", "Setting not found with this Key");
             return _mapper.Map<SettingReturnDto>(setting);
         }
+        public async Task<SettingReturnDto> GetSettingByIdAsync(int id)
+        {
+            var setting = await _unitOfWork.SettingRepository.GetEntity(s => s.Id == id);
+            if (setting is null)
+                throw new CustomException(404, "Id", "Setting not found with this Id");
+            return _mapper.Map<SettingReturnDto>(setting);
+        }
+        public async Task UpdateSettingAsync(int id, SettingUpdateDto settingUpdateDto)
+        {
+            var existSetting = await _unitOfWork.SettingRepository.GetEntity(s => s.Id == id);
+            if (existSetting is null)
+                throw new CustomException(404, "Id", "Setting not found with this Id");
+            _mapper.Map(settingUpdateDto,existSetting);
+            await _unitOfWork.SettingRepository.Update(existSetting);
+            _unitOfWork.Commit();
+        }
+
     }
 }

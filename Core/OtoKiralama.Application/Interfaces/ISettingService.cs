@@ -7,7 +7,9 @@ namespace OtoKiralama.Application.Interfaces
     public interface ISettingService
     {
         Task<PagedResponse<SettingListItemDto>> GetAllSettingsAsync(int pageNumber, int pageSize);
-        Task<SettingReturnDto> GetSettingByIdAsync(string key);
+        Task<SettingReturnDto> GetSettingByKeyAsync(string key);
+        Task<SettingReturnDto> GetSettingByIdAsync(int id);
         Task CreateSettingAsync(SettingCreateDto settingCreateDto);
+        Task UpdateSettingAsync(int id, SettingUpdateDto settingUpdateDto);
     }
 }

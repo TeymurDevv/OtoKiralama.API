@@ -8,5 +8,6 @@ namespace OtoKiralama.Persistance.Entities
         public string FullName { get; set; }
         public int? CompanyId { get; set; }
         public Company Company { get; set; }
+        public List<Reservation> Reservations { get; set; }
     }
 }

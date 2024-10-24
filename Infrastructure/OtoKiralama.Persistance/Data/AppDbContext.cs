@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Entities;
+using System.Reflection;
 
 namespace OtoKiralama.Persistance.Data
 {
@@ -10,6 +11,7 @@ namespace OtoKiralama.Persistance.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             // When a Brand is deleted, all related Models will be deleted.
             modelBuilder.Entity<Model>()
                 .HasOne(m => m.Brand)
@@ -29,7 +31,14 @@ namespace OtoKiralama.Persistance.Data
                 .HasOne(c => c.Model)
                 .WithMany(m => m.Cars)
                 .HasForeignKey(c => c.ModelId)
-                .OnDelete(DeleteBehavior.Cascade); // Cascade delete Cars when a Model is deleted
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete Cars when a Model is delete
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne<AppUser>(r => (AppUser)r.AppUser)
+                .WithMany(u => u.Reservations)
+                .HasForeignKey(r => r.AppUserId);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Model> Models { get; set; }

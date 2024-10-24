@@ -19,6 +19,7 @@ namespace OtoKiralama.Application.Dtos.Car
         public int Year { get; set; }
         public bool IsInstantConfirm { get; set; }
         public bool IsFreeRefund { get; set; }
+        public bool IsActive { get; set; }
         public BrandReturnDto Brand { get; set; }
         public BodyReturnDto Body { get; set; }
         public ModelReturnDto Model { get; set; }
