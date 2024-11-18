@@ -39,5 +39,17 @@ namespace OtoKiralama.Presentation.Controllers
             await _reservationService.DeleteReservationAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPatch("cancel/{id}")]
+        public async Task<IActionResult> CancelReservation(int id)
+        {
+            await _reservationService.CancelReservation(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+        [HttpPatch("complete/{id}")]
+        public async Task<IActionResult> CompleteReservation(int id)
+        {
+            await _reservationService.CompleteReservation(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }

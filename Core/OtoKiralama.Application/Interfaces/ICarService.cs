@@ -11,5 +11,6 @@ namespace OtoKiralama.Application.Interfaces
         Task CreateCarAsync(CarCreateDto carCreateDto);
         Task DeleteCarAsync(int id);
         Task ChangeCarStatus(int id);
+        Task MarkAsDeactıve(int id);
     }
 }

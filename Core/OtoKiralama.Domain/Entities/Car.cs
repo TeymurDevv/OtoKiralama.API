@@ -1,4 +1,6 @@
 ﻿using OtoKiralama.Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace OtoKiralama.Domain.Entities
 {
@@ -8,9 +10,10 @@ namespace OtoKiralama.Domain.Entities
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }
         public int Year { get; set; }
-        public bool IsInstantConfirm { get; set; }
-        public bool IsFreeRefund { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsInstantConfirm { get; set; } // Rezervasyon onayı gerekli mi?
+        public bool IsFreeRefund { get; set; } // İptal durumunda ücretsiz geri ödeme var mı?
+        public bool IsActive { get; set; } // Araç aktif mi, kullanıma hazır mı?
+        public bool IsReserved { get; set; } // Şu anda rezervasyonlu mu?
         public int BodyId { get; set; }
         public Body Body { get; set; }
         public int BrandId { get; set; }
@@ -27,6 +30,8 @@ namespace OtoKiralama.Domain.Entities
         public Location Location { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
-        public List<Reservation> Reservations { get; set; }
+
+        // Rezervasyonlar
+        public List<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

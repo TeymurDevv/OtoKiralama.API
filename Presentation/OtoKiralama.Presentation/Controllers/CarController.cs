@@ -43,5 +43,11 @@ namespace OtoKiralama.Presentation.Controllers
             await _carService.ChangeCarStatus(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPatch("deactivate/{id}")]
+        public async Task<IActionResult> MarkAsDeactıve(int id)
+        {
+            await _carService.MarkAsDeactıve(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }

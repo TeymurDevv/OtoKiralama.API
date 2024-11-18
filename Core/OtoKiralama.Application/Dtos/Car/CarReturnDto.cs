@@ -12,6 +12,7 @@ namespace OtoKiralama.Application.Dtos.Car
 {
     public class CarReturnDto
     {
+        public string Id { get; set; }
         public string Plate { get; set; }
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }

@@ -9,5 +9,6 @@ namespace OtoKiralama.Persistance.Entities
         public int? CompanyId { get; set; }
         public Company Company { get; set; }
         public List<Reservation> Reservations { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace OtoKiralama.Application.Interfaces
         Task<ReservationReturnDto> GetReservationByIdAsync(int id);
         Task CreateReservationAsync(ReservationCreateDto reservationCreateDto);
         Task DeleteReservationAsync(int id);
-        Task<bool> IsCarAvailable(int carId, DateTime startDate, DateTime endDate);
+        Task CancelReservation(int id);
+        Task CompleteReservation(int id);
+        
     }
 }

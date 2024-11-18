@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -126,7 +125,7 @@ namespace OtoKiralama.Application.Services
             );
 
             if (car is null)
-                throw new CustomException(404, "Id", "Reservation not found with this Id");
+                throw new CustomException(404, "Id", "Car not found with this Id");
 
             return _mapper.Map<CarReturnDto>(car);
         }
@@ -137,6 +136,16 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Car not found with this Id");
             car.IsActive = !car.IsActive;
             await _unitOfWork.CarRepository.Update(car);
+            _unitOfWork.Commit();
+        }
+
+        public async Task MarkAsDeactıve(int id)
+        {
+            var car = await _unitOfWork.CarRepository.GetEntity(c => c.Id == id);
+            if (car is null)
+                throw new CustomException(404, "Id", "Car not found with this Id");
+            car.IsActive = false;
+            car.IsReserved = false;
             _unitOfWork.Commit();
         }
     }

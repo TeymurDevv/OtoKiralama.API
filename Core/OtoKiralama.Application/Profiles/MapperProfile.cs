@@ -63,6 +63,7 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
                 .ReverseMap();
             CreateMap<CarCreateDto, Car>();
             CreateMap<CompanyCreateDto, Company>()
@@ -98,11 +99,14 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Reservation, ReservationListItemDto>()
                 .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
                 .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser));
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
             CreateMap<Reservation, ReservationReturnDto>()
                 .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
                 .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser));
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             CreateMap<ReservationCreateDto, Reservation>();
         }
     }

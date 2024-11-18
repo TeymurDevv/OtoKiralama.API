@@ -1,4 +1,5 @@
 ﻿using OtoKiralama.Domain.Entities.Common;
+using OtoKiralama.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OtoKiralama.Domain.Entities
@@ -14,5 +15,21 @@ namespace OtoKiralama.Domain.Entities
         public double TotalPrice { get; set; }
         public bool IsPaid { get; set; }
         public bool IsCanceled { get; set; }
+        private ReservationStatus _status;
+
+        public ReservationStatus Status
+        {
+            get
+            {
+                if (IsCanceled) return ReservationStatus.Canceled;
+                else if (DateTime.Now < StartDate) return ReservationStatus.Pending;
+                else if (DateTime.Now >= StartDate && DateTime.Now <= EndDate) return ReservationStatus.InProgress;
+                return _status; // Return explicitly set status
+            }
+            set
+            {
+                _status = value;
+            }
+        }
     }
 }
