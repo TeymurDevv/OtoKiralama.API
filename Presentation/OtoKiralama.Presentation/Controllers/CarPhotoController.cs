@@ -27,7 +27,7 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(await _carPhotoService.GetCarPhotoByIdAsync(id));
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCarPhotoAsync([FromForm] CarPhotoCreateDto carPhotoCreateDto)
+        public async Task<IActionResult> CreateCarPhotoAsync(CarPhotoCreateDto carPhotoCreateDto)
         {
             await _carPhotoService.CreateCarPhotoAsync(carPhotoCreateDto);
             return StatusCode(StatusCodes.Status201Created);

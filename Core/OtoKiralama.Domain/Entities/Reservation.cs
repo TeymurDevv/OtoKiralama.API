@@ -15,6 +15,7 @@ namespace OtoKiralama.Domain.Entities
         public double TotalPrice { get; set; }
         public bool IsPaid { get; set; }
         public bool IsCanceled { get; set; }
+        public bool IsCompleted { get; set; }
         private ReservationStatus _status;
 
         public ReservationStatus Status
@@ -22,6 +23,7 @@ namespace OtoKiralama.Domain.Entities
             get
             {
                 if (IsCanceled) return ReservationStatus.Canceled;
+                if (IsCompleted) return ReservationStatus.Completed;
                 else if (DateTime.Now < StartDate) return ReservationStatus.Pending;
                 else if (DateTime.Now >= StartDate && DateTime.Now <= EndDate) return ReservationStatus.InProgress;
                 return _status; // Return explicitly set status

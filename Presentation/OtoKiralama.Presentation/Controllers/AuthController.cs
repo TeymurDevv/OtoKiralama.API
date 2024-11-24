@@ -150,6 +150,46 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "admin",
             });
         }
+        [HttpPost("ValidateAgentToken")]
+        [Authorize(Roles = "companyAdmin,companyPersonel")]
+        public IActionResult ValidateAgentToken([FromHeader] string Authorization)
+        {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = "Invalid token format." });
+            }
+
+            var token = Authorization.Substring("Bearer ".Length).Trim();
+            var principal = _tokenService.ValidateToken(token);
+
+            if (principal == null)
+            {
+                return Unauthorized(new { message = "Invalid or expired token." });
+            }
+
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "User ID not found in token." });
+            }
+
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found." });
+            }
+
+            return Ok(new
+            {
+                id = user.Id,
+                username = user.UserName,
+                first_name = user.FullName,
+                last_name = user.FullName,
+                email = user.Email,
+                companyId = user.CompanyId,
+                roles = "companyAdmin",
+            });
+        }
     }
 }
 

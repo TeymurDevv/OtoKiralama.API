@@ -17,7 +17,6 @@ namespace OtoKiralama.Presentation.Controllers
             _gearService = gearService;
         }
         [HttpGet("")]
-        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllGears(int pageNumber = 1, int pageSize = 10)
         {
             var gears = await _gearService.GetAllGearsAsync(pageNumber, pageSize);

@@ -42,13 +42,18 @@ namespace OtoKiralama.Application.Services
             var existReservation = await _unitOfWork.ReservationRepository.GetEntity(r => r.Id == id);
             if (existReservation is null)
                 throw new CustomException(404, "Id", "Reservation not found with this Id");
-            if (existReservation.Status != Domain.Enums.ReservationStatus.Canceled)
+            if (existReservation.Status == Domain.Enums.ReservationStatus.Canceled)
                 throw new CustomException(400, "Id", "Cannot complete a reservation that is Cancelled");
-            existReservation.Status = Domain.Enums.ReservationStatus.Completed;
+            if (existReservation.Status == Domain.Enums.ReservationStatus.Completed)
+                throw new CustomException(400, "Id", "Reservation is already completed");
+
+            existReservation.IsCompleted = true;
             var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
             existCar.IsReserved = false;
+
             _unitOfWork.Commit();
         }
+
 
         public async Task CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
