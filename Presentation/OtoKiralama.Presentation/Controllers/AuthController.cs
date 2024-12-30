@@ -8,7 +8,7 @@ using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Settings;
 using OtoKiralama.Persistance.Data.Implementations;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Persistance.Entities; 
 using System.Security.Claims;
 
 namespace OtoKiralama.Presentation.Controllers
@@ -38,6 +38,10 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
+            if(_userManager.Users.Any(u => u.Email == registerDto.Email))
+                throw new CustomException(400,"Email", "Email already in use");
+            if(_userManager.Users.Any(u => u.UserName == registerDto.UserName))
+                throw new CustomException(400,"Username", "Username already in use");
             var existUser = await _userManager.FindByNameAsync(registerDto.UserName);
             if (existUser != null) return BadRequest();
             AppUser appUser = new AppUser();
@@ -45,8 +49,12 @@ namespace OtoKiralama.Presentation.Controllers
             appUser.Email = registerDto.Email;
             appUser.FullName = registerDto.FullName;
             var result = await _userManager.CreateAsync(appUser, registerDto.Password);
-            if (!result.Succeeded) return BadRequest(result.Errors);
-            await _userManager.AddToRoleAsync(appUser, "member");
+            if (!result.Succeeded)
+            {
+                var errorMessages = result.Errors.ToDictionary(e => e.Code, e => e.Description);
+
+                throw new CustomException(400, errorMessages);
+            }            await _userManager.AddToRoleAsync(appUser, "member");
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("CompanyPersonelRegister")]
@@ -111,6 +119,7 @@ namespace OtoKiralama.Presentation.Controllers
             await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
             return Ok();
         }
+        
         [HttpPost("ValidateToken")]
         [Authorize(Roles ="admin")]
         public IActionResult ValidateToken([FromHeader] string Authorization)
@@ -150,6 +159,7 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "admin",
             });
         }
+        
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
         public IActionResult ValidateAgentToken([FromHeader] string Authorization)
@@ -188,6 +198,46 @@ namespace OtoKiralama.Presentation.Controllers
                 email = user.Email,
                 companyId = user.CompanyId,
                 roles = "companyAdmin",
+            });
+        }
+        
+        [HttpPost("ValidateUserToken")]
+        [Authorize(Roles = "member")]
+        public IActionResult ValidateUserToken([FromHeader] string Authorization)
+        {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { message = "Invalid token format." });
+            }
+
+            var token = Authorization.Substring("Bearer ".Length).Trim();
+            var principal = _tokenService.ValidateToken(token);
+
+            if (principal == null)
+            {
+                return Unauthorized(new { message = "Invalid or expired token." });
+            }
+
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "User ID not found in token." });
+            }
+
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found." });
+            }
+
+            return Ok(new
+            {
+                id = user.Id,
+                username = user.UserName,
+                first_name = user.FullName,
+                last_name = user.FullName,
+                email = user.Email,
+                roles = "member",
             });
         }
     }

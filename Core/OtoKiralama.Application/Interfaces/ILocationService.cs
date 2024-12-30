@@ -8,6 +8,7 @@ namespace OtoKiralama.Application.Interfaces
     public interface ILocationService
     {
         Task<PagedResponse<LocationListItemDto>> GetAllLocationsAsync(int pageNumber, int pageSize);
+        Task<PagedResponse<LocationListItemDto>> GetAllLocationsByNameAsync(string name, int pageNumber, int pageSize);
         Task<LocationReturnDto> GetLocationByIdAsync(int id);
         Task CreateLocationAsync(LocationCreateDto locationCreateDto);
         Task DeleteLocationAsync(int id);

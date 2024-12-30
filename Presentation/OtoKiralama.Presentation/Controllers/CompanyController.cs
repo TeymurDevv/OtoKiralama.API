@@ -31,6 +31,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _companyService.GetCompanyByIdAsync(id));
         }
+
+        [HttpGet("GetCompanyByName/{name}")]
+        public async Task<IActionResult> GetCompanyByName(string name)
+        {
+            return Ok(await _companyService.GetCompanyByNameAsync(name));
+        }
         [HttpPost("")]
         public async Task<IActionResult> CreateCompany(CompanyCreateDto companyCreateDto)
         {

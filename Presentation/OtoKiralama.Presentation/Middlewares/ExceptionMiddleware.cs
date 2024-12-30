@@ -10,24 +10,37 @@ namespace OtoKiralama.Presentation.Middlewares
         {
             _next = next;
         }
-        public async Task InvokeAsync(HttpContext context)
+
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
-                await _next.Invoke(context);
+                await _next(httpContext);
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
                 var errors = new Dictionary<string, string>();
-                context.Response.StatusCode = 500;
+                var responseMessage = ex.Message;
+
+                // If it's a CustomException, extract the errors
                 if (ex is CustomException customException)
                 {
-                    message = customException.Message;
                     errors = customException.Errors;
-                    context.Response.StatusCode = customException.Code;
+                    responseMessage = customException.Message;
                 }
-                await context.Response.WriteAsJsonAsync(new { message, errors });
+
+                var response = new
+                {
+                    message = responseMessage,
+                    errors = errors // Always include the errors dictionary, even if empty
+                };
+
+                httpContext.Response.ContentType = "application/json";
+                httpContext.Response.StatusCode = ex is CustomException custom
+                    ? custom.Code
+                    : StatusCodes.Status500InternalServerError;
+
+                await httpContext.Response.WriteAsJsonAsync(response);
             }
         }
     }

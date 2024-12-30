@@ -18,43 +18,52 @@ builder.Services.AddInfrastructureServices(config);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews()
-     .ConfigureApiBehaviorOptions(opt =>
-     {
-         opt.InvalidModelStateResponseFactory = context =>
-         {
-             var errors = context.ModelState
-                 .Where(e => e.Value?.Errors.Count > 0)
-                 .ToDictionary(
-                     x => x.Key,
-                     x => x.Value.Errors.First().ErrorMessage
-                 );
-
-             var response = new
-             {
-                 message = "Validation errors occurred.",
-                 errors
-             };
-
-             return new BadRequestObjectResult(response);
-         };
-     }); builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+    .ConfigureApiBehaviorOptions(opt =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = config["Jwt:Issuer"],
-        ValidAudience = config["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SecretKey"])),
-        ClockSkew = TimeSpan.Zero
-    };
+        opt.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.First().ErrorMessage
+                );
+
+            var response = new
+            {
+                message = "Validation errors occurred.",
+                errors
+            };
+
+            return new BadRequestObjectResult(response);
+        };
+    });    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = config["Jwt:Issuer"],
+            ValidAudience = config["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SecretKey"])),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() // Herhangi bir origin'e izin verir
+            .AllowAnyHeader() // Herhangi bir header'a izin verir
+            .AllowAnyMethod(); // Herhangi bir HTTP metoduna izin verir
+    });
 });
 builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
 builder.Services.AddSwaggerGen(c => {
@@ -89,15 +98,12 @@ builder.Services.AddPersistanceServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

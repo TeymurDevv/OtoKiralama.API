@@ -48,9 +48,9 @@ namespace OtoKiralama.Application.Services
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4250034f-c024-41f3-a10e-f7fd5ccc0671")),
                     ValidateIssuer = true,
-                    ValidIssuer = "http://localhost:7140",
+                    ValidIssuer = "https://api.kuzeygo.com",
                     ValidateAudience = true,
-                    ValidAudience = "http://localhost:7140",
+                    ValidAudience = "https://api.kuzeygo.com",
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 

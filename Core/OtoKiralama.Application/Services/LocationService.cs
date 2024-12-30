@@ -56,6 +56,25 @@ namespace OtoKiralama.Application.Services
                 CurrentPage = pageNumber
             };
         }
+
+        public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsByNameAsync(string name, int pageNumber, int pageSize)
+        { 
+            var locations = await _unitOfWork.LocationRepository.GetAll(
+                includes: query => query
+                    .Where(l=>l.Name.Contains(name))
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+            );
+            int locationsCount = locations.Count();
+            return new PagedResponse<LocationListItemDto>
+            {
+                Data = _mapper.Map<List<LocationListItemDto>>(locations),
+                TotalCount = locationsCount,
+                PageSize = pageSize,
+                CurrentPage = pageNumber
+            };
+        }
+
         public async Task<LocationReturnDto> GetLocationByIdAsync(int id)
         {
             var location = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == id);

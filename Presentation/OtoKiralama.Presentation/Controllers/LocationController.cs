@@ -26,6 +26,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _locationService.GetLocationByIdAsync(id));
         }
+
+        [HttpGet("search/{name}")]
+        public async Task<IActionResult> GetLocationsByKeyword(string name,int pageNumber = 1, int pageSize = 10)
+        {
+            return Ok(await _locationService.GetAllLocationsByNameAsync(name, pageNumber, pageSize));
+        }
         [HttpPost]
         public async Task<IActionResult> CreateLocation([FromBody] LocationCreateDto locationCreateDto)
         {

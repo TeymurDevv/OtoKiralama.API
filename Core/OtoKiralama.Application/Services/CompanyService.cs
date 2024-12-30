@@ -21,6 +21,14 @@ namespace OtoKiralama.Application.Services
             _photoService = photoService;
         }
 
+        public async Task<CompanyReturnDto> GetCompanyByNameAsync(string name)
+        {
+            var company = await _unitOfWork.CompanyRepository.GetEntity(c=>c.Name == name);
+            if(company == null)
+                throw new CustomException(404, "Name", "Company not found with this Name");
+            return _mapper.Map<CompanyReturnDto>(company);
+        }
+
         public async Task CreateCompanyAsync(CompanyCreateDto companyCreateDto)
         {
             var existCompany = await _unitOfWork.CompanyRepository.isExists(c => c.Name == companyCreateDto.Name);
