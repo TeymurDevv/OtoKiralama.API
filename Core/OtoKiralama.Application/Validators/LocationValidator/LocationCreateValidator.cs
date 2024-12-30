@@ -7,7 +7,7 @@ namespace OtoKiralama.Application.Validators.LocationValidator
     {
         public LocationCreateValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("İsim alanı zorunludur.");
         }
     }
 }

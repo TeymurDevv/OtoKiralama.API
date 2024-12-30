@@ -7,55 +7,54 @@ namespace OtoKiralama.Application.Validators.CarValidator
     {
         public CarCreateValidator()
         {
-            // Plate validation: Must not be empty, length between 6 and 10
+            // Plaka doğrulaması: Boş olamaz, uzunluğu 6 ile 10 karakter arasında olmalı
             RuleFor(x => x.Plate)
-                .NotEmpty().WithMessage("Plate is required.")
-                .Length(6, 10).WithMessage("Plate must be between 6 and 10 characters.");
+                .NotEmpty().WithMessage("Plaka alanı zorunludur.")
+                .Length(6, 10).WithMessage("Plaka alanının uzunluğu en az 6, en fazla 10 karakter olmalıdır.");
 
-            // CompanyId validation: Must be greater than 0
+            // Model doğrulaması: Boş olamaz
             RuleFor(x => x.ModelId)
-                .GreaterThan(0).WithMessage("ModelId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Model alanı boş olamaz.");
 
-            // SeatCount validation: Must be between 1 and 9
+            // Koltuk Sayısı doğrulaması: 1 ile 9 arasında olmalı
             RuleFor(x => x.SeatCount)
-                .InclusiveBetween(1, 9).WithMessage("Seat count must be between 1 and 9.");
+                .InclusiveBetween(1, 9).WithMessage("Koltuk sayısı 1 ile 9 arasında olmalıdır.");
 
-            // DailyPrice validation: Must be greater than 0
+            // Günlük Fiyat doğrulaması: 0'dan büyük olmalı
             RuleFor(x => x.DailyPrice)
-                .GreaterThan(0).WithMessage("Daily price must be greater than 0.");
+                .GreaterThan(0).WithMessage("Günlük fiyat 0'dan büyük olmalıdır.");
 
-            // Year validation: Must be a valid year
+            // Üretim Yılı doğrulaması: Geçerli bir yıl olmalı
             RuleFor(x => x.Year)
-                .InclusiveBetween(1886, DateTime.Now.Year).WithMessage($"Year must be between 1886 and {DateTime.Now.Year}.");
+                .InclusiveBetween(1886, DateTime.Now.Year).WithMessage($"Üretim yılı 1886 ile {DateTime.Now.Year} arasında olmalıdır.");
 
-
-            // BrandId validation: Must be greater than 0
+            // Marka doğrulaması: Boş olamaz
             RuleFor(x => x.BrandId)
-                .GreaterThan(0).WithMessage("BrandId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Marka alanı boş olamaz.");
 
-            // CompanyId validation: Must be greater than 0
+            // Şirket doğrulaması: Boş olamaz
             RuleFor(x => x.CompanyId)
-                .GreaterThan(0).WithMessage("CompanyId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Şirket alanı boş olamaz.");
 
-            // ClassId validation: Must be greater than 0
+            // Sınıf doğrulaması: Boş olamaz
             RuleFor(x => x.ClassId)
-                .GreaterThan(0).WithMessage("ClassId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Sınıf alanı boş olamaz.");
 
-            // FuelId validation: Must be greater than 0
+            // Yakıt doğrulaması: Boş olamaz
             RuleFor(x => x.FuelId)
-                .GreaterThan(0).WithMessage("FuelId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Yakıt alanı boş olamaz.");
 
-            // GearId validation: Must be greater than 0
+            // Vites doğrulaması: Boş olamaz
             RuleFor(x => x.GearId)
-                .GreaterThan(0).WithMessage("GearId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Vites alanı boş olamaz.");
 
-            // BodyId validation: Must be greater than 0
+            // Gövde doğrulaması: Boş olamaz
             RuleFor(x => x.BodyId)
-                .GreaterThan(0).WithMessage("BodyId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Gövde alanı boş olamaz.");
 
-            // LocationId validation: Must be greater than 0
+            // Konum doğrulaması: Boş olamaz
             RuleFor(x => x.LocationId)
-                .GreaterThan(0).WithMessage("LocationId must be greater than 0.");
+                .GreaterThan(0).WithMessage("Konum alanı boş olamaz.");
         }
     }
 }

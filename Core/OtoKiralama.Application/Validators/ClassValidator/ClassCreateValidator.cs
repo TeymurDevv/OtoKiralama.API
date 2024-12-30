@@ -9,9 +9,9 @@ namespace OtoKiralama.Application.Validators.ClassValidator
         {
             RuleFor(c => c.Name)
                 .NotEmpty()
-                .WithMessage("Name is required.")
+                .WithMessage("İsim alanı zorunludur.")
                 .MinimumLength(3)
-                .WithMessage("Name must be at least 3 characters long");
+                .WithMessage("isim alanı en az 3 karakter uzunluğunda olmak zorunda.");
         }
     }
 }

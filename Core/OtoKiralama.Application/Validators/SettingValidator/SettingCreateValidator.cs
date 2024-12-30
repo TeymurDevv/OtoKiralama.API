@@ -7,9 +7,9 @@ namespace OtoKiralama.Application.Validators.SettingValidator
     {
         public SettingCreateValidator()
         {
-            RuleFor(s => s.Name).NotEmpty().WithMessage("Name is required");
-            RuleFor(s => s.Key).NotEmpty().WithMessage("Key is required");
-            RuleFor(s => s.Value).NotEmpty().WithMessage("Value is required");
+            RuleFor(s => s.Name).NotEmpty().WithMessage("Ad alanı zorunludur.");
+            RuleFor(s => s.Key).NotEmpty().WithMessage("Anahtar alanı zorunludur.");
+            RuleFor(s => s.Value).NotEmpty().WithMessage("Değer alanı zorunludur.");
         }
     }
 }

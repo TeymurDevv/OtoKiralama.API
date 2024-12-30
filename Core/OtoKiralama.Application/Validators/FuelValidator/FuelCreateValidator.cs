@@ -7,9 +7,9 @@ namespace OtoKiralama.Application.Validators.FuelValidator
     {
         public FuelCreateValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
-            RuleFor(x=> x.Name).MaximumLength(50).WithMessage("Name can't be more than 50 character");
-            RuleFor(x=>x.Name).MinimumLength(3).WithMessage("Name can't be more than 3 character");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Ad alanı zorunludur.");
+            RuleFor(x => x.Name).MaximumLength(50).WithMessage("Ad 50 karakterden uzun olamaz.");
+            RuleFor(x => x.Name).MinimumLength(3).WithMessage("Ad 3 karakterden kısa olamaz.");
         }
     }
 }

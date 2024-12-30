@@ -7,7 +7,7 @@ namespace OtoKiralama.Application.Validators.RoleValidator
     {
         public RoleCreateValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("İsim alanı zorunludur.");
         }
     }
 }
