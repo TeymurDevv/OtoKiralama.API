@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241230215302_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,7 +324,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 12, 31, 2, 23, 51, 655, DateTimeKind.Local).AddTicks(3578));
+                        .HasDefaultValue(new DateTime(2024, 12, 31, 1, 53, 2, 364, DateTimeKind.Local).AddTicks(682));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -496,9 +499,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
@@ -509,7 +509,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 12, 31, 2, 23, 51, 653, DateTimeKind.Local).AddTicks(7246));
+                        .HasDefaultValue(new DateTime(2024, 12, 31, 1, 53, 2, 363, DateTimeKind.Local).AddTicks(5999));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -549,9 +549,6 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("UserIdentityInformation")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

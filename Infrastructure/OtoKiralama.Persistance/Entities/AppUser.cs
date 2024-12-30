@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OtoKiralama.Domain.Entities;
+using OtoKiralama.Domain.Enums;
 
 namespace OtoKiralama.Persistance.Entities
 {
@@ -10,5 +11,7 @@ namespace OtoKiralama.Persistance.Entities
         public Company Company { get; set; }
         public List<Reservation> Reservations { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public UserIdentityInformation? UserIdentityInformation { get; set; }
     }
 }

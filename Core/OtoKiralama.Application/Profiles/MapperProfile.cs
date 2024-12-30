@@ -108,6 +108,9 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             CreateMap<ReservationCreateDto, Reservation>();
+            CreateMap<AppUser, UserGetDto>();
+            CreateMap<UpdateUserDto, AppUser>()
+            .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

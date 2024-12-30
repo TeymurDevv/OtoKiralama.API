@@ -7,6 +7,7 @@ using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Settings;
+using OtoKiralama.Domain.Enums;
 using OtoKiralama.Persistance.Data.Implementations;
 using OtoKiralama.Persistance.Entities; 
 using System.Security.Claims;
@@ -24,7 +25,8 @@ namespace OtoKiralama.Presentation.Controllers
         private readonly ITokenService _tokenService;
         private readonly JwtSettings _jwtSettings;
         private readonly IUnitOfWork _unitOfWork;
-        public AuthController(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService, IUnitOfWork unitOfWork)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AuthController(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -33,6 +35,7 @@ namespace OtoKiralama.Presentation.Controllers
             _tokenService = tokenService;
             _jwtSettings = jwtSettings.Value;
             _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpPost("Register")]
@@ -239,6 +242,38 @@ namespace OtoKiralama.Presentation.Controllers
                 email = user.Email,
                 roles = "member",
             });
+        }
+        [HttpGet("Profile")]
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+            var existedUser=await _userManager.FindByIdAsync(userId);
+            if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+            var mappedUser=_mapper.Map<UserGetDto>(existedUser);
+            return Ok(mappedUser);
+        }
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateUserDto updateUserDto)
+        {
+
+            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+            var existedUser = await _userManager.FindByIdAsync(userId);
+            if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+            if (updateUserDto.UserIdentityInformation.Value != UserIdentityInformation.TCKimlik && updateUserDto.UserIdentityInformation != UserIdentityInformation.Passport)
+                throw new CustomException(400, "UsUserIdentityInformation", "UsUserIdentityInformation is wrong");
+            _mapper.Map(updateUserDto, existedUser);
+            var result = await _userManager.UpdateAsync(existedUser);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new CustomException(400, "Update Failed", errors);
+            }
+            var mappedExistedUser=_mapper.Map<UserGetDto>(existedUser);
+            return Ok(mappedExistedUser);
         }
     }
 }
