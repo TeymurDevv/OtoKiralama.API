@@ -9,6 +9,7 @@ using System.Text;
 using OtoKiralama.Persistance;
 using OtoKiralama.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 builder.Services.Register(builder.Configuration);
@@ -96,7 +97,14 @@ builder.Services.AddSwaggerGen(c => {
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddPersistanceServices();
 var app = builder.Build();
+app.MapOpenApi();
 
+// Map Scalar API Reference
+//app.MapScalarApiReference(options =>
+//{
+//    options.WithTitle("My API");
+
+//});
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -107,7 +115,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapOpenApi("/api-docs");
 app.MapControllers();
 
 app.Run();
