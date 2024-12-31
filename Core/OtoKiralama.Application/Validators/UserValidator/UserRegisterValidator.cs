@@ -22,6 +22,15 @@ namespace OtoKiralama.Application.Validators.UserValidator
                 .MinimumLength(6).WithMessage("Şifre en az 6 karakter olmalıdır.");
             RuleFor(r => r.RePassword)
                 .Equal(r => r.Password).WithMessage("Şifreler eşleşmelidir.");
+            RuleFor(s => s).Custom((s, context) =>
+            {
+                if (s.Password != s.RePassword)
+                {
+                    context.AddFailure("Password", "paswords dont match in this part");
+                }
+
+            });
+
         }
     }
 }
