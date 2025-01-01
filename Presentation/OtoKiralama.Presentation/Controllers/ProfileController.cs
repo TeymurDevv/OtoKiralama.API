@@ -82,5 +82,6 @@ namespace OtoKiralama.Presentation.Controllers
                 CurrentPage = pageNumber
             });
         }
+
     }
 }

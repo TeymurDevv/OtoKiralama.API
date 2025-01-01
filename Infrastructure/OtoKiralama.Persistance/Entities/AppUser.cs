@@ -13,5 +13,7 @@ namespace OtoKiralama.Persistance.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime? BirthDate { get; set; }
         public UserIdentityInformation? UserIdentityInformation { get; set; }
+        public bool IsEmailSubscribed { get; set; }
+        public bool IsSmsSubscribed { get; set; }
     }
 }

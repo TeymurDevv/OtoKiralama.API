@@ -8,8 +8,10 @@ namespace OtoKiralama.Domain.Entities
         int? CompanyId { get; set; }
         Company Company { get; set; }
         List<Reservation> Reservations { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public UserIdentityInformation? UserIdentityInformation { get; set; }
+         DateTime CreatedDate { get; set; }
+         DateTime? BirthDate { get; set; }
+         UserIdentityInformation? UserIdentityInformation { get; set; }
+         bool IsEmailSubscribed { get; set; }
+         bool IsSmsSubscribed { get; set; }
     }
 }
