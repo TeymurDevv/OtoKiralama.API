@@ -11,6 +11,8 @@ namespace OtoKiralama.Persistance.Data.Configurations
         {
             builder.HasKey(c => c.Id);
             builder.Property(c => c.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.Property(s=>s.IsSmsSubscribed).HasDefaultValue(false);
+            builder.Property(s => s.IsEmailSubscribed).HasDefaultValue(false);
         }
     }
 }
