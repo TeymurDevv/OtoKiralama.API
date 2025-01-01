@@ -248,17 +248,7 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "member",
             });
         }
-        [HttpGet("Profile")]
-        [Authorize]
-        public async Task<IActionResult> Profile()
-        {
-            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
-            var existedUser=await _userManager.FindByIdAsync(userId);
-            if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
-            var mappedUser=_mapper.Map<UserGetDto>(existedUser);
-            return Ok(mappedUser);
-        }
+       
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserDto updateUserDto)
@@ -280,46 +270,7 @@ namespace OtoKiralama.Presentation.Controllers
             var mappedExistedUser=_mapper.Map<UserGetDto>(existedUser);
             return Ok(mappedExistedUser);
         }
-        [HttpGet("GetUserReservations")]
-        [Authorize]
-        public async Task<IActionResult> GetUserReservations(int pageNumber, int pageSize)
-        {
-            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
-            var existedUser = await _userManager.FindByIdAsync(userId);
-            if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
-            var existedReservations=await _unitOfWork.ReservationRepository.GetAll(s=>s.AppUserId==userId, includes: new Func<IQueryable<Reservation>, IQueryable<Reservation>>[]
-    {
-        query => query.Include(c => c.Car)
-                        .ThenInclude(c => c.Brand)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Model)
-                            .ThenInclude(m => m.CarPhoto)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Body)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Class)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Fuel)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Gear)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Location)
-                    .Include(c => c.Car)
-                        .ThenInclude(c => c.Company)
-                    .Include(c => c.AppUser).Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-    });
-            var mappedReservation = _mapper.Map<List<ReservationListItemDto>>(existedReservations);
-            var totalReservations = await _unitOfWork.ReservationRepository.CountAsync();
-            return Ok(new PagedResponse<ReservationListItemDto>
-            {
-                Data = mappedReservation,
-                TotalCount = totalReservations,
-                PageSize = pageSize,
-                CurrentPage = pageNumber
-            });
-        }
+        
     }
 }
 
