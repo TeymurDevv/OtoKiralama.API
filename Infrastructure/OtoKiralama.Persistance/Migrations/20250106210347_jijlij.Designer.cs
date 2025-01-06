@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250106210347_jijlij")]
+    partial class jijlij
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,7 +324,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 1, 7, 1, 8, 20, 342, DateTimeKind.Local).AddTicks(4900));
+                        .HasDefaultValue(new DateTime(2025, 1, 7, 1, 3, 46, 806, DateTimeKind.Local).AddTicks(2410));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -509,7 +512,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 1, 7, 1, 8, 20, 323, DateTimeKind.Local).AddTicks(9760));
+                        .HasDefaultValue(new DateTime(2025, 1, 7, 1, 3, 46, 795, DateTimeKind.Local).AddTicks(1150));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

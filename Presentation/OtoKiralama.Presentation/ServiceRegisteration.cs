@@ -10,6 +10,7 @@ using OtoKiralama.Application.Settings;
 using OtoKiralama.Persistance.Data;
 using OtoKiralama.Persistance.Entities;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace OtoKiralama.Presentation
 {
@@ -20,7 +21,8 @@ namespace OtoKiralama.Presentation
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("AppConnectionString"),
-                                     sqlOptions => sqlOptions.MigrationsAssembly("OtoKiralama.Persistance"));
+                        sqlOptions => sqlOptions.MigrationsAssembly("OtoKiralama.Persistance"))
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));   
             });
 
             services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -36,16 +38,7 @@ namespace OtoKiralama.Presentation
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.User.RequireUniqueEmail = true;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
-            services.AddControllers()
-                .ConfigureApiBehaviorOptions(opt =>
-                {
-                    opt.InvalidModelStateResponseFactory = context =>
-                    {
-                        var errors = context.ModelState.Where(e => e.Value?.Errors.Count > 0)
-                            .Select(x => new Dictionary<string, string>() { { x.Key, x.Value.Errors.First().ErrorMessage } });
-                        return new BadRequestObjectResult(new { message = "", errors });
-                    };
-                });
+            services.AddControllers();
             services.AddCors(options => options.AddPolicy("CorsPolicy",
     builder =>
     {
