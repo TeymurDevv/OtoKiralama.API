@@ -174,5 +174,41 @@ namespace OtoKiralama.Persistance.Data.Implementations
                 throw new Exception(ex.Message);
             }
         }
+        public Task<IQueryable<T>> GetQuery(
+            Expression<Func<T, bool>> predicate = null, bool AsnoTracking = false, bool AsSplitQuery = false,
+            params Func<IQueryable<T>, IQueryable<T>>[] includes)
+        {
+            try
+            {
+                IQueryable<T> query = _table.AsQueryable();
+
+                if (includes != null && includes.Length > 0)
+                {
+                    foreach (var include in includes)
+                    {
+                        query = include(query);
+                    }
+                }
+
+                if (predicate != null)
+                {
+                    query = query.Where(predicate);
+                }
+                if (AsnoTracking is true)
+                {
+                    query = query.AsNoTracking();
+                };
+                if (AsSplitQuery is true)
+                {
+                    query = query.AsSplitQuery();
+                }
+                return Task.FromResult(query);
+            }
+            catch (Exception ex)
+            {
+                // Provide more detailed error information
+                throw new Exception($"Error in GetQuery for type {typeof(T).Name}: {ex.Message}", ex);
+            }
+        }
     }
 }

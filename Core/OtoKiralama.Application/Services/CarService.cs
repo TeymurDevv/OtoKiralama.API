@@ -89,7 +89,7 @@ namespace OtoKiralama.Application.Services
                 includes: query => query
                     .Include(c => c.Brand)
                     .Include(c => c.Model)
-                        .ThenInclude(c => c.CarPhoto)
+                    .ThenInclude(c => c.CarPhoto)
                     .Include(c => c.Body)
                     .Include(c => c.Class)
                     .Include(c => c.Fuel)
@@ -108,6 +108,7 @@ namespace OtoKiralama.Application.Services
                 CurrentPage = pageNumber
             };
         }
+
         public async Task<CarReturnDto> GetCarByIdAsync(int id)
         {
             var car = await _unitOfWork.CarRepository.GetEntity(
@@ -115,7 +116,7 @@ namespace OtoKiralama.Application.Services
                 includes: query => query
                     .Include(c => c.Brand)
                     .Include(c => c.Model)
-                        .ThenInclude(m => m.CarPhoto)
+                    .ThenInclude(m => m.CarPhoto)
                     .Include(c => c.Body)
                     .Include(c => c.Class)
                     .Include(c => c.Fuel)
@@ -129,6 +130,7 @@ namespace OtoKiralama.Application.Services
 
             return _mapper.Map<CarReturnDto>(car);
         }
+
         public async Task ChangeCarStatus(int id)
         {
             var car = await _unitOfWork.CarRepository.GetEntity(c => c.Id == id);
@@ -147,6 +149,39 @@ namespace OtoKiralama.Application.Services
             car.IsActive = false;
             car.IsReserved = false;
             _unitOfWork.Commit();
+        }
+
+        public async Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime fromDate, DateTime toDate)
+        {
+            var pickupLocation = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == pickupLocationId);
+            if (pickupLocation is null)
+                throw new CustomException(404, "Id", "PickupLocation not found");
+
+            dropoffLocationId ??= pickupLocationId;
+
+            var dropoffLocation = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == dropoffLocationId);
+            if (dropoffLocation is null)
+                throw new CustomException(404, "Id", "DropoffLocation not found");
+
+            var cars = await _unitOfWork.CarRepository.GetQuery(
+                predicate: c => c.LocationId == pickupLocationId &&
+                                !c.IsReserved &&
+                                !c.Reservations.Any(b => (fromDate >= b.StartDate && fromDate <= b.EndDate) ||
+                                                         (toDate >= b.StartDate && toDate <= b.EndDate) ||
+                                                         (fromDate <= b.StartDate && toDate >= b.EndDate)),
+                includes: query => query
+                    .Include(c => c.Brand)
+                    .Include(c => c.Model)
+                    .ThenInclude(m => m.CarPhoto)
+                    .Include(c => c.Body)
+                    .Include(c => c.Class)
+                    .Include(c => c.Fuel)
+                    .Include(c => c.Gear)
+                    .Include(c => c.Location)
+                    .Include(c => c.Company)
+            );
+
+            return _mapper.Map<List<CarListItemDto>>(cars);
         }
     }
 }

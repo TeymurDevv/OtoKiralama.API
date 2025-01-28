@@ -11,5 +11,8 @@ namespace OtoKiralama.Domain.Repositories
         Task Delete(T entity);
         Task<bool> isExists(Expression<Func<T, bool>> predicate = null);
         Task Commit();
+        Task<IQueryable<T>> GetQuery(
+            Expression<Func<T, bool>> predicate = null, bool AsnoTracking = false, bool AsSplitQuery = false,
+            params Func<IQueryable<T>, IQueryable<T>>[] includes);
     }
 }

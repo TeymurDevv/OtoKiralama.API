@@ -11,6 +11,5 @@ namespace OtoKiralama.Application.Interfaces
         Task DeleteReservationAsync(int id);
         Task CancelReservation(int id);
         Task CompleteReservation(int id);
-        
     }
 }

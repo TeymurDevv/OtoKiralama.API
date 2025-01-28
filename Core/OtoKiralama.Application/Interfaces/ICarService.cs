@@ -12,5 +12,8 @@ namespace OtoKiralama.Application.Interfaces
         Task DeleteCarAsync(int id);
         Task ChangeCarStatus(int id);
         Task MarkAsDeactıve(int id);
+
+        Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime startDate,
+            DateTime endDate);
     }
 }

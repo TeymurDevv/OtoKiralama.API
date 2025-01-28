@@ -49,5 +49,13 @@ namespace OtoKiralama.Presentation.Controllers
             await _carService.MarkAsDeactıve(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        [HttpPost("Search")]
+        public async Task<IActionResult> SearchCars(CarSearchDto carSearchDto)
+        {
+            return Ok(await _carService.GetAllFilteredCarsAsync(carSearchDto.PickupLocationId,
+                carSearchDto.DropOffLocationId,
+                carSearchDto.StartDate, carSearchDto.EndDate));
+        }
     }
 }
