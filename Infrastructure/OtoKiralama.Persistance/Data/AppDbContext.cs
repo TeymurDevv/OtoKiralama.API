@@ -53,6 +53,7 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<CarPhoto> CarPhotos { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<DeliveryType> DeliveryTypes { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }

@@ -1,6 +1,4 @@
 ﻿using OtoKiralama.Domain.Entities.Common;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
 
 namespace OtoKiralama.Domain.Entities
 {
@@ -31,7 +29,21 @@ namespace OtoKiralama.Domain.Entities
         public int CompanyId { get; set; }
         public Company Company { get; set; }
 
+        //yeni yaradilan entitiler
+        public bool IsLimited { get; private set; } = false;
+        public int? Limit { get; private set; }
+        public int DeliveryTypeId { get; set; }
+        public DeliveryType DeliveryType { get; set; }
+        public int DepositAmount { get; set; }
+
+
         // Rezervasyonlar
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        public void SetLimit(int limit)
+        {
+            Limit = limit;
+            IsLimited = true;
+        }
     }
 }

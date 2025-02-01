@@ -2,11 +2,11 @@
 
 namespace OtoKiralama.Persistance.Data.Implementations
 {
-    public class UnitOfWork : IUnitOfWork,IDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly AppDbContext _context;
 
-        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository, IClassRepository classRepository, ICarRepository carRepository, ICompanyRepository companyRepository, IModelRepository modelRepository, ICarPhotoRepository carPhotoRepository, ISettingRepository settingRepository, IReservationRepository reservationRepository)
+        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository, IClassRepository classRepository, ICarRepository carRepository, ICompanyRepository companyRepository, IModelRepository modelRepository, ICarPhotoRepository carPhotoRepository, ISettingRepository settingRepository, IReservationRepository reservationRepository, IDeliveryTypeRepository deliveryTypeRepository)
         {
             _context = context;
             LocationRepository = locationRepository;
@@ -21,6 +21,7 @@ namespace OtoKiralama.Persistance.Data.Implementations
             CarPhotoRepository = carPhotoRepository;
             SettingRepository = settingRepository;
             ReservationRepository = reservationRepository;
+            DeliveryTypeRepository = deliveryTypeRepository;
         }
 
         public ILocationRepository LocationRepository { get; private set; }
@@ -35,6 +36,7 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public ICarPhotoRepository CarPhotoRepository { get; private set; }
         public ISettingRepository SettingRepository { get; private set; }
         public IReservationRepository ReservationRepository { get; private set; }
+        public IDeliveryTypeRepository DeliveryTypeRepository { get; private set; }
 
 
         public void Commit()

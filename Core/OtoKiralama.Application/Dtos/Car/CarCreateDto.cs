@@ -16,5 +16,8 @@
         public int FuelId { get; set; }
         public int GearId { get; set; }
         public int LocationId { get; set; }
+        public int? Limit { get; private set; }
+        public int DeliveryTypeId { get; set; }
+        public int DepositAmount { get; set; }
     }
 }

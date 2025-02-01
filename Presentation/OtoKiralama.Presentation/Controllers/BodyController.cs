@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Body;
-using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Application.Services;
 
 namespace OtoKiralama.Presentation.Controllers
 {

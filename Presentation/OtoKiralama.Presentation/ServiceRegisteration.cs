@@ -1,16 +1,10 @@
 ﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using OtoKiralama.Application.Profiles;
-using OtoKiralama.Application.Settings;
 using OtoKiralama.Persistance.Data;
 using OtoKiralama.Persistance.Entities;
-using System.Text;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace OtoKiralama.Presentation
 {
@@ -22,7 +16,7 @@ namespace OtoKiralama.Presentation
             {
                 options.UseSqlServer(configuration.GetConnectionString("AppConnectionString"),
                         sqlOptions => sqlOptions.MigrationsAssembly("OtoKiralama.Persistance"))
-                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));   
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
             });
 
             services.AddIdentity<AppUser, IdentityRole>(options =>

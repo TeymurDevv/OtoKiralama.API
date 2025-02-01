@@ -66,8 +66,11 @@ namespace OtoKiralama.Application.Services
             if (carPhoto == null)
                 throw new CustomException(404, "CarPhotoId", "CarPhoto not found in this model");
 
-
             var car = _mapper.Map<Car>(carCreateDto);
+
+            if (carCreateDto.Limit != null) car.SetLimit(carCreateDto.Limit.Value);  // deposit profileda set olunmalidi auto limit burda set olunur profilede seti legv elemek lazimdi ve deliverytype profileda set olunmalidi nezere alarsan bulari
+
+
             await _unitOfWork.CarRepository.Create(car);
             _unitOfWork.Commit();
         }
@@ -96,6 +99,7 @@ namespace OtoKiralama.Application.Services
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
                     .Include(c => c.Company)
+                    .Include(c => c.DeliveryType)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
             );
@@ -123,6 +127,7 @@ namespace OtoKiralama.Application.Services
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
                     .Include(c => c.Company)
+                    .Include(c => c.DeliveryType)
             );
 
             if (car is null)
