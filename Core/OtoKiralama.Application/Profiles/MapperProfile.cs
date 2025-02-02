@@ -54,6 +54,7 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Model.Brand))
                 .ReverseMap();
             CreateMap<Car, CarReturnDto>()
                 //.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
@@ -65,6 +66,7 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Model.Brand))
                 .ReverseMap();
             CreateMap<CarCreateDto, Car>();
             CreateMap<CompanyCreateDto, Company>()

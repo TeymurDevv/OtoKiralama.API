@@ -91,6 +91,8 @@ namespace OtoKiralama.Application.Services
             var cars = await _unitOfWork.CarRepository.GetAll(
                 includes: query => query
                     .Include(c => c.Model)
+                    .ThenInclude(m => m.Brand)
+                    .Include(c => c.Model)
                     .ThenInclude(c => c.CarPhoto)
                     .Include(c => c.Body)
                     .Include(c => c.Class)
