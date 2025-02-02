@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250202190509_AddDeliveryTypeToTable")]
+    partial class AddDeliveryTypeToTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -332,11 +335,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<< HEAD
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 902, DateTimeKind.Local).AddTicks(520));
-=======
                         .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 779, DateTimeKind.Local).AddTicks(57));
->>>>>>> ad1a6e1074ece6303d93b68e532d9f07ce7d5138
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -540,11 +539,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<< HEAD
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 889, DateTimeKind.Local).AddTicks(1520));
-=======
                         .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 772, DateTimeKind.Local).AddTicks(9499));
->>>>>>> ad1a6e1074ece6303d93b68e532d9f07ce7d5138
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -592,11 +587,11 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TcKimlik")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("UserIdentityInformation")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

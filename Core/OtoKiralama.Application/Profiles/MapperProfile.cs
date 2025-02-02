@@ -6,6 +6,7 @@ using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.CarPhoto;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Company;
+using OtoKiralama.Application.Dtos.DeliveryType;
 using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Location;
@@ -110,6 +111,18 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<AppUser, UserGetDto>();
             CreateMap<UpdateUserDto, AppUser>()
             .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember != null));
+
+            //DeliveryType Mapping
+
+            CreateMap<DeliveryType, DeliveryTypeReturnDto>()
+              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<DeliveryType, DeliveryTypeListItemDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<DeliveryTypeCreateDto, DeliveryType>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
         }
     }
 }

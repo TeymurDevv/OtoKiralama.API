@@ -34,9 +34,9 @@ namespace OtoKiralama.Application.Services
             if (!existCompany)
                 throw new CustomException(404, "CompanyId", "Company not found with this Id");
 
-            //var existBrand = await _unitOfWork.BrandRepository.isExists(b => b.Id == carCreateDto.BrandId);
-            //if (!existBrand)
-            //    throw new CustomException(404, "BrandId", "Brand not found with this Id");
+            var existDeliveryType = await _unitOfWork.DeliveryTypeRepository.isExists(d => d.Id == carCreateDto.DeliveryTypeId);
+            if (!existDeliveryType)
+                throw new CustomException(404, "DeliveryTypeId", "Delivery type not found with this Id");
 
             var existModel = await _unitOfWork.ModelRepository.isExists(m => m.Id == carCreateDto.ModelId);
             if (!existModel)
