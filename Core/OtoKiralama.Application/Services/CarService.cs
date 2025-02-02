@@ -90,7 +90,6 @@ namespace OtoKiralama.Application.Services
             var totalCars = await _unitOfWork.CarRepository.CountAsync();
             var cars = await _unitOfWork.CarRepository.GetAll(
                 includes: query => query
-                    .Include(c => c.Brand)
                     .Include(c => c.Model)
                     .ThenInclude(c => c.CarPhoto)
                     .Include(c => c.Body)
@@ -118,7 +117,9 @@ namespace OtoKiralama.Application.Services
             var car = await _unitOfWork.CarRepository.GetEntity(
                 c => c.Id == id,
                 includes: query => query
-                    .Include(c => c.Brand)
+                    //.Include(c => c.Brand)
+                    .Include(c => c.Model)
+                    .ThenInclude(m => m.Brand)
                     .Include(c => c.Model)
                     .ThenInclude(m => m.CarPhoto)
                     .Include(c => c.Body)
@@ -175,7 +176,6 @@ namespace OtoKiralama.Application.Services
                                                          (toDate >= b.StartDate && toDate <= b.EndDate) ||
                                                          (fromDate <= b.StartDate && toDate >= b.EndDate)),
                 includes: query => query
-                    .Include(c => c.Brand)
                     .Include(c => c.Model)
                     .ThenInclude(m => m.CarPhoto)
                     .Include(c => c.Body)

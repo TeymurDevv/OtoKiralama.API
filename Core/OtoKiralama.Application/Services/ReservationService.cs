@@ -96,6 +96,7 @@ namespace OtoKiralama.Application.Services
             var reservations = await _unitOfWork.ReservationRepository.GetAll(
                 includes: query => query
                     .Include(c => c.Car)
+                    .ThenInclude(c => c.Model)
                         .ThenInclude(c => c.Brand)
                     .Include(c => c.Car)
                         .ThenInclude(c => c.Model)
@@ -132,6 +133,7 @@ namespace OtoKiralama.Application.Services
                 r => r.Id == id,
                 includes: query => query
                     .Include(c => c.Car)
+                    .ThenInclude(c => c.Model)
                         .ThenInclude(c => c.Brand)
                     .Include(c => c.Car)
                         .ThenInclude(c => c.Model)

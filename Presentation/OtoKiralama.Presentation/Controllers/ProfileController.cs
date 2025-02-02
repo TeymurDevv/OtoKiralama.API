@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +52,7 @@ namespace OtoKiralama.Presentation.Controllers
             var existedReservations = await _unitOfWork.ReservationRepository.GetAll(s => s.AppUserId == userId, includes: new Func<IQueryable<Reservation>, IQueryable<Reservation>>[]
     {
         query => query.Include(c => c.Car)
+                        .ThenInclude(c => c.Model)
                         .ThenInclude(c => c.Brand)
                     .Include(c => c.Car)
                         .ThenInclude(c => c.Model)
@@ -91,8 +91,8 @@ namespace OtoKiralama.Presentation.Controllers
             if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
             var existedUser = await _userManager.FindByIdAsync(userId);
             if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
-            existedUser.IsEmailSubscribed=changeSubscribtionStatusDto.IsEmailSubscribed;
-            existedUser.IsSmsSubscribed=changeSubscribtionStatusDto.IsSmsSubscribed;
+            existedUser.IsEmailSubscribed = changeSubscribtionStatusDto.IsEmailSubscribed;
+            existedUser.IsSmsSubscribed = changeSubscribtionStatusDto.IsSmsSubscribed;
             await _userManager.UpdateAsync(existedUser);
             return Ok(StatusCodes.Status200OK);
         }

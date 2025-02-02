@@ -14,8 +14,8 @@ namespace OtoKiralama.Domain.Entities
         public bool IsReserved { get; set; } // Şu anda rezervasyonlu mu?
         public int BodyId { get; set; }
         public Body Body { get; set; }
-        public int BrandId { get; set; }
-        public Brand Brand { get; set; }
+        //public int BrandId { get; set; }
+        //public Brand Brand { get; set; }
         public int ModelId { get; set; }
         public Model Model { get; set; }
         public int ClassId { get; set; }

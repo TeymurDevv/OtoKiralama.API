@@ -20,11 +20,11 @@ namespace OtoKiralama.Persistance.Data
                 .OnDelete(DeleteBehavior.Cascade); // Cascade delete Models when a Brand is deleted
 
             // Disable cascade delete from Brand to Cars
-            modelBuilder.Entity<Car>()
-                .HasOne(c => c.Brand)
-                .WithMany(b => b.Cars)
-                .HasForeignKey(c => c.BrandId)
-                .OnDelete(DeleteBehavior.Restrict); // No cascade delete from Brand to Cars directly
+            //modelBuilder.Entity<Car>()
+            //    .HasOne(c => c.Brand)
+            //    .WithMany(b => b.Cars)
+            //    .HasForeignKey(c => c.BrandId)
+            //    .OnDelete(DeleteBehavior.Restrict); // No cascade delete from Brand to Cars directly
 
             // When a Model is deleted, all related Cars will be deleted.
             modelBuilder.Entity<Car>()
