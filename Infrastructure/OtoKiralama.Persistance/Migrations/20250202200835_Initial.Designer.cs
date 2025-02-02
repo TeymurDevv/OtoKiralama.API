@@ -12,8 +12,8 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250202190509_AddDeliveryTypeToTable")]
-    partial class AddDeliveryTypeToTable
+    [Migration("20250202200835_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -335,7 +335,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 779, DateTimeKind.Local).AddTicks(57));
+                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 127, DateTimeKind.Local).AddTicks(410));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -539,7 +539,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 772, DateTimeKind.Local).AddTicks(9499));
+                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 113, DateTimeKind.Local).AddTicks(1140));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -587,11 +587,11 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TcKimlik")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("UserIdentityInformation")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

@@ -111,7 +111,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Migrations applied successfully.");
 
         Console.WriteLine("Seeding database...");
-        await SeedData.SeedDatabaseAsync(services); // Run your seeding logic
+        await SeedIdentityData.SeedDatabaseAsync(services); // Run your seeding logic
         Console.WriteLine("Database seeding completed successfully.");
     }
     catch (Exception ex)

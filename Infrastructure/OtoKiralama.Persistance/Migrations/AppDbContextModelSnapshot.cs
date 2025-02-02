@@ -332,11 +332,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<< HEAD
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 902, DateTimeKind.Local).AddTicks(520));
-=======
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 779, DateTimeKind.Local).AddTicks(57));
->>>>>>> ad1a6e1074ece6303d93b68e532d9f07ce7d5138
+                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 127, DateTimeKind.Local).AddTicks(410));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -540,11 +536,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<< HEAD
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 889, DateTimeKind.Local).AddTicks(1520));
-=======
-                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 5, 8, 772, DateTimeKind.Local).AddTicks(9499));
->>>>>>> ad1a6e1074ece6303d93b68e532d9f07ce7d5138
+                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 113, DateTimeKind.Local).AddTicks(1140));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
