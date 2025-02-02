@@ -12,15 +12,15 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241022093110_AddReservationConfiguration")]
-    partial class AddReservationConfiguration
+    [Migration("20250202192805_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -201,7 +201,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("BodyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BrandId")
+                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClassId")
@@ -213,17 +213,37 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<double>("DailyPrice")
                         .HasColumnType("float");
 
+                    b.Property<int>("DeliveryTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepositAmount")
+                        .HasColumnType("int");
+
                     b.Property<int>("FuelId")
                         .HasColumnType("int");
 
                     b.Property<int>("GearId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<bool>("IsFreeRefund")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsInstantConfirm")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsLimited")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReserved")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Limit")
+                        .HasColumnType("int");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -250,6 +270,8 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("DeliveryTypeId");
+
                     b.HasIndex("FuelId");
 
                     b.HasIndex("GearId");
@@ -274,9 +296,6 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -313,18 +332,51 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 902, DateTimeKind.Local).AddTicks(520));
+
+                    b.Property<string>("Essentials")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PaymentInformation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Requirements")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Trust")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.DeliveryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryTypes");
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Fuel", b =>
@@ -418,6 +470,9 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPaid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -425,6 +480,9 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
@@ -435,7 +493,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Reservation");
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Setting", b =>
@@ -468,12 +526,20 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 2, 2, 23, 28, 4, 889, DateTimeKind.Local).AddTicks(1520));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -484,6 +550,16 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEmailSubscribed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSmsSubscribed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -509,6 +585,9 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TcKimlik")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -592,11 +671,9 @@ namespace OtoKiralama.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OtoKiralama.Domain.Entities.Brand", "Brand")
+                    b.HasOne("OtoKiralama.Domain.Entities.Brand", null)
                         .WithMany("Cars")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BrandId");
 
                     b.HasOne("OtoKiralama.Domain.Entities.Class", "Class")
                         .WithMany("Cars")
@@ -607,6 +684,12 @@ namespace OtoKiralama.Persistance.Migrations
                     b.HasOne("OtoKiralama.Domain.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OtoKiralama.Domain.Entities.DeliveryType", "DeliveryType")
+                        .WithMany("Cars")
+                        .HasForeignKey("DeliveryTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -636,11 +719,11 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.Navigation("Body");
 
-                    b.Navigation("Brand");
-
                     b.Navigation("Class");
 
                     b.Navigation("Company");
+
+                    b.Navigation("DeliveryType");
 
                     b.Navigation("Fuel");
 
@@ -717,6 +800,11 @@ namespace OtoKiralama.Persistance.Migrations
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Class", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.DeliveryType", b =>
                 {
                     b.Navigation("Cars");
                 });

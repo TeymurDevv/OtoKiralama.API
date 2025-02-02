@@ -12,7 +12,7 @@ namespace OtoKiralama.Persistance.Entities
         public List<Reservation> Reservations { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? BirthDate { get; set; }
-        public UserIdentityInformation? UserIdentityInformation { get; set; }
+        public string TcKimlik { get; set; }
         public bool IsEmailSubscribed { get; set; }
         public bool IsSmsSubscribed { get; set; }
     }

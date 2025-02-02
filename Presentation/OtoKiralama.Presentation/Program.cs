@@ -9,6 +9,9 @@ using System.Text;
 using OtoKiralama.Persistance;
 using OtoKiralama.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OtoKiralama.Persistance.Data;
+using OtoKiralama.Persistance.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -97,6 +100,26 @@ builder.Services.AddSwaggerGen(c => {
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddPersistanceServices();
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<AppDbContext>();
+        Console.WriteLine("Applying migrations...");
+        await dbContext.Database.MigrateAsync(); // Apply any pending migrations
+        Console.WriteLine("Migrations applied successfully.");
+
+        Console.WriteLine("Seeding database...");
+        await SeedData.SeedDatabaseAsync(services); // Run your seeding logic
+        Console.WriteLine("Database seeding completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during database seeding: {ex}");
+    }
+}
+
 app.MapOpenApi();
 
 // Map Scalar API Reference

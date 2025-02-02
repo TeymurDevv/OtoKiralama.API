@@ -10,8 +10,8 @@ namespace OtoKiralama.Domain.Entities
         List<Reservation> Reservations { get; set; }
          DateTime CreatedDate { get; set; }
          DateTime? BirthDate { get; set; }
-         UserIdentityInformation? UserIdentityInformation { get; set; }
          bool IsEmailSubscribed { get; set; }
+         public string TcKimlik { get; set; }
          bool IsSmsSubscribed { get; set; }
     }
 }
