@@ -2,9 +2,8 @@
 
 namespace OtoKiralama.Domain.Entities
 {
-    public class CarPhoto:BaseEntity
+    public class CarPhoto : BaseEntity
     {
-        public string Name { get; set; }
         public int ModelId { get; set; }
         public Model Model { get; set; }
         public string ImageUrl { get; set; }

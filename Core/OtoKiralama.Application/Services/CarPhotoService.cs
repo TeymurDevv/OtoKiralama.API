@@ -27,9 +27,9 @@ namespace OtoKiralama.Application.Services
             var existModel = await _unitOfWork.ModelRepository.isExists(m => m.Id == carPhotoCreateDto.ModelId);
             if (!existModel)
                 throw new CustomException(404, "ModelId", "Model not found with this Id");
-            var eixstCarPhotoWithName = await _unitOfWork.CarPhotoRepository.isExists(cp => cp.Name == carPhotoCreateDto.Name);
-            if (eixstCarPhotoWithName)
-                throw new CustomException(400, "Name", "CarPhoto is Already exist with this name");
+            var eixstCarPhotoWithModelId = await _unitOfWork.CarPhotoRepository.isExists(cp => cp.ModelId == carPhotoCreateDto.ModelId);
+            if (eixstCarPhotoWithModelId)
+                throw new CustomException(400, "ModelId", "CarPhoto is Already exist with this Model");
             var carPhoto = _mapper.Map<CarPhoto>(carPhotoCreateDto);
             string imageUrl = await _photoService.UploadPhotoAsync(carPhotoCreateDto.Image);
             carPhoto.ImageUrl = imageUrl;
@@ -52,7 +52,7 @@ namespace OtoKiralama.Application.Services
             int totalCarPhotos = await _unitOfWork.CarPhotoRepository.CountAsync();
             var carPhotos = await _unitOfWork.CarPhotoRepository.GetAll(
                 includes: query => query
-                    .Include(cp=>cp.Model)
+                    .Include(cp => cp.Model)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
             );

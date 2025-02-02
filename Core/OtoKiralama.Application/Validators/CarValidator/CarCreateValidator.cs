@@ -28,9 +28,9 @@ namespace OtoKiralama.Application.Validators.CarValidator
             RuleFor(x => x.Year)
                 .InclusiveBetween(1886, DateTime.Now.Year).WithMessage($"Üretim yılı 1886 ile {DateTime.Now.Year} arasında olmalıdır.");
 
-            // Marka doğrulaması: Boş olamaz
-            RuleFor(x => x.BrandId)
-                .GreaterThan(0).WithMessage("Marka alanı boş olamaz.");
+            //// Marka doğrulaması: Boş olamaz
+            //RuleFor(x => x.BrandId)
+            //    .GreaterThan(0).WithMessage("Marka alanı boş olamaz.");
 
             // Şirket doğrulaması: Boş olamaz
             RuleFor(x => x.CompanyId)

@@ -10,7 +10,6 @@
         public bool IsFreeRefund { get; set; }
         public int CompanyId { get; set; }
         public int BodyId { get; set; }
-        public int BrandId { get; set; }
         public int ModelId { get; set; }
         public int ClassId { get; set; }
         public int FuelId { get; set; }
