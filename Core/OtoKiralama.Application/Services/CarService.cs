@@ -192,5 +192,76 @@ namespace OtoKiralama.Application.Services
 
             return _mapper.Map<List<CarListItemDto>>(cars);
         }
+
+        public async Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto)
+        {
+            var query = await _unitOfWork.CarRepository.GetQuery(
+                includes: q => q
+                    .Include(c => c.Model)
+                        .ThenInclude(m => m.Brand)
+                    .Include(c => c.Model)
+                        .ThenInclude(m => m.CarPhoto)
+                    .Include(c => c.Body)
+                    .Include(c => c.Class)
+                    .Include(c => c.Fuel)
+                    .Include(c => c.Gear)
+                    .Include(c => c.Location)
+                    .Include(c => c.Company)
+                    .Include(c => c.DeliveryType)
+            );
+
+            if (carSearchListDto.BrandIds != null && carSearchListDto.BrandIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.BrandIds.Contains(c.Model.Brand.Id));
+            }
+
+            if (carSearchListDto.ModelIds != null && carSearchListDto.ModelIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.ModelIds.Contains(c.Model.Id));
+            }
+
+            if (carSearchListDto.GearIds != null && carSearchListDto.GearIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.GearIds.Contains(c.GearId));
+            }
+
+            if (carSearchListDto.CompanyIds != null && carSearchListDto.CompanyIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.CompanyIds.Contains(c.CompanyId));
+            }
+
+            if (carSearchListDto.FuelIds != null && carSearchListDto.FuelIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.FuelIds.Contains(c.FuelId));
+            }
+
+            if (carSearchListDto.DeliveryTypeIds != null && carSearchListDto.DeliveryTypeIds.Any())
+            {
+                query = query.Where(c => carSearchListDto.DeliveryTypeIds.Contains(c.DeliveryTypeId));
+            }
+
+            if (carSearchListDto.SeatCounts != null && carSearchListDto.SeatCounts.Any())
+            {
+                query = query.Where(c => carSearchListDto.SeatCounts.Contains(c.SeatCount));
+            }
+
+            if (carSearchListDto.DailyPrices != null && carSearchListDto.DailyPrices.Count == 2)
+            {
+                double minPrice = carSearchListDto.DailyPrices[0];
+                double maxPrice = carSearchListDto.DailyPrices[1];
+                query = query.Where(c => c.DailyPrice >= minPrice && c.DailyPrice <= maxPrice);
+            }
+
+            if (carSearchListDto.DepositAmounts != null && carSearchListDto.DepositAmounts.Count == 2)
+            {
+                int minDeposit = carSearchListDto.DepositAmounts[0];
+                int maxDeposit = carSearchListDto.DepositAmounts[1];
+                query = query.Where(c => c.DepositAmount >= minDeposit && c.DepositAmount <= maxDeposit);
+            }
+
+            var cars = await query.ToListAsync();
+
+            return _mapper.Map<List<CarListItemDto>>(cars);
+        }
     }
 }

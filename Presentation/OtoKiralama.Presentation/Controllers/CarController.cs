@@ -57,5 +57,11 @@ namespace OtoKiralama.Presentation.Controllers
                 carSearchDto.DropOffLocationId,
                 carSearchDto.StartDate, carSearchDto.EndDate));
         }
+
+        [HttpPost("SearchAll")]
+        public async Task<IActionResult> SearchCarsAll(CarSearchListDto carSearchListDto)
+        {
+            return Ok(await _carService.GetAllFilteredListCarsAsync(carSearchListDto));
+        }
     }
 }
