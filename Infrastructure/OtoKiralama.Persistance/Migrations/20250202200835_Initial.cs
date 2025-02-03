@@ -78,7 +78,7 @@ namespace OtoKiralama.Persistance.Migrations
                     Trust = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Essentials = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 2, 23, 28, 4, 902, DateTimeKind.Local).AddTicks(520))
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 3, 0, 8, 35, 127, DateTimeKind.Local).AddTicks(410))
                 },
                 constraints: table =>
                 {
@@ -200,7 +200,7 @@ namespace OtoKiralama.Persistance.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 2, 23, 28, 4, 889, DateTimeKind.Local).AddTicks(1520)),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 3, 0, 8, 35, 113, DateTimeKind.Local).AddTicks(1140)),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TcKimlik = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsEmailSubscribed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
