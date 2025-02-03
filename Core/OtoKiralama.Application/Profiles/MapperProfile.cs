@@ -45,7 +45,6 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Class, ClassReturnDto>();
             CreateMap<Class, ClassListItemDto>();
             CreateMap<Car, CarListItemDto>()
-                //.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
                 .ForMember(dest => dest.Body, opt => opt.MapFrom(src => src.Body))
                 .ForMember(dest => dest.Class, opt => opt.MapFrom(src => src.Class))
                 .ForMember(dest => dest.Fuel, opt => opt.MapFrom(src => src.Fuel))
@@ -53,11 +52,11 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
-                .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
-                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Model.Brand))
+                .ForPath(dest => dest.Model.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
+                .ForPath(dest => dest.Model.Brand, opt => opt.MapFrom(src => src.Model.Brand))
+                .ForPath(dest => dest.DeliveryType, opt => opt.MapFrom(src => src.DeliveryType))
                 .ReverseMap();
             CreateMap<Car, CarReturnDto>()
-                //.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
                 .ForMember(dest => dest.Body, opt => opt.MapFrom(src => src.Body))
                 .ForMember(dest => dest.Class, opt => opt.MapFrom(src => src.Class))
                 .ForMember(dest => dest.Fuel, opt => opt.MapFrom(src => src.Fuel))
@@ -65,8 +64,9 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
-                .ForMember(dest => dest.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
-                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Model.Brand))
+                .ForPath(dest => dest.Model.CarPhoto, opt => opt.MapFrom(src => src.Model.CarPhoto))
+                .ForPath(dest => dest.Model.Brand, opt => opt.MapFrom(src => src.Model.Brand))
+                .ForPath(dest => dest.DeliveryType, opt => opt.MapFrom(src => src.DeliveryType))
                 .ReverseMap();
             CreateMap<CarCreateDto, Car>();
             CreateMap<CompanyCreateDto, Company>()
@@ -81,12 +81,10 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<AppUser, UserListItemDto>()
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company));
             CreateMap<CarPhoto, CarPhotoReturnDto>()
-               .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-               .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model));
+               .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
 
             CreateMap<CarPhoto, CarPhotoListItemDto>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model));
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
 
             CreateMap<CarPhotoCreateDto, CarPhoto>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
@@ -100,13 +98,13 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
             CreateMap<Reservation, ReservationListItemDto>()
                 .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
-                .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
+                .ForPath(dest => dest.Car.Model.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<Reservation, ReservationReturnDto>()
                 .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
-                .ForPath(dest => dest.Car.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
+                .ForPath(dest => dest.Car.Model.CarPhoto, opt => opt.MapFrom(src => src.Car.Model.CarPhoto))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.AppUser))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
             CreateMap<ReservationCreateDto, Reservation>();

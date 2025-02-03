@@ -119,7 +119,6 @@ namespace OtoKiralama.Application.Services
             var car = await _unitOfWork.CarRepository.GetEntity(
                 c => c.Id == id,
                 includes: query => query
-                    //.Include(c => c.Brand)
                     .Include(c => c.Model)
                     .ThenInclude(m => m.Brand)
                     .Include(c => c.Model)
@@ -178,6 +177,8 @@ namespace OtoKiralama.Application.Services
                                                          (toDate >= b.StartDate && toDate <= b.EndDate) ||
                                                          (fromDate <= b.StartDate && toDate >= b.EndDate)),
                 includes: query => query
+                .Include(c => c.Model)
+                    .ThenInclude(m => m.Brand)
                     .Include(c => c.Model)
                     .ThenInclude(m => m.CarPhoto)
                     .Include(c => c.Body)
@@ -186,6 +187,7 @@ namespace OtoKiralama.Application.Services
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
                     .Include(c => c.Company)
+                    .Include(c => c.DeliveryType)
             );
 
             return _mapper.Map<List<CarListItemDto>>(cars);
