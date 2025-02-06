@@ -7,6 +7,7 @@ using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
 using System.Diagnostics;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
 {
@@ -14,11 +15,13 @@ namespace OtoKiralama.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFusionCache _fusionCache;
 
-        public CarService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFusionCache fusionCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fusionCache = fusionCache;
         }
 
         public async Task CreateCarAsync(CarCreateDto carCreateDto)
@@ -199,6 +202,12 @@ namespace OtoKiralama.Application.Services
 
         public async Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto)
         {
+            var cacheKey = GenerateCacheKey(carSearchListDto);
+
+            var cachedCars = await _fusionCache.GetOrDefaultAsync<List<CarListItemDto>>(cacheKey);
+            if (cachedCars is not null)
+                return cachedCars;
+
             // `GetQuery` ilə əsas sorğunu alın
             var query = await _unitOfWork.CarRepository.GetQuery(
                 includes: q => q
@@ -273,7 +282,6 @@ namespace OtoKiralama.Application.Services
                                          c.DailyPrice <= carSearchListDto.DailyPriceRange.MaxPrice.Value);
             }
 
-
             // DepositAmount filtr
             if (carSearchListDto.DepositAmountRange.MinAmount.HasValue && carSearchListDto.DepositAmountRange.MaxAmount.HasValue)
             {
@@ -281,13 +289,28 @@ namespace OtoKiralama.Application.Services
                                          c.DepositAmount <= carSearchListDto.DepositAmountRange.MaxAmount.Value);
             }
 
-
-
             var cars = await query.ToListAsync();
 
-            return _mapper.Map<List<CarListItemDto>>(cars);
+            var mappedCars = _mapper.Map<List<CarListItemDto>>(cars);
+
+            await _fusionCache.SetAsync(cacheKey, mappedCars, TimeSpan.FromMinutes(2));
+
+            return mappedCars;
         }
 
-
+        // Helper method to generate a unique cache key based on filters
+        private string GenerateCacheKey(CarSearchListDto filters)
+        {
+            return $"cars-{string.Join("-", filters.BrandIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.ModelIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.GearIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.CompanyIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.FuelIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.DeliveryTypeIds ?? new List<int>())}" +
+                   $"-{string.Join("-", filters.SeatCounts ?? new List<int>())}" +
+                   $"-{filters.LimitRange.MinLimit}-{filters.LimitRange.MaxLimit}" +
+                   $"-{filters.DailyPriceRange.MinPrice}-{filters.DailyPriceRange.MaxPrice}" +
+                   $"-{filters.DepositAmountRange.MinAmount}-{filters.DepositAmountRange.MaxAmount}";
+        } 
     }
 }
