@@ -30,7 +30,7 @@ namespace OtoKiralama.Application.Services
             if (existModel)
                 throw new CustomException(400, "Name", "Model already exist with this name");
             await _unitOfWork.ModelRepository.Create(model);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteModelAsync(int id)
@@ -39,7 +39,7 @@ namespace OtoKiralama.Application.Services
             if (model is null)
                 throw new CustomException(404, "Id", "Model not found with this Id");
             await _unitOfWork.ModelRepository.Delete(model);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<ModelListItemDto>> GetAllModelsAsync(int pageNumber, int pageSize)

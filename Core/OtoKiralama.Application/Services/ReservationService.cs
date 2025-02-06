@@ -26,55 +26,92 @@ namespace OtoKiralama.Application.Services
 
         public async Task CancelReservation(int id)
         {
-            var existReservation = await _unitOfWork.ReservationRepository.GetEntity(r => r.Id == id);
-            if (existReservation is null)
-                throw new CustomException(404, "Id", "Reservation not found with this Id");
-            if (existReservation.Status == Domain.Enums.ReservationStatus.Canceled)
-                throw new CustomException(400, "Id", "Cannot cancel a reservation that is Cancelled");
-            existReservation.IsCanceled = true;
-            var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
-            existCar.IsReserved = false;
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var existReservation = await _unitOfWork.ReservationRepository.GetEntity(r => r.Id == id);
+                if (existReservation is null)
+                    throw new CustomException(404, "Id", "Reservation not found with this Id");
+
+                if (existReservation.Status == Domain.Enums.ReservationStatus.Canceled)
+                    throw new CustomException(400, "Id", "Cannot cancel a reservation that is already canceled");
+
+                existReservation.IsCanceled = true;
+
+                var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
+                existCar.IsReserved = false;
+
+                await _unitOfWork.CommitTransactionAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
         }
 
         public async Task CompleteReservation(int id)
         {
-            var existReservation = await _unitOfWork.ReservationRepository.GetEntity(r => r.Id == id);
-            if (existReservation is null)
-                throw new CustomException(404, "Id", "Reservation not found with this Id");
-            if (existReservation.Status == Domain.Enums.ReservationStatus.Canceled)
-                throw new CustomException(400, "Id", "Cannot complete a reservation that is Cancelled");
-            if (existReservation.Status == Domain.Enums.ReservationStatus.Completed)
-                throw new CustomException(400, "Id", "Reservation is already completed");
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var existReservation = await _unitOfWork.ReservationRepository.GetEntity(r => r.Id == id);
+                if (existReservation is null)
+                    throw new CustomException(404, "Id", "Reservation not found with this Id");
 
-            existReservation.IsCompleted = true;
-            var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
-            existCar.IsReserved = false;
+                if (existReservation.Status == Domain.Enums.ReservationStatus.Canceled)
+                    throw new CustomException(400, "Id", "Cannot complete a reservation that is canceled");
 
-            _unitOfWork.Commit();
+                if (existReservation.Status == Domain.Enums.ReservationStatus.Completed)
+                    throw new CustomException(400, "Id", "Reservation is already completed");
+
+                existReservation.IsCompleted = true;
+
+                var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
+                existCar.IsReserved = false;
+
+                await _unitOfWork.CommitTransactionAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
         }
-
 
         public async Task CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            var existCar = await _unitOfWork.CarRepository.isExists(c => c.Id == reservationCreateDto.CarId);
-            if (!existCar)
-                throw new CustomException(404, "CarId", "Car not found with this Id");
-            var existCarEntity = await _unitOfWork.CarRepository.GetEntity(c => c.Id == reservationCreateDto.CarId);
-            if (existCarEntity.IsReserved)
-                throw new CustomException(400, "CarId", "Car is already reserved");
-            if (!existCarEntity.IsActive)
-                throw new CustomException(400, "CarId", "Car is not active");
-            var existUser = await _userManager.FindByIdAsync(reservationCreateDto.UserId);
-            if (existUser is null)
-                throw new CustomException(404, "UserId", "User not found with this Id");
-            var reservation = _mapper.Map<Reservation>(reservationCreateDto);
-            reservation.AppUserId = reservationCreateDto.UserId;
-            reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays * existCarEntity.DailyPrice;
-            reservation.Status = Domain.Enums.ReservationStatus.Pending;
-            existCarEntity.IsReserved = true;
-            await _unitOfWork.ReservationRepository.Create(reservation);
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var existCar = await _unitOfWork.CarRepository.isExists(c => c.Id == reservationCreateDto.CarId);
+                if (!existCar)
+                    throw new CustomException(404, "CarId", "Car not found with this Id");
+
+                var existCarEntity = await _unitOfWork.CarRepository.GetEntity(c => c.Id == reservationCreateDto.CarId);
+                if (existCarEntity.IsReserved)
+                    throw new CustomException(400, "CarId", "Car is already reserved");
+
+                if (!existCarEntity.IsActive)
+                    throw new CustomException(400, "CarId", "Car is not active");
+
+                var existUser = await _userManager.FindByIdAsync(reservationCreateDto.UserId);
+                if (existUser is null)
+                    throw new CustomException(404, "UserId", "User not found with this Id");
+
+                var reservation = _mapper.Map<Reservation>(reservationCreateDto);
+                reservation.AppUserId = reservationCreateDto.UserId;
+                reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays * existCarEntity.DailyPrice;
+                existCarEntity.IsReserved = true;
+
+                await _unitOfWork.ReservationRepository.Create(reservation);
+                await _unitOfWork.CommitTransactionAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
         }
 
         public async Task DeleteReservationAsync(int id)
@@ -87,7 +124,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(400, "Id", "Cannot delete a reservation that is in progress");
 
             await _unitOfWork.ReservationRepository.Delete(existReservation);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<ReservationListItemDto>> GetAllReservationsAsync(int pageNumber, int pageSize)

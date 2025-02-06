@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using OtoKiralama.Application.Dtos.Body;
-using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -28,7 +26,7 @@ namespace OtoKiralama.Application.Services
             if (existFuel)
                 throw new CustomException(400, "Name", "Fuel already exist with this name");
             await _unitOfWork.FuelRepository.Create(fuel);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteFuelAsync(int id)
@@ -37,7 +35,7 @@ namespace OtoKiralama.Application.Services
             if (fuel is null)
                 throw new CustomException(404, "Id", "Fuel not found with this Id");
             await _unitOfWork.FuelRepository.Delete(fuel);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<FuelListItemDto>> GetAllFuelsAsync(int pageNumber, int pageSize)

@@ -34,7 +34,8 @@ namespace OtoKiralama.Application.Services
             string imageUrl = await _photoService.UploadPhotoAsync(carPhotoCreateDto.Image);
             carPhoto.ImageUrl = imageUrl;
             await _unitOfWork.CarPhotoRepository.Create(carPhoto);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task DeleteCarPhotoAsync(int id)
@@ -44,7 +45,8 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "CarPhoto not found with this Id");
             await _unitOfWork.CarPhotoRepository.Delete(carPhoto);
             await _photoService.DeletePhotoAsync(carPhoto.ImageUrl);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task<PagedResponse<CarPhotoListItemDto>> GetAllCarPhotosAsync(int pageNumber, int pageSize)

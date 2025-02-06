@@ -23,8 +23,8 @@ namespace OtoKiralama.Application.Services
 
         public async Task<CompanyReturnDto> GetCompanyByNameAsync(string name)
         {
-            var company = await _unitOfWork.CompanyRepository.GetEntity(c=>c.Name == name);
-            if(company == null)
+            var company = await _unitOfWork.CompanyRepository.GetEntity(c => c.Name == name);
+            if (company == null)
                 throw new CustomException(404, "Name", "Company not found with this Name");
             return _mapper.Map<CompanyReturnDto>(company);
         }
@@ -38,7 +38,7 @@ namespace OtoKiralama.Application.Services
             string imageUrl = await _photoService.UploadPhotoAsync(companyCreateDto.ImageFile);
             company.ImageUrl = imageUrl;
             await _unitOfWork.CompanyRepository.Create(company);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteCompanyAsync(int id)
@@ -48,7 +48,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Company not found with this Id");
             await _unitOfWork.CompanyRepository.Delete(company);
             await _photoService.DeletePhotoAsync(company.ImageUrl);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<CompanyListItemDto>> GetAllCompaniesAsync(int pageNumber, int pageSize)

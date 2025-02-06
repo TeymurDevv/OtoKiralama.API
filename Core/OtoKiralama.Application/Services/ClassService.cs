@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -27,7 +26,7 @@ namespace OtoKiralama.Application.Services
             if (existClass)
                 throw new CustomException(400, "Name", "Class already exist with this name");
             await _unitOfWork.ClassRepository.Create(@class);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteClassAsync(int id)
@@ -36,7 +35,8 @@ namespace OtoKiralama.Application.Services
             if (@class is null)
                 throw new CustomException(404, "Id", "Class not found with this Id");
             await _unitOfWork.ClassRepository.Delete(@class);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task<PagedResponse<ClassListItemDto>> GetAllClassesAsync(int pageNumber, int pageSize)

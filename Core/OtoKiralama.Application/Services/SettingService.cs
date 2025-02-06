@@ -8,7 +8,7 @@ using OtoKiralama.Persistance.Data.Implementations;
 
 namespace OtoKiralama.Application.Services
 {
-    public class SettingService:ISettingService
+    public class SettingService : ISettingService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,14 +22,14 @@ namespace OtoKiralama.Application.Services
         public async Task CreateSettingAsync(SettingCreateDto settingCreateDto)
         {
             var existSettingWithName = await _unitOfWork.SettingRepository.isExists(s => s.Name == settingCreateDto.Name);
-            if(existSettingWithName)
+            if (existSettingWithName)
                 throw new CustomException(400, "Name", "Setting with this name already exists");
             var existSettingWithKey = await _unitOfWork.SettingRepository.isExists(s => s.Key == settingCreateDto.Key);
-            if(existSettingWithKey)
+            if (existSettingWithKey)
                 throw new CustomException(400, "Key", "Setting with this key already exists");
             var setting = _mapper.Map<Setting>(settingCreateDto);
             await _unitOfWork.SettingRepository.Create(setting);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<SettingListItemDto>> GetAllSettingsAsync(int pageNumber, int pageSize)
@@ -68,9 +68,9 @@ namespace OtoKiralama.Application.Services
             var existSetting = await _unitOfWork.SettingRepository.GetEntity(s => s.Id == id);
             if (existSetting is null)
                 throw new CustomException(404, "Id", "Setting not found with this Id");
-            _mapper.Map(settingUpdateDto,existSetting);
+            _mapper.Map(settingUpdateDto, existSetting);
             await _unitOfWork.SettingRepository.Update(existSetting);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
     }

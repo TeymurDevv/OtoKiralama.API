@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -27,7 +26,7 @@ namespace OtoKiralama.Application.Services
             if (existGear)
                 throw new CustomException(400, "Name", "Gear already exist with this name");
             await _unitOfWork.GearRepository.Create(gear);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteGearAsync(int id)
@@ -36,7 +35,7 @@ namespace OtoKiralama.Application.Services
             if (gear is null)
                 throw new CustomException(404, "Id", "Gear not found with this Id");
             await _unitOfWork.GearRepository.Delete(gear);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<PagedResponse<GearListItemDto>> GetAllGearsAsync(int pageNumber, int pageSize)

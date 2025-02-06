@@ -73,7 +73,8 @@ namespace OtoKiralama.Application.Services
 
 
             await _unitOfWork.CarRepository.Create(car);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
 
@@ -83,7 +84,8 @@ namespace OtoKiralama.Application.Services
             if (car is null)
                 throw new CustomException(404, "Id", "Car not found with this Id");
             await _unitOfWork.CarRepository.Delete(car);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task<PagedResponse<CarListItemDto>> GetAllCarsAsync(int pageNumber, int pageSize)
@@ -146,7 +148,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Car not found with this Id");
             car.IsActive = !car.IsActive;
             await _unitOfWork.CarRepository.Update(car);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task MarkAsDeactıve(int id)
@@ -156,7 +158,8 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Car not found with this Id");
             car.IsActive = false;
             car.IsReserved = false;
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime fromDate, DateTime toDate)

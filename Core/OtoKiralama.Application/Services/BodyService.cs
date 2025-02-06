@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Body;
-using OtoKiralama.Application.Dtos.Car;
-using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
@@ -25,11 +22,11 @@ namespace OtoKiralama.Application.Services
         public async Task CreateBodyAsync(BodyCreateDto bodyCreateDto)
         {
             var body = _mapper.Map<Body>(bodyCreateDto);
-            var existBody =await  _unitOfWork.BodyRepository.isExists(b=>b.Name == bodyCreateDto.Name);
+            var existBody = await _unitOfWork.BodyRepository.isExists(b => b.Name == bodyCreateDto.Name);
             if (existBody)
                 throw new CustomException(400, "Name", "Body already exist with this name");
             await _unitOfWork.BodyRepository.Create(body);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
 
         }
 
@@ -39,7 +36,8 @@ namespace OtoKiralama.Application.Services
             if (body is null)
                 throw new CustomException(404, "Id", "Body not found with this Id");
             await _unitOfWork.BodyRepository.Delete(body);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task<PagedResponse<BodyListItemDto>> GetAllBodiesAsync(int pageNumber, int pageSize)

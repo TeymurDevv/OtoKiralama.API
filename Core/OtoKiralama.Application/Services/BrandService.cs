@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Logging;
-using OtoKiralama.Application.Dtos.Body;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -30,7 +28,8 @@ namespace OtoKiralama.Application.Services
             if (existBrand)
                 throw new CustomException(400, "Name", "Brand already exist with this name");
             await _unitOfWork.BrandRepository.Create(brand);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
         public async Task DeleteBrandAsync(int id)
@@ -52,7 +51,8 @@ namespace OtoKiralama.Application.Services
                 }
             }
             await _unitOfWork.BrandRepository.Delete(brand);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
+
         }
 
 

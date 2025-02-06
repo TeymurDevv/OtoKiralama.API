@@ -1,12 +1,27 @@
-﻿using OtoKiralama.Domain.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Persistance.Data.Implementations
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private IDbContextTransaction _transaction;
 
-        public UnitOfWork(AppDbContext context, ILocationRepository locationRepository, IBrandRepository brandRepository, IGearRepository gearRepository, IBodyRepository bodyRepository, IFuelRepository fuelRepository, IClassRepository classRepository, ICarRepository carRepository, ICompanyRepository companyRepository, IModelRepository modelRepository, ICarPhotoRepository carPhotoRepository, ISettingRepository settingRepository, IReservationRepository reservationRepository, IDeliveryTypeRepository deliveryTypeRepository)
+        public UnitOfWork(AppDbContext context,
+            ILocationRepository locationRepository,
+            IBrandRepository brandRepository,
+            IGearRepository gearRepository,
+            IBodyRepository bodyRepository,
+            IFuelRepository fuelRepository,
+            IClassRepository classRepository,
+            ICarRepository carRepository,
+            ICompanyRepository companyRepository,
+            IModelRepository modelRepository,
+            ICarPhotoRepository carPhotoRepository,
+            ISettingRepository settingRepository,
+            IReservationRepository reservationRepository,
+            IDeliveryTypeRepository deliveryTypeRepository)
         {
             _context = context;
             LocationRepository = locationRepository;
@@ -38,11 +53,51 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public IReservationRepository ReservationRepository { get; private set; }
         public IDeliveryTypeRepository DeliveryTypeRepository { get; private set; }
 
-
-        public void Commit()
+        // Tranzaksiyanı başlatmaq
+        public async Task BeginTransactionAsync()
         {
-            _context.SaveChanges();
+            if (_transaction == null)
+            {
+                _transaction = await _context.Database.BeginTransactionAsync();
+            }
         }
+
+        // Əməliyyatları təsdiqləmək
+        public async Task CommitTransactionAsync()
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+                if (_transaction != null)
+                {
+                    await _transaction.CommitAsync();
+                    await _transaction.DisposeAsync();
+                    _transaction = null;
+                }
+            }
+            catch
+            {
+                await RollbackTransactionAsync();
+                throw;
+            }
+        }
+
+        // Əməliyyatı geri qaytarmaq (rollback etmək)
+        public async Task RollbackTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+        }
+
+        public async Task CommitAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public void Dispose()
         {
             _context.Dispose();

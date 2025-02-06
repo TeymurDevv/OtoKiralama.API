@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using OtoKiralama.Application.Dtos.Brand;
-using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -30,7 +27,7 @@ namespace OtoKiralama.Application.Services
             if (existLocation)
                 throw new CustomException(400, "Name", "Location already exist with this name");
             await _unitOfWork.LocationRepository.Create(location);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
         public async Task DeleteLocationAsync(int id)
         {
@@ -38,7 +35,7 @@ namespace OtoKiralama.Application.Services
             if (location is null)
                 throw new CustomException(404, "Id", "Location not found with this Id");
             await _unitOfWork.LocationRepository.Delete(location);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
         public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsAsync(int pageNumber, int pageSize)
         {
@@ -58,10 +55,10 @@ namespace OtoKiralama.Application.Services
         }
 
         public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsByNameAsync(string name, int pageNumber, int pageSize)
-        { 
+        {
             var locations = await _unitOfWork.LocationRepository.GetAll(
                 includes: query => query
-                    .Where(l=>l.Name.Contains(name))
+                    .Where(l => l.Name.Contains(name))
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
             );
