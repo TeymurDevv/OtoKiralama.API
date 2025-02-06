@@ -6,6 +6,7 @@ using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
+using System.Diagnostics;
 
 namespace OtoKiralama.Application.Services
 {
@@ -195,6 +196,9 @@ namespace OtoKiralama.Application.Services
 
         public async Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto)
         {
+            var stp = Stopwatch.StartNew();
+
+            // `GetQuery` ilə əsas sorğunu alın
             var query = await _unitOfWork.CarRepository.GetQuery(
                 includes: q => q
                     .Include(c => c.Model)
@@ -210,58 +214,79 @@ namespace OtoKiralama.Application.Services
                     .Include(c => c.DeliveryType)
             );
 
+            // Aktiv və rezerv olunmayan maşınları filtrlə
+            query = query.Where(c => c.IsActive && !c.IsReserved);
+
+            // BrandIds filtr
             if (carSearchListDto.BrandIds != null && carSearchListDto.BrandIds.Any())
             {
                 query = query.Where(c => carSearchListDto.BrandIds.Contains(c.Model.Brand.Id));
             }
 
+            // ModelIds filtr
             if (carSearchListDto.ModelIds != null && carSearchListDto.ModelIds.Any())
             {
                 query = query.Where(c => carSearchListDto.ModelIds.Contains(c.Model.Id));
             }
 
+            // GearIds filtr
             if (carSearchListDto.GearIds != null && carSearchListDto.GearIds.Any())
             {
                 query = query.Where(c => carSearchListDto.GearIds.Contains(c.GearId));
             }
 
+            // CompanyIds filtr
             if (carSearchListDto.CompanyIds != null && carSearchListDto.CompanyIds.Any())
             {
                 query = query.Where(c => carSearchListDto.CompanyIds.Contains(c.CompanyId));
             }
 
+            // FuelIds filtr
             if (carSearchListDto.FuelIds != null && carSearchListDto.FuelIds.Any())
             {
                 query = query.Where(c => carSearchListDto.FuelIds.Contains(c.FuelId));
             }
 
+            // DeliveryTypeIds filtr
             if (carSearchListDto.DeliveryTypeIds != null && carSearchListDto.DeliveryTypeIds.Any())
             {
                 query = query.Where(c => carSearchListDto.DeliveryTypeIds.Contains(c.DeliveryTypeId));
             }
 
+            // SeatCounts filtr
             if (carSearchListDto.SeatCounts != null && carSearchListDto.SeatCounts.Any())
             {
                 query = query.Where(c => carSearchListDto.SeatCounts.Contains(c.SeatCount));
             }
 
-            if (carSearchListDto.DailyPrices != null && carSearchListDto.DailyPrices.Count == 2)
+            // Limits filtr
+            if (carSearchListDto.LimitRange.MinLimit.HasValue && carSearchListDto.LimitRange.MaxLimit.HasValue)
             {
-                double minPrice = carSearchListDto.DailyPrices[0];
-                double maxPrice = carSearchListDto.DailyPrices[1];
-                query = query.Where(c => c.DailyPrice >= minPrice && c.DailyPrice <= maxPrice);
+                query = query.Where(c => c.Limit >= carSearchListDto.LimitRange.MinLimit.Value &&
+                                         c.Limit <= carSearchListDto.LimitRange.MaxLimit.Value);
             }
 
-            if (carSearchListDto.DepositAmounts != null && carSearchListDto.DepositAmounts.Count == 2)
+            if (carSearchListDto.DailyPriceRange.MinPrice.HasValue && carSearchListDto.DailyPriceRange.MaxPrice.HasValue)
             {
-                int minDeposit = carSearchListDto.DepositAmounts[0];
-                int maxDeposit = carSearchListDto.DepositAmounts[1];
-                query = query.Where(c => c.DepositAmount >= minDeposit && c.DepositAmount <= maxDeposit);
+                query = query.Where(c => c.DailyPrice >= carSearchListDto.DailyPriceRange.MinPrice.Value &&
+                                         c.DailyPrice <= carSearchListDto.DailyPriceRange.MaxPrice.Value);
             }
+
+
+            // DepositAmount filtr
+            if (carSearchListDto.DepositAmountRange.MinAmount.HasValue && carSearchListDto.DepositAmountRange.MaxAmount.HasValue)
+            {
+                query = query.Where(c => c.DepositAmount >= carSearchListDto.DepositAmountRange.MinAmount.Value &&
+                                         c.DepositAmount <= carSearchListDto.DepositAmountRange.MaxAmount.Value);
+            }
+
+
 
             var cars = await query.ToListAsync();
 
             return _mapper.Map<List<CarListItemDto>>(cars);
         }
+
+
     }
 }
