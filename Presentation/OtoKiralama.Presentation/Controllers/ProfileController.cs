@@ -41,6 +41,19 @@ namespace OtoKiralama.Presentation.Controllers
             var mappedUser = _mapper.Map<UserGetDto>(existedUser);
             return Ok(mappedUser);
         }
+
+        [HttpDelete("DeleteUser")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser()
+        {
+            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+            var existUser = await _userManager.FindByIdAsync(userId);
+            if(existUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur");
+            await _userManager.DeleteAsync(existUser);
+            return Ok(StatusCode(StatusCodes.Status204NoContent));
+            
+        }
         [HttpGet("GetUserReservations")]
         [Authorize]
         public async Task<IActionResult> GetUserReservations(int pageNumber, int pageSize)
