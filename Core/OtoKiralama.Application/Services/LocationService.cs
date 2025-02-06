@@ -6,6 +6,7 @@ using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data;
 using OtoKiralama.Persistance.Data.Implementations;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
 {
@@ -13,11 +14,13 @@ namespace OtoKiralama.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFusionCache _fusionCache;
 
-        public LocationService(AppDbContext context, IMapper mapper, IUnitOfWork unitOfWork)
+        public LocationService(AppDbContext context, IMapper mapper, IUnitOfWork unitOfWork, IFusionCache fusionCache)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _fusionCache = fusionCache;
         }
 
         public async Task CreateLocationAsync(LocationCreateDto locationCreateDto)
@@ -54,22 +57,35 @@ namespace OtoKiralama.Application.Services
             };
         }
 
-        public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsByNameAsync(string name, int pageNumber, int pageSize)
+        public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsByNameAsync(
+            string name, int pageNumber, int pageSize)
         {
+            var cacheKey = $"locations-{name}-{pageNumber}-{pageSize}";
+
+            var cachedLocations = await _fusionCache.GetOrDefaultAsync<PagedResponse<LocationListItemDto>>(cacheKey);
+            if (cachedLocations is not null)
+                return cachedLocations;
+
             var locations = await _unitOfWork.LocationRepository.GetAll(
                 includes: query => query
                     .Where(l => l.Name.Contains(name))
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
             );
-            int locationsCount = locations.Count();
-            return new PagedResponse<LocationListItemDto>
+
+            int totalCount = await _unitOfWork.LocationRepository.CountAsync(l=>l.Name.Contains(name));
+
+            var pagedResponse = new PagedResponse<LocationListItemDto>
             {
                 Data = _mapper.Map<List<LocationListItemDto>>(locations),
-                TotalCount = locationsCount,
+                TotalCount = totalCount,
                 PageSize = pageSize,
                 CurrentPage = pageNumber
             };
+
+            await _fusionCache.SetAsync(cacheKey, pagedResponse, TimeSpan.FromMinutes(2));
+
+            return pagedResponse;
         }
 
         public async Task<LocationReturnDto> GetLocationByIdAsync(int id)
