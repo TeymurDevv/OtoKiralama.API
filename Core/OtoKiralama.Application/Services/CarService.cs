@@ -199,8 +199,6 @@ namespace OtoKiralama.Application.Services
 
         public async Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto)
         {
-            var stp = Stopwatch.StartNew();
-
             // `GetQuery` ilə əsas sorğunu alın
             var query = await _unitOfWork.CarRepository.GetQuery(
                 includes: q => q
