@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Services;
 using OtoKiralama.Application.Validators.BrandValidator;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application
 {
@@ -31,6 +33,15 @@ namespace OtoKiralama.Application
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
+            services.AddMemoryCache();
+
+            services.AddFusionCache()
+                .WithDefaultEntryOptions(new FusionCacheEntryOptions
+                {
+                    Duration = TimeSpan.FromMinutes(2),
+                    Priority = CacheItemPriority.High,
+
+                });
         }
     }
 }
