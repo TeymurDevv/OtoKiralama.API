@@ -165,8 +165,15 @@ namespace OtoKiralama.Application.Services
 
         }
 
-        public async Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime fromDate, DateTime toDate)
+        public async Task<List<CarListItemDto>> GetAllFilteredCarsAsync(
+            int pickupLocationId, int? dropoffLocationId, DateTime fromDate, DateTime toDate)
         {
+            var cacheKey = $"cars-{pickupLocationId}-{dropoffLocationId}-{fromDate:yyyyMMdd}-{toDate:yyyyMMdd}";
+
+            var cachedCars = await _fusionCache.GetOrDefaultAsync<List<CarListItemDto>>(cacheKey);
+            if (cachedCars is not null)
+                return cachedCars;
+
             var pickupLocation = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == pickupLocationId);
             if (pickupLocation is null)
                 throw new CustomException(404, "Id", "PickupLocation not found");
@@ -197,9 +204,12 @@ namespace OtoKiralama.Application.Services
                     .Include(c => c.DeliveryType)
             );
 
-            return _mapper.Map<List<CarListItemDto>>(cars);
-        }
+            var pagedResponse = _mapper.Map<List<CarListItemDto>>(cars);
 
+            await _fusionCache.SetAsync(cacheKey, pagedResponse, TimeSpan.FromMinutes(2));
+
+            return pagedResponse;
+        }
         public async Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto)
         {
             var cacheKey = GenerateCacheKey(carSearchListDto);
