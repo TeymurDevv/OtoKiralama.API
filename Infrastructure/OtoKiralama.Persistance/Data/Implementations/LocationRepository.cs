@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Repositories;
 
@@ -14,6 +15,11 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public async Task<int> CountAsync()
         {
             return await _context.Set<Location>().CountAsync();
+        }
+
+        public Task<int> CountAsync(Expression<Func<Location, bool>> predicate)
+        {
+            return _context.Set<Location>().CountAsync(predicate);
         }
     }
 }
