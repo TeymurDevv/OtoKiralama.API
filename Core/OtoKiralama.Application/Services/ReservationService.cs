@@ -101,7 +101,15 @@ namespace OtoKiralama.Application.Services
 
                 var reservation = _mapper.Map<Reservation>(reservationCreateDto);
                 reservation.AppUserId = reservationCreateDto.UserId;
+
+                int currentYear = DateTime.UtcNow.Year;
+                int lastNumber = await _unitOfWork.ReservationRepository.GetLastReservationNumberForYear(currentYear);
+                int nextNumber = lastNumber + 1;
+
+                reservation.ReservationNumber = $"{currentYear}-{nextNumber:D6}";
+
                 reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays * existCarEntity.DailyPrice;
+                reservation.TotalPrice += existCarEntity.DepositAmount;
                 existCarEntity.IsReserved = true;
 
                 await _unitOfWork.ReservationRepository.Create(reservation);
@@ -192,6 +200,46 @@ namespace OtoKiralama.Application.Services
 
             if (reservation is null)
                 throw new CustomException(404, "Id", "Reservation not found with this Id");
+
+            return _mapper.Map<ReservationReturnDto>(reservation);
+        }
+
+        public async Task<ReservationReturnDto> GetReservationByReservationNumberAndEmail(string reservationNumber, string email)
+        {
+            if (reservationNumber == null)
+                throw new CustomException(404, "ReservationNumber", "Reservation can not be null");
+            if (email == null)
+                throw new CustomException(404, "Email", "Email can not be null");
+
+            var reservation = await _unitOfWork.ReservationRepository.GetEntity(
+                r => r.ReservationNumber == reservationNumber,
+                includes: query => query
+                    .Include(c => c.Car)
+                    .ThenInclude(c => c.Model)
+                        .ThenInclude(c => c.Brand)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Model)
+                            .ThenInclude(m => m.CarPhoto)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Body)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Class)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Fuel)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Gear)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Location)
+                    .Include(c => c.Car)
+                        .ThenInclude(c => c.Company)
+                    .Include(c => c.AppUser)
+            );
+
+            if (reservation is null)
+                throw new CustomException(404, "ReservationNumber", "Reservation not found with this reservation number");
+            var existUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == reservation.AppUserId);
+            if (existUser.Email != email)
+                throw new CustomException(404, "Email", "Email is not correctly");
 
             return _mapper.Map<ReservationReturnDto>(reservation);
         }

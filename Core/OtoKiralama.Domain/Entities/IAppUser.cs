@@ -1,6 +1,4 @@
-﻿using OtoKiralama.Domain.Enums;
-
-namespace OtoKiralama.Domain.Entities
+﻿namespace OtoKiralama.Domain.Entities
 {
     public interface IAppUser
     {
@@ -8,10 +6,10 @@ namespace OtoKiralama.Domain.Entities
         int? CompanyId { get; set; }
         Company Company { get; set; }
         List<Reservation> Reservations { get; set; }
-         DateTime CreatedDate { get; set; }
-         DateTime? BirthDate { get; set; }
-         bool IsEmailSubscribed { get; set; }
-         public string TcKimlik { get; set; }
-         bool IsSmsSubscribed { get; set; }
+        DateTime CreatedDate { get; set; }
+        DateTime? BirthDate { get; set; }
+        bool IsEmailSubscribed { get; set; }
+        public string? TcKimlik { get; set; }
+        bool IsSmsSubscribed { get; set; }
     }
 }

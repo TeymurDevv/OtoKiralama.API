@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OtoKiralama.Application.Dtos.Car;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Interfaces;
 
@@ -22,6 +20,7 @@ namespace OtoKiralama.Presentation.Controllers
             var reservations = await _reservationService.GetAllReservationsAsync(pageNumber, pageSize);
             return Ok(reservations);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReservationById(int id)
         {
@@ -33,6 +32,7 @@ namespace OtoKiralama.Presentation.Controllers
             await _reservationService.CreateReservationAsync(reservationCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservationById(int id)
         {
@@ -50,6 +50,13 @@ namespace OtoKiralama.Presentation.Controllers
         {
             await _reservationService.CompleteReservation(id);
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpGet("FindReservation")]
+        public async Task<IActionResult> GetReservationByReservationNumberAndEmail(string reservationNumber, string email)
+        {
+            var reservation = await _reservationService.GetReservationByReservationNumberAndEmail(reservationNumber, email);
+            return Ok(reservation);
         }
     }
 }

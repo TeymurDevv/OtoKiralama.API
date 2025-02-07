@@ -4,7 +4,7 @@ using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Persistance.Data.Implementations
 {
-    public class ReservationRepository:Repository<Reservation>,IReservationRepository
+    public class ReservationRepository : Repository<Reservation>, IReservationRepository
     {
         private readonly AppDbContext _context;
         public ReservationRepository(AppDbContext context) : base(context)
@@ -15,6 +15,19 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public async Task<int> CountAsync()
         {
             return await _context.Set<Reservation>().CountAsync();
+        }
+
+        public async Task<int> GetLastReservationNumberForYear(int year)
+        {
+            var lastReservation = await _context.Reservations
+                .Where(r => r.ReservationNumber.StartsWith(year.ToString()))
+                .OrderByDescending(r => r.ReservationNumber)
+                .FirstOrDefaultAsync();
+
+            if (lastReservation == null)
+                return 0;
+
+            return int.Parse(lastReservation.ReservationNumber.Split('-')[1]);
         }
     }
 }

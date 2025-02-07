@@ -1,11 +1,11 @@
 ﻿using OtoKiralama.Domain.Entities.Common;
 using OtoKiralama.Domain.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OtoKiralama.Domain.Entities
 {
     public class Reservation : BaseEntity
     {
+        public string ReservationNumber { get; set; }
         public int CarId { get; set; }
         public Car Car { get; set; }
         public string AppUserId { get; set; }
