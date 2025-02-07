@@ -204,15 +204,10 @@ namespace OtoKiralama.Application.Services
             return _mapper.Map<ReservationReturnDto>(reservation);
         }
 
-        public async Task<ReservationReturnDto> GetReservationByReservationNumberAndEmail(string reservationNumber, string email)
+        public async Task<ReservationReturnDto> GetReservationByReservationNumberAndEmail(ReservationGetByEmailAndNumberDto reservationGetByEmailAndNumberDto)
         {
-            if (reservationNumber == null)
-                throw new CustomException(404, "ReservationNumber", "Reservation can not be null");
-            if (email == null)
-                throw new CustomException(404, "Email", "Email can not be null");
-
             var reservation = await _unitOfWork.ReservationRepository.GetEntity(
-                r => r.ReservationNumber == reservationNumber,
+                r => r.ReservationNumber == reservationGetByEmailAndNumberDto.ReservationNumber,
                 includes: query => query
                     .Include(c => c.Car)
                     .ThenInclude(c => c.Model)
@@ -238,7 +233,7 @@ namespace OtoKiralama.Application.Services
             if (reservation is null)
                 throw new CustomException(404, "ReservationNumber", "Reservation not found with this reservation number");
             var existUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == reservation.AppUserId);
-            if (existUser.Email != email)
+            if (existUser.Email != reservationGetByEmailAndNumberDto.Email)
                 throw new CustomException(404, "Email", "Email is not correctly");
 
             return _mapper.Map<ReservationReturnDto>(reservation);
