@@ -40,7 +40,7 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int? id, FuelUpdateDto fuelUpdateDto)
         {
-           await _fuelService.Update(id, fuelUpdateDto);
+           await _fuelService.UpdateAsync(id, fuelUpdateDto);
             return StatusCode(StatusCodes.Status200OK);
         }
     }

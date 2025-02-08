@@ -38,5 +38,11 @@ namespace OtoKiralama.Presentation.Controllers
             await _classService.DeleteClassAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int? id, ClassUpdateDto classUpdateDto)
+        {
+            await _classService.UpdateAsync(id, classUpdateDto);
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }

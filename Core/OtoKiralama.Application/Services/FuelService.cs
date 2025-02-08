@@ -64,7 +64,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Fuel not found with this Id");
             return _mapper.Map<FuelReturnDto>(fuel);
         }
-        public async Task Update(int? id,FuelUpdateDto fuelUpdateDto)
+        public async Task UpdateAsync(int? id,FuelUpdateDto fuelUpdateDto)
         {
             if (id is null)
                 throw new CustomException(400, "Id", "Id can not be left empty");

@@ -11,6 +11,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<FuelReturnDto> GetFuelByIdAsync(int id);
         Task CreateFuelAsync(FuelCreateDto fuelCreateDto);
         Task DeleteFuelAsync(int id);
-        Task Update(int? id, FuelUpdateDto fuelUpdateDto);
+        Task UpdateAsync(int? id, FuelUpdateDto fuelUpdateDto);
     }
 }

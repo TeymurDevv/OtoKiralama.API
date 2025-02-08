@@ -48,6 +48,10 @@ namespace OtoKiralama.Application.Profiles
                                     srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
                                 ));
             //bu setir gedir eger  property bosdusa onu goturmuk belelikle user bos gonderse  update nezere alinmir
+            CreateMap<ClassUpdateDto, Class>().
+                 ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                                    srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
+                                ));
             CreateMap<ClassCreateDto, Class>();
             CreateMap<Class, ClassReturnDto>();
             CreateMap<Class, ClassListItemDto>();

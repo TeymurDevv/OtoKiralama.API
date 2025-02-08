@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.Class;
+using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
@@ -62,6 +63,24 @@ namespace OtoKiralama.Application.Services
             if (@class is null)
                 throw new CustomException(404, "Id", "Class not found with this Id");
             return _mapper.Map<ClassReturnDto>(@class);
+        }
+        public  async Task UpdateAsync(int? id,ClassUpdateDto classUpdateDto)
+        {
+            if (id is null)
+                throw new CustomException(400, "Id", "Id can not be left empty");
+            var existedClass=await _unitOfWork.ClassRepository.GetEntity(s=>s.Id == id);
+            if (existedClass is null)
+                throw new CustomException(404, "Class", "Not found");
+            if (!string.IsNullOrEmpty(classUpdateDto.Name) && !existedClass.Name.Equals(classUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == classUpdateDto.Name.ToLower()))
+                {
+                    throw new CustomException(400, "Name", "This Class name already exists");
+                }
+            }
+            _mapper.Map(classUpdateDto,existedClass);
+            await _unitOfWork.ClassRepository.Update(existedClass);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

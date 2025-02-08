@@ -10,5 +10,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<ClassReturnDto> GetClassByIdAsync(int id);
         Task CreateClassAsync(ClassCreateDto classCreateDto);
         Task DeleteClassAsync(int id);
+        Task UpdateAsync(int? id, ClassUpdateDto classUpdateDto);
     }
 }
