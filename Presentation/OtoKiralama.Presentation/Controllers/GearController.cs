@@ -39,5 +39,11 @@ namespace OtoKiralama.Presentation.Controllers
             await _gearService.DeleteGearAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateGear(int? id, GearUpdateDto gearUpdateDto)
+        {
+            await _gearService.UpdateAsync(id, gearUpdateDto);
+            return StatusCode(StatusCodes.Status201Created);
+        }
     }
 }

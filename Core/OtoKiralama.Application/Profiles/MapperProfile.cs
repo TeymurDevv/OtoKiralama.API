@@ -56,6 +56,10 @@ namespace OtoKiralama.Application.Profiles
              ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                                 srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
                             ));
+            CreateMap<GearUpdateDto, Gear>().
+             ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                                srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
+                            ));
             CreateMap<ClassCreateDto, Class>();
             CreateMap<Class, ClassReturnDto>();
             CreateMap<Class, ClassListItemDto>();

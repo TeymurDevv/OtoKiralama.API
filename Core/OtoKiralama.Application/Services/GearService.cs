@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -61,6 +62,24 @@ namespace OtoKiralama.Application.Services
             if (gear is null)
                 throw new CustomException(404, "Id", "Gear not found with this Id");
             return _mapper.Map<GearReturnDto>(gear);
+        }
+        public async Task UpdateAsync(int? id,GearUpdateDto gearUpdateDto)
+        {
+            if (id is null)
+                throw new CustomException(400, "Id", "Id can not be left empty");
+            var existedGear = await _unitOfWork.GearRepository.GetEntity(s => s.Id == id);
+            if (existedGear is null)
+                throw new CustomException(404, "Gear", "Not found");
+            if (!string.IsNullOrEmpty(gearUpdateDto.Name) && !existedGear.Name.Equals(gearUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == gearUpdateDto.Name.ToLower()))
+                {
+                    throw new CustomException(400, "Name", "This Fuel name already exists");
+                }
+            }
+            _mapper.Map(gearUpdateDto, existedGear);
+            await _unitOfWork.GearRepository.Update(existedGear);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<GearReturnDto> GetGearByIdAsync(int id);
         Task CreateGearAsync(GearCreateDto gearCreateDto);
         Task DeleteGearAsync(int id);
+        Task UpdateAsync(int? id, GearUpdateDto gearUpdateDto);
     }
 }
