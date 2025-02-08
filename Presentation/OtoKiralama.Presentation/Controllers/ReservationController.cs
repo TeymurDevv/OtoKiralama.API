@@ -53,9 +53,9 @@ namespace OtoKiralama.Presentation.Controllers
         }
 
         [HttpGet("FindReservation")]
-        public async Task<IActionResult> GetReservationByReservationNumberAndEmail(string reservationNumber, string email)
+        public async Task<IActionResult> GetReservationByReservationNumberAndEmail(ReservationGetByEmailAndNumberDto reservationGetByEmailAndNumberDto)
         {
-            var reservation = await _reservationService.GetReservationByReservationNumberAndEmail(reservationNumber, email);
+            var reservation = await _reservationService.GetReservationByReservationNumberAndEmail(reservationGetByEmailAndNumberDto);
             return Ok(reservation);
         }
     }

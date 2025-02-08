@@ -7,6 +7,7 @@ using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
+using OtoKiralama.Persistance.Entities;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
@@ -16,9 +17,9 @@ namespace OtoKiralama.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFusionCache _fusionCache;
-        private readonly UserManager<IAppUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFusionCache fusionCache, UserManager<IAppUser> userManager)
+        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFusionCache fusionCache, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
