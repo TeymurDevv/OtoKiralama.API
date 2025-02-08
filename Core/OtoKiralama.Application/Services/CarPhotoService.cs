@@ -31,7 +31,17 @@ namespace OtoKiralama.Application.Services
             if (eixstCarPhotoWithModelId)
                 throw new CustomException(400, "ModelId", "CarPhoto is Already exist with this Model");
             var carPhoto = _mapper.Map<CarPhoto>(carPhotoCreateDto);
-            string imageUrl = await _photoService.UploadPhotoAsync(carPhotoCreateDto.Image);
+
+            string imageUrl;
+            try
+            {
+                imageUrl = await _photoService.UploadPhotoAsync(carPhotoCreateDto.Image);
+            }
+            catch (Exception)
+            {
+                throw new CustomException(500, "ImageUpload", "Failed to upload the image");
+            }
+
             carPhoto.ImageUrl = imageUrl;
             await _unitOfWork.CarPhotoRepository.Create(carPhoto);
             await _unitOfWork.CommitAsync();
@@ -46,8 +56,39 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.CarPhotoRepository.Delete(carPhoto);
             await _photoService.DeletePhotoAsync(carPhoto.ImageUrl);
             await _unitOfWork.CommitAsync();
-
         }
+
+        public async Task UpdateCarPhotoAsync(int id, CarPhotoUpdateDto carPhotoUpdateDto)
+        {
+            var existCarPhoto = await _unitOfWork.CarPhotoRepository.GetEntity(cp => cp.Id == id);
+            if (existCarPhoto is null)
+                throw new CustomException(404, "Id", "CarPhoto not found with this Id");
+
+            if (carPhotoUpdateDto.Image != null)
+            {
+                try
+                {
+                    string newImageUrl = await _photoService.UploadPhotoAsync(carPhotoUpdateDto.Image);
+
+                    if (!string.IsNullOrEmpty(existCarPhoto.ImageUrl))
+                    {
+                        await _photoService.DeletePhotoAsync(existCarPhoto.ImageUrl);
+                    }
+
+                    existCarPhoto.ImageUrl = newImageUrl;
+                }
+                catch (Exception ex)
+                {
+                    throw new CustomException(500, "ImageUpload", "Failed to upload the new image");
+                }
+            }
+
+            _unitOfWork.CarPhotoRepository.Update(existCarPhoto);
+            await _unitOfWork.CommitAsync();
+        }
+
+
+
 
         public async Task<PagedResponse<CarPhotoListItemDto>> GetAllCarPhotosAsync(int pageNumber, int pageSize)
         {

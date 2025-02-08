@@ -27,6 +27,7 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Brand, BrandReturnDto>();
             CreateMap<Brand, BrandListItemDto>();
             CreateMap<BrandCreateDto, Brand>();
+            CreateMap<BrandUpdateDto, Brand>();
             CreateMap<Location, LocationReturnDto>();
             CreateMap<Location, LocationListItemDto>();
             CreateMap<LocationCreateDto, Location>();
@@ -35,6 +36,7 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<GearCreateDto, Gear>();
             CreateMap<Gear, GearListItemDto>();
             CreateMap<Gear, GearReturnDto>();
+            CreateMap<BodyUpdateDto, Body>();
             CreateMap<BodyCreateDto, Body>();
             CreateMap<Body, BodyReturnDto>();
             CreateMap<Body, BodyListItemDto>();
@@ -68,7 +70,19 @@ namespace OtoKiralama.Application.Profiles
                 .ForPath(dest => dest.Model.Brand, opt => opt.MapFrom(src => src.Model.Brand))
                 .ForPath(dest => dest.DeliveryType, opt => opt.MapFrom(src => src.DeliveryType))
                 .ReverseMap();
-            CreateMap<CarCreateDto, Car>();
+            CreateMap<CarCreateDto, Car>()
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.IsReserved, opt => opt.MapFrom(src => false))
+                .ForMember(dest => dest.IsLimited, opt => opt.MapFrom(src => src.Limit.HasValue))
+                .ForMember(dest => dest.Limit, opt => opt.MapFrom(src => src.Limit ?? null))
+                .ReverseMap();
+            CreateMap<CarUpdateDto, Car>()
+                .ForMember(dest => dest.IsLimited, opt => opt.MapFrom(src => src.Limit.HasValue))
+                .ForMember(dest => dest.Limit, opt => opt.MapFrom(src => src.Limit ?? null))
+                .ReverseMap();
+
+
+
             CreateMap<CompanyCreateDto, Company>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
             CreateMap<Company, CompanyReturnDto>();

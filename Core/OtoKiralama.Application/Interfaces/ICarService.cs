@@ -8,13 +8,15 @@ namespace OtoKiralama.Application.Interfaces
         Task<PagedResponse<CarListItemDto>> GetAllCarsAsync(int pageNumber, int pageSize);
         Task<CarReturnDto> GetCarByIdAsync(int id);
         Task CreateCarAsync(CarCreateDto carCreateDto);
-        Task DeleteCarAsync(int id);
+        Task DeleteCarAsync(int id, string userId);
         Task ChangeCarStatus(int id);
         Task MarkAsDeactıve(int id);
 
         Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime startDate,
             DateTime endDate);
         Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto);
+
+        Task UpdateCarAsync(int id, string userId, CarUpdateDto carUpdateDto);
 
 
     }

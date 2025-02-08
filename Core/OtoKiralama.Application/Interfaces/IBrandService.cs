@@ -1,5 +1,4 @@
-﻿using OtoKiralama.Application.Dtos.Body;
-using OtoKiralama.Application.Dtos.Brand;
+﻿using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Dtos.Pagination;
 
 namespace OtoKiralama.Application.Interfaces
@@ -10,5 +9,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<BrandReturnDto> GetBrandByIdAsync(int id);
         Task CreateBrandAsync(BrandCreateDto brandCreateDto);
         Task DeleteBrandAsync(int id);
+        Task UpdateBrandAsync(int id, BrandUpdateDto brandUpdateDto);
     }
 }

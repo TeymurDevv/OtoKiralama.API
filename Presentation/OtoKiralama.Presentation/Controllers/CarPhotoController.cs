@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.CarPhoto;
 using OtoKiralama.Application.Interfaces;
 
@@ -16,7 +15,7 @@ namespace OtoKiralama.Presentation.Controllers
             _carPhotoService = carPhotoService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllCarPhotosAsync(int pageNumber=1, int pageSize=10)
+        public async Task<IActionResult> GetAllCarPhotosAsync(int pageNumber = 1, int pageSize = 10)
         {
             var carPhotos = await _carPhotoService.GetAllCarPhotosAsync(pageNumber, pageSize);
             return Ok(carPhotos);
@@ -37,6 +36,13 @@ namespace OtoKiralama.Presentation.Controllers
         {
             await _carPhotoService.DeleteCarPhotoAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBody(int id, CarPhotoUpdateDto carPhotoUpdateDto)
+        {
+            await _carPhotoService.UpdateCarPhotoAsync(id, carPhotoUpdateDto);
+            return NoContent();
         }
     }
 }

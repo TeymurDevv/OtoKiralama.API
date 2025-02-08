@@ -1,6 +1,4 @@
 ﻿using OtoKiralama.Application.Dtos.Body;
-using OtoKiralama.Application.Dtos.Car;
-using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.Pagination;
 
 namespace OtoKiralama.Application.Interfaces
@@ -11,5 +9,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<BodyReturnDto> GetBodyByIdAsync(int id);
         Task CreateBodyAsync(BodyCreateDto bodyCreateDto);
         Task DeleteBodyAsync(int id);
+        Task UpdateBodyAsync(int id, BodyUpdateDto bodyUpdateDto);
     }
 }

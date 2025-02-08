@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Interfaces;
 
@@ -31,6 +30,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             await _brandService.CreateBrandAsync(brandCreateDto);
             return StatusCode(StatusCodes.Status201Created);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBody(int id, BrandUpdateDto brandUpdateDto)
+        {
+            await _brandService.UpdateBrandAsync(id, brandUpdateDto);
+            return NoContent();
         }
         //[HttpPut("{id}")]
         //public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoryUpdateDto categoryUpdateDto)

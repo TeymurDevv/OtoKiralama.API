@@ -28,8 +28,8 @@ namespace OtoKiralama.Application.Dtos.Car
         public CompanyReturnDto Company { get; set; }
         public LocationReturnDto Location { get; set; }
         public DeliveryTypeReturnDto DeliveryType { get; set; }
-        public bool IsLimited { get; private set; } = false;
-        public int? Limit { get; private set; }
+        public bool IsLimited { get; set; } = false;
+        public int? Limit { get; set; }
         public int DepositAmount { get; set; }
 
     }

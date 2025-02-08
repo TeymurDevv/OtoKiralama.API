@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.Pagination;
@@ -6,7 +7,6 @@ using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data.Implementations;
-using System.Diagnostics;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
@@ -16,12 +16,14 @@ namespace OtoKiralama.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFusionCache _fusionCache;
+        private readonly UserManager<IAppUser> _userManager;
 
-        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFusionCache fusionCache)
+        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFusionCache fusionCache, UserManager<IAppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fusionCache = fusionCache;
+            _userManager = userManager;
         }
 
         public async Task CreateCarAsync(CarCreateDto carCreateDto)
@@ -71,21 +73,79 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "CarPhotoId", "CarPhoto not found in this model");
 
             var car = _mapper.Map<Car>(carCreateDto);
-
-            if (carCreateDto.Limit != null) car.SetLimit(carCreateDto.Limit.Value);  // deposit profileda set olunmalidi auto limit burda set olunur profilede seti legv elemek lazimdi ve deliverytype profileda set olunmalidi nezere alarsan bulari
-
-
             await _unitOfWork.CarRepository.Create(car);
             await _unitOfWork.CommitAsync();
 
         }
 
-
-        public async Task DeleteCarAsync(int id)
+        public async Task UpdateCarAsync(int id, string userId, CarUpdateDto carUpdateDto)
         {
+            var existUser = await _userManager.FindByIdAsync(userId);
+            if (existUser == null)
+                throw new CustomException(404, "UserId", "User not found");
+
+            if (existUser.Company == null)
+                throw new CustomException(404, "Id", "Company not found with this Id");
+
             var car = await _unitOfWork.CarRepository.GetEntity(c => c.Id == id);
             if (car is null)
                 throw new CustomException(404, "Id", "Car not found with this Id");
+
+            if (existUser.CompanyId != car.CompanyId)
+                throw new CustomException(404, "Company", "This company no access for update this car");
+
+            if (!await _unitOfWork.BodyRepository.isExists(b => b.Id == carUpdateDto.BodyId))
+                throw new CustomException(404, "BodyId", "Body not found with this Id");
+
+            if (!await _unitOfWork.LocationRepository.isExists(l => l.Id == carUpdateDto.LocationId))
+                throw new CustomException(404, "LocationId", "Location not found with this Id");
+
+            if (!await _unitOfWork.CompanyRepository.isExists(c => c.Id == carUpdateDto.CompanyId))
+                throw new CustomException(404, "CompanyId", "Company not found with this Id");
+
+            if (!await _unitOfWork.DeliveryTypeRepository.isExists(d => d.Id == carUpdateDto.DeliveryTypeId))
+                throw new CustomException(404, "DeliveryTypeId", "Delivery type not found with this Id");
+
+            if (!await _unitOfWork.ModelRepository.isExists(m => m.Id == carUpdateDto.ModelId))
+                throw new CustomException(404, "ModelId", "Model not found with this Id");
+
+            if (!await _unitOfWork.GearRepository.isExists(g => g.Id == carUpdateDto.GearId))
+                throw new CustomException(404, "GearId", "Gear not found with this Id");
+
+            if (!await _unitOfWork.FuelRepository.isExists(f => f.Id == carUpdateDto.FuelId))
+                throw new CustomException(404, "FuelId", "Fuel not found with this Id");
+
+            if (!await _unitOfWork.ClassRepository.isExists(c => c.Id == carUpdateDto.ClassId))
+                throw new CustomException(404, "ClassId", "Class not found with this Id");
+
+            var existCarWithSamePlate = await _unitOfWork.CarRepository.isExists(c => c.Plate == carUpdateDto.Plate && c.Id != id);
+            if (existCarWithSamePlate)
+                throw new CustomException(400, "Plate", "Another car already exists with this plate");
+
+            _mapper.Map(carUpdateDto, car);
+
+            car.IsLimited = carUpdateDto.Limit.HasValue;
+            car.Limit = carUpdateDto.Limit;
+
+            _unitOfWork.CarRepository.Update(car);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task DeleteCarAsync(int id, string userId)
+        {
+            var existUser = await _userManager.FindByIdAsync(userId);
+            if (existUser == null)
+                throw new CustomException(404, "UserId", "User not found");
+
+            if (existUser.Company == null)
+                throw new CustomException(404, "Id", "Company not found with this Id");
+
+            var car = await _unitOfWork.CarRepository.GetEntity(c => c.Id == id);
+            if (car is null)
+                throw new CustomException(404, "Id", "Car not found with this Id");
+            if (existUser.CompanyId != car.CompanyId)
+                throw new CustomException(404, "Company", "This company no access for delete this car");
+
             await _unitOfWork.CarRepository.Delete(car);
             await _unitOfWork.CommitAsync();
 
@@ -321,6 +381,6 @@ namespace OtoKiralama.Application.Services
                    $"-{filters.LimitRange.MinLimit}-{filters.LimitRange.MaxLimit}" +
                    $"-{filters.DailyPriceRange.MinPrice}-{filters.DailyPriceRange.MaxPrice}" +
                    $"-{filters.DepositAmountRange.MinAmount}-{filters.DepositAmountRange.MaxAmount}";
-        } 
+        }
     }
 }

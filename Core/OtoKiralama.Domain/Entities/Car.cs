@@ -10,8 +10,8 @@ namespace OtoKiralama.Domain.Entities
         public int Year { get; set; }
         public bool IsInstantConfirm { get; set; } // Rezervasyon onayı gerekli mi?
         public bool IsFreeRefund { get; set; } // İptal durumunda ücretsiz geri ödeme var mı?
-        public bool IsActive { get; set; } // Araç aktif mi, kullanıma hazır mı?
-        public bool IsReserved { get; set; } // Şu anda rezervasyonlu mu?
+        public bool IsActive { get; set; } = true;
+        public bool IsReserved { get; set; } = false;
         public int BodyId { get; set; }
         public Body Body { get; set; }
         public int ModelId { get; set; }
@@ -28,8 +28,8 @@ namespace OtoKiralama.Domain.Entities
         public Company Company { get; set; }
 
         //yeni yaradilan entitiler
-        public bool IsLimited { get; private set; } = false;
-        public int? Limit { get; private set; }
+        public bool IsLimited { get; set; } = false;
+        public int? Limit { get; set; }
         public int DeliveryTypeId { get; set; }
         public DeliveryType DeliveryType { get; set; }
         public int DepositAmount { get; set; }
@@ -38,10 +38,6 @@ namespace OtoKiralama.Domain.Entities
         // Rezervasyonlar
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 
-        public void SetLimit(int limit)
-        {
-            Limit = limit;
-            IsLimited = true;
-        }
+
     }
 }

@@ -37,5 +37,13 @@ namespace OtoKiralama.Presentation.Controllers
             await _bodyService.DeleteBodyAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBody(int id, BodyUpdateDto bodyUpdateDto)
+        {
+            await _bodyService.UpdateBodyAsync(id, bodyUpdateDto);
+            return NoContent();
+        }
+
     }
 }

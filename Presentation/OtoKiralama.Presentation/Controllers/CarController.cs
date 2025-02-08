@@ -31,10 +31,18 @@ namespace OtoKiralama.Presentation.Controllers
             await _carService.CreateCarAsync(carCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarById(int id)
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBody(int id, string userId, CarUpdateDto carUpdateDto)
         {
-            await _carService.DeleteCarAsync(id);
+            await _carService.UpdateCarAsync(id, userId, carUpdateDto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCarById(int id, string userId)
+        {
+            await _carService.DeleteCarAsync(id, userId);
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("{id}")]

@@ -1,6 +1,6 @@
 ﻿namespace OtoKiralama.Application.Dtos.Car
 {
-    public class CarCreateDto
+    public class CarUpdateDto
     {
         public string Plate { get; set; }
         public int SeatCount { get; set; }
@@ -19,4 +19,5 @@
         public int DeliveryTypeId { get; set; }
         public int DepositAmount { get; set; }
     }
+
 }

@@ -109,7 +109,6 @@ namespace OtoKiralama.Application.Services
                 reservation.ReservationNumber = $"{currentYear}-{nextNumber:D6}";
 
                 reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays * existCarEntity.DailyPrice;
-                reservation.TotalPrice += existCarEntity.DepositAmount;
                 existCarEntity.IsReserved = true;
 
                 await _unitOfWork.ReservationRepository.Create(reservation);

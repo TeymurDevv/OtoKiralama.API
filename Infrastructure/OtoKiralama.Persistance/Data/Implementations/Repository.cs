@@ -59,6 +59,18 @@ namespace OtoKiralama.Persistance.Data.Implementations
             }
         }
 
+        public async Task DeleteRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                _context.Set<T>().RemoveRange(entities);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<List<T>> GetAll(
        Expression<Func<T, bool>> predicate = null,
        int skip = 0, int take = 0,

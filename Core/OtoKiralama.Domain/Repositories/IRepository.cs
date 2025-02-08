@@ -9,6 +9,7 @@ namespace OtoKiralama.Domain.Repositories
         Task Create(T entity);
         Task Update(T entity);
         Task Delete(T entity);
+        Task DeleteRangeAsync(IEnumerable<T> entities);
         Task<bool> isExists(Expression<Func<T, bool>> predicate = null);
         Task Commit();
         Task<IQueryable<T>> GetQuery(
