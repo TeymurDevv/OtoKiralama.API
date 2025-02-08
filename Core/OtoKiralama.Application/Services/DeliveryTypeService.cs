@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.DeliveryType;
+using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
@@ -62,6 +63,24 @@ namespace OtoKiralama.Application.Services
             if (deliveryType is null)
                 throw new CustomException(404, "Id", "Delivery type not found with this Id");
             return _mapper.Map<DeliveryTypeReturnDto>(deliveryType);
+        }
+        public async Task UpdateAsync(int? id, DeliveryTypeUpdateDto deliveryTypeUpdateDto)
+        {
+            if (id is null)
+                throw new CustomException(400, "Id", "Id can not be left empty");
+            var existedDeliveryType = await _unitOfWork.DeliveryTypeRepository.GetEntity(s => s.Id == id);
+            if (existedDeliveryType is null)
+                throw new CustomException(404, "DeliveryType", "Not found");
+            if (!string.IsNullOrEmpty(deliveryTypeUpdateDto.Name) && !existedDeliveryType.Name.Equals(deliveryTypeUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower()))
+                {
+                    throw new CustomException(400, "Name", "This Fuel name already exists");
+                }
+            }
+            _mapper.Map(deliveryTypeUpdateDto,existedDeliveryType);
+            await _unitOfWork.DeliveryTypeRepository.Update(existedDeliveryType);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

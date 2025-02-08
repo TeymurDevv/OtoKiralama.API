@@ -9,5 +9,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<DeliveryTypeReturnDto> GetDeliveryTypeByIdAsync(int id);
         Task CreateDeliveryTypeAsync(DeliveryTypeCreateDto deliveryTypeCreateDto);
         Task DeleteDeliveryTypeAsync(int id);
+        Task UpdateAsync(int? id, DeliveryTypeUpdateDto deliveryTypeUpdateDto);
     }
 }

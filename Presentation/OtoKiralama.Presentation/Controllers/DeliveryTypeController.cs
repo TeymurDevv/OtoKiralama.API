@@ -26,7 +26,7 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(await _deliveryTypeService.GetDeliveryTypeByIdAsync(id));
         }
         [HttpPost("")]
-        public async Task<IActionResult> CreateFuel(DeliveryTypeCreateDto deliveryTypeCreateDto)
+        public async Task<IActionResult> CreateDeliveryType(DeliveryTypeCreateDto deliveryTypeCreateDto)
         {
             await _deliveryTypeService.CreateDeliveryTypeAsync(deliveryTypeCreateDto);
             return StatusCode(StatusCodes.Status201Created);
@@ -36,6 +36,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             await _deliveryTypeService.DeleteDeliveryTypeAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateDeliveryType(int? id,DeliveryTypeUpdateDto deliveryTypeUpdateDto)
+        {
+            await _deliveryTypeService.UpdateAsync(id, deliveryTypeUpdateDto);
+            return StatusCode(StatusCodes.Status200OK);
         }
     }
 }
