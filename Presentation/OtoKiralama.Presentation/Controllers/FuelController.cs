@@ -37,5 +37,11 @@ namespace OtoKiralama.Presentation.Controllers
             await _fuelService.DeleteFuelAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int? id, FuelUpdateDto fuelUpdateDto)
+        {
+           await _fuelService.Update(id, fuelUpdateDto);
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }

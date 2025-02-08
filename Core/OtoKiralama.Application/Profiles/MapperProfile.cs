@@ -43,6 +43,9 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<FuelCreateDto, Fuel>();
             CreateMap<Fuel, FuelReturnDto>();
             CreateMap<Fuel, FuelListItemDto>();
+            CreateMap<FuelUpdateDto, Fuel>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            //bu setir gedir eger  property bosdusa onu goturmuk belelikle user bos gonderse  update nezere alinmir
             CreateMap<ClassCreateDto, Class>();
             CreateMap<Class, ClassReturnDto>();
             CreateMap<Class, ClassListItemDto>();
