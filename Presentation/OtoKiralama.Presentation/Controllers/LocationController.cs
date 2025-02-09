@@ -44,5 +44,11 @@ namespace OtoKiralama.Presentation.Controllers
             await _locationService.DeleteLocationAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateLocation(int? id,LocationUpdateDto locationUpdateDto)
+        {
+            await _locationService.UpdateAsync(id, locationUpdateDto);
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }

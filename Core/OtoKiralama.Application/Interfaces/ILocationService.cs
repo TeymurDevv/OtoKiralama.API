@@ -12,5 +12,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<LocationReturnDto> GetLocationByIdAsync(int id);
         Task CreateLocationAsync(LocationCreateDto locationCreateDto);
         Task DeleteLocationAsync(int id);
+        Task UpdateAsync(int? id, LocationUpdateDto locationUpdateDto);
     }
 }
