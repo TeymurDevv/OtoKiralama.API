@@ -18,5 +18,6 @@ public class EmailService : IEmailService
         message.Subject =subject;
         message.HtmlBody = body;
 
-        await _resend.EmailSendAsync(message);    }
+        await _resend.EmailSendAsync(message);
+    }
 }
