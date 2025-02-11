@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
+using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Repositories;
@@ -24,9 +26,14 @@ public class ProfileService : IProfileService
         _unitOfWork = unitOfWork;
         _contextAccessor = httpContextAccessor;
     }
-    public Task<UserGetDto> GetUserInformationAsync()
+    public async Task<UserGetDto> GetUserInformationAsync()
     {
-        throw new NotImplementedException();
+        var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+        var existedUser = await _userManager.FindByIdAsync(userId);
+        if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+        var mappedUser = _mapper.Map<UserGetDto>(existedUser);
+        return mappedUser;
     }
 
     public Task DeleteUser()
