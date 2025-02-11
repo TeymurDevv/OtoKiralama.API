@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.Class;
-using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
@@ -19,7 +18,6 @@ namespace OtoKiralama.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
         public async Task CreateClassAsync(ClassCreateDto classCreateDto)
         {
             var existClass = await _unitOfWork.ClassRepository.isExists(c => c.Name.ToLower() == classCreateDto.Name.ToLower());
@@ -28,20 +26,6 @@ namespace OtoKiralama.Application.Services
             var @class = _mapper.Map<Class>(classCreateDto);
 
             await _unitOfWork.ClassRepository.Create(@class);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
-        public async Task UpdateClassAsync(int id, ClassUpdateDto classUpdateDto)
-        {
-            var @class = await _unitOfWork.ClassRepository.GetEntity(c => c.Id == id);
-            if (@class is null)
-                throw new CustomException(404, "Class", "Class not found with this Id");
-            var existClass = await _unitOfWork.ClassRepository.isExists(c => c.Name.ToLower() == classUpdateDto.Name.ToLower() && c.Id != id);
-            if (existClass)
-                throw new CustomException(400, "Name", "Another class already exists with this name");
-
-            _mapper.Map(classUpdateDto, @class);
-
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -79,11 +63,9 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Class not found with this Id");
             return _mapper.Map<ClassReturnDto>(@class);
         }
-        public  async Task UpdateAsync(int? id,ClassUpdateDto classUpdateDto)
+        public async Task UpdateAsync(int id, ClassUpdateDto classUpdateDto)
         {
-            if (id is null)
-                throw new CustomException(400, "Id", "Id can not be left empty");
-            var existedClass=await _unitOfWork.ClassRepository.GetEntity(s=>s.Id == id);
+            var existedClass = await _unitOfWork.ClassRepository.GetEntity(s => s.Id == id);
             if (existedClass is null)
                 throw new CustomException(404, "Class", "Not found");
             if (!string.IsNullOrEmpty(classUpdateDto.Name) && !existedClass.Name.Equals(classUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
@@ -93,7 +75,7 @@ namespace OtoKiralama.Application.Services
                     throw new CustomException(400, "Name", "This Class name already exists");
                 }
             }
-            _mapper.Map(classUpdateDto,existedClass);
+            _mapper.Map(classUpdateDto, existedClass);
             await _unitOfWork.ClassRepository.Update(existedClass);
             await _unitOfWork.SaveChangesAsync();
         }
