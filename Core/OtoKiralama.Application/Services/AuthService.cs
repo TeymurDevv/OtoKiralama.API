@@ -98,9 +98,23 @@ public class AuthService : IAuthService
         await _userManager.AddToRoleAsync(appUser, "companyAdmin");
     }
 
-    public Task LogInAsync(LoginDto loginDto)
+    public async Task<AuthResponseDto> LogInAsync(LoginDto loginDto)
     {
-        throw new NotImplementedException();
+        var existUser = await _userManager.FindByNameAsync(loginDto.UserName);
+        if (existUser == null)
+            throw new CustomException(400, "UserName", "User not found with this name");
+        var result = await _userManager.CheckPasswordAsync(existUser, loginDto.Password);
+        if (!result)
+            throw new CustomException(400, "Password", "Password is incorrect");
+        IList<string> roles = await _userManager.GetRolesAsync(existUser);
+        var Audience = _jwtSettings.Audience;
+        var SecretKey = _jwtSettings.secretKey;
+        var Issuer = _jwtSettings.Issuer;
+        AuthResponseDto authResponseDto = new()
+        {
+            Token = _tokenService.GetToken(SecretKey, Audience, Issuer, existUser, roles)
+        };
+        return authResponseDto;
     }
 
     public Task ValidateToken(string Authorization)

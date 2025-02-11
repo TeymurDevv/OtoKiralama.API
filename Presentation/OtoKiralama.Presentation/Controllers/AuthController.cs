@@ -109,7 +109,6 @@ namespace OtoKiralama.Presentation.Controllers
             var SecretKey = _jwtSettings.secretKey;
             var Issuer = _jwtSettings.Issuer;
             return Ok(new { token = _tokenService.GetToken(SecretKey, Audience, Issuer, existUser, roles) });
-
         }
         [HttpGet]
         public async Task<IActionResult> CreateRole()
