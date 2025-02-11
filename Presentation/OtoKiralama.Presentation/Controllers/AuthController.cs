@@ -18,6 +18,12 @@ namespace OtoKiralama.Presentation.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -29,25 +35,21 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("CompanyAdminRegister")]
         public async Task<IActionResult> CompanyAdminRegister(RegisterCompanyUserDto registerCompanyUserDto)
         {
-            
         }
         [HttpPost("ValidateToken")]
         [Authorize(Roles = "admin")]
         public IActionResult ValidateToken([FromHeader] string Authorization)
         {
-
         }
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
         public IActionResult ValidateAgentToken([FromHeader] string Authorization)
         {
-
         }
         [HttpPost("ValidateUserToken")]
         [Authorize(Roles = "member")]
         public IActionResult ValidateUserToken([FromHeader] string Authorization)
         {
-
         }
     }
 }
