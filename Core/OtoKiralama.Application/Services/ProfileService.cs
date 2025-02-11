@@ -105,7 +105,12 @@ public class ProfileService : IProfileService
         if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
         var existedUser = await _userManager.FindByIdAsync(userId);
         if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
-        updateUserDto.
-        await _userManager.UpdateAsync(existedUser);
+        _mapper.Map(updateUserDto, existedUser);
+        var result = await _userManager.UpdateAsync(existedUser);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new CustomException(400, "Update Failed", errors);
+        }
     }
 }
