@@ -10,4 +10,5 @@ public interface IProfileService
     Task DeleteUser();
     Task<PagedResponse<ReservationListItemDto>> GetUserReservations(int pageNumber, int pageSize);
     Task ChangeSubscribtionStatus(ChangeSubscribtionStatusDto changeSubscribtionStatusDto);
+    Task UpdateUserInformation(UpdateUserDto updateUserDto);
 }
