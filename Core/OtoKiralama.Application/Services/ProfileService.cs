@@ -2,6 +2,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
@@ -45,10 +46,47 @@ public class ProfileService : IProfileService
         await _userManager.DeleteAsync(existUser);
     }
 
-    public Task<PagedResponse<ReservationListItemDto>> GetUserReservations(int pageNumber, int pageSize)
+    public async Task<PagedResponse<ReservationListItemDto>> GetUserReservations(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+        var existedUser = await _userManager.FindByIdAsync(userId);
+        if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+        var existedReservations = await _unitOfWork.ReservationRepository.GetAll(s => s.AppUserId == userId, includes: new Func<IQueryable<Reservation>, IQueryable<Reservation>>[]
+        {
+            query => query
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Model)
+                    .ThenInclude(c => c.Brand)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Model)
+                    .ThenInclude(m => m.CarPhoto)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Body)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Class)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Fuel)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Gear)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Location)
+                .Include(c => c.Car)
+                    .ThenInclude(c => c.Company)
+                .Include(c => c.AppUser).Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+        });
+        var mappedReservation = _mapper.Map<List<ReservationListItemDto>>(existedReservations);
+        var totalReservations = await _unitOfWork.ReservationRepository.CountAsync(); //bug report burda biz butun reservationlari sayiriq amma userin reservationlari sayilmalidir...
+        return new PagedResponse<ReservationListItemDto>
+        {
+            Data = mappedReservation,
+            TotalCount = totalReservations,
+            PageSize = pageSize,
+            CurrentPage = pageNumber
+        };
     }
+    
 
     public Task ChangeSubscribtionStatus(ChangeSubscribtionStatusDto changeSubscribtionStatusDto)
     {
