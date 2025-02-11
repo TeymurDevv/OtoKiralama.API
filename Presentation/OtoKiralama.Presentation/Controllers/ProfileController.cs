@@ -54,5 +54,12 @@ namespace OtoKiralama.Presentation.Controllers
             await _profileService.ChangeSubscribtionStatus(changeSubscribtionStatusDto);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("UpdateUserInformation")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserInformation(UpdateUserDto updateUserDto)
+        {
+            await _profileService.UpdateUserInformation(updateUserDto);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }
