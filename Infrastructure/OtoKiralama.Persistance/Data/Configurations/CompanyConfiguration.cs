@@ -10,6 +10,15 @@ namespace OtoKiralama.Persistance.Data.Configurations
         {
             builder.HasKey(c => c.Id);
             builder.Property(c => c.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.HasMany(b => b.Cars)
+               .WithOne(m => m.Company)
+               .HasForeignKey(m => m.CompanyId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(b => b.AppUsers)
+               .WithOne(m => m.Company)
+               .HasForeignKey(m => m.CompanyId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
