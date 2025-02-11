@@ -23,6 +23,9 @@ namespace OtoKiralama.Persistance
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IDeliveryTypeRepository, DeliveryTypeRepository>();
             //test25
+            //test commit
+            //test1
+            //test2
         }
     }
 }
