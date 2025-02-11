@@ -24,6 +24,12 @@ namespace OtoKiralama.Presentation.Controllers
         {
             _authService = authService;
         }
+
+        [HttpPost("LogIn")]
+        public async Task<IActionResult> LogIn(LoginDto loginDto)
+        {
+            return Ok(await _authService.LogInAsync(loginDto));
+        }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
