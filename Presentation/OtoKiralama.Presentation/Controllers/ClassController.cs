@@ -38,17 +38,11 @@ namespace OtoKiralama.Presentation.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        public async Task<IActionResult> UpdateClass(int id, ClassUpdateDto classUpdateDto)
-        {
-            await _classService.UpdateAsync(id, classUpdateDto);
-            return NoContent();
-        }
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int? id, ClassUpdateDto classUpdateDto)
+        public async Task<IActionResult> Update(int id, ClassUpdateDto classUpdateDto)
         {
             await _classService.UpdateAsync(id, classUpdateDto);
-            return StatusCode(StatusCodes.Status200OK);
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }
