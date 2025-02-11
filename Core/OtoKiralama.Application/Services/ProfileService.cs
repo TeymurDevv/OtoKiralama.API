@@ -1,12 +1,29 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Interfaces;
+using OtoKiralama.Domain.Entities;
+using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Application.Services;
 
 public class ProfileService : IProfileService
 {
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public ProfileService(UserManager<AppUser> userManager, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+    {
+        _userManager = userManager;
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
+        _httpContextAccessor = httpContextAccessor;
+    }
     public Task<UserGetDto> GetUserInformationAsync()
     {
         throw new NotImplementedException();
