@@ -30,6 +30,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IDeliveryTypeService, DeliveryTypeService>();
             services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
