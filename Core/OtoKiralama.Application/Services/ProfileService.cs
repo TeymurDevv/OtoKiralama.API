@@ -77,7 +77,7 @@ public class ProfileService : IProfileService
                 .Take(pageSize)
         });
         var mappedReservation = _mapper.Map<List<ReservationListItemDto>>(existedReservations);
-        var totalReservations = await _unitOfWork.ReservationRepository.CountAsync(); //bug report burda biz butun reservationlari sayiriq amma userin reservationlari sayilmalidir...
+        var totalReservations = await _unitOfWork.ReservationRepository.CountAsync(r=>r.AppUserId == userId); //bug report burda biz butun reservationlari sayiriq amma userin reservationlari sayilmalidir...
         return new PagedResponse<ReservationListItemDto>
         {
             Data = mappedReservation,
