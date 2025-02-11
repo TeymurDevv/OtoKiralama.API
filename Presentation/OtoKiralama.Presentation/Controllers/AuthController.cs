@@ -27,29 +27,38 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
+           await _authService.RegisterAsync(registerDto);
+           return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("CompanyPersonelRegister")]
         public async Task<IActionResult> CompanyPersonelRegister(RegisterCompanyUserDto registerCompanyUserDto)
         {
+            await _authService.CompanyPersonelRegisterAsync(registerCompanyUserDto);
+            return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("CompanyAdminRegister")]
         public async Task<IActionResult> CompanyAdminRegister(RegisterCompanyUserDto registerCompanyUserDto)
         {
+            await _authService.CompanyAdminRegisterAsync(registerCompanyUserDto);
+            return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("ValidateToken")]
         [Authorize(Roles = "admin")]
         public IActionResult ValidateToken([FromHeader] string Authorization)
         {
+            return Ok(_authService.ValidateToken(Authorization));
         }
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
         public IActionResult ValidateAgentToken([FromHeader] string Authorization)
         {
+            return Ok(_authService.ValidateAgentToken(Authorization));
         }
         [HttpPost("ValidateUserToken")]
         [Authorize(Roles = "member")]
         public IActionResult ValidateUserToken([FromHeader] string Authorization)
         {
+            return Ok(_authService.ValidateUserToken(Authorization));
         }
     }
 }
