@@ -9,7 +9,7 @@ public interface IAuthService
     Task CompanyPersonelRegisterAsync(RegisterCompanyUserDto registerCompanyUserDto);
     Task CompanyAdminRegisterAsync(RegisterCompanyUserDto registerCompanyUserDto);
     Task<AuthResponseDto> LogInAsync(LoginDto loginDto);
-    Task ValidateToken([FromHeader] string Authorization);
+    Task<TokenValidationReturnDto> ValidateToken([FromHeader] string Authorization);
     Task ValidateAgentToken([FromHeader] string Authorization);
     Task ValidateUserToken([FromHeader] string Authorization);
 }
