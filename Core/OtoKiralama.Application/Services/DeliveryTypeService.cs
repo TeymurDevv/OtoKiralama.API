@@ -82,5 +82,9 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.DeliveryTypeRepository.Update(existedDeliveryType);
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task UpdateMethod()
+        {
+
+        }    
     }
 }
