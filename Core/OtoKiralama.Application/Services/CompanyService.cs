@@ -69,8 +69,24 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(400, "Name", "Company already exist with this name");
 
             _mapper.Map(companyFullUpdateDto, existCompany);
-            string imageUrl = await _photoService.UploadPhotoAsync(companyFullUpdateDto.ImageFile);
-            existCompany.ImageUrl = imageUrl;
+            if (companyFullUpdateDto.ImageFile != null)
+            {
+                try
+                {
+                    string newImageUrl = await _photoService.UploadPhotoAsync(companyFullUpdateDto.ImageFile);
+
+                    if (!string.IsNullOrEmpty(existCompany.ImageUrl))
+                    {
+                        await _photoService.DeletePhotoAsync(existCompany.ImageUrl);
+                    }
+                    existCompany.ImageUrl = newImageUrl;
+
+                }
+                catch (Exception ex)
+                {
+                    throw new CustomException(500, "ImageUpload", "Failed to upload the new image");
+                }
+            }
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteCompanyAsyncs(int id)
@@ -83,39 +99,16 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        //public async Task DeleteCompanyAsync(int id)
-        //{
-        //    await _unitOfWork.BeginTransactionAsync();
-        //    try
-        //    {
-        //        var company = await _unitOfWork.CompanyRepository.GetEntity(
-        //            b => b.Id == id,
-        //            includes: query => query
-        //                .Include(b => b.Cars)
-        //                .Include(m => m.AppUsers)
-        //        );
+        public async Task DeleteCompanyAsync(int id)
+        {
+            var company = await _unitOfWork.CompanyRepository.GetEntity(b => b.Id == id);
 
-        //        if (company is null)
-        //            throw new CustomException(404, "Id", "Brand not found with this Id");
+            if (company is null)
+                throw new CustomException(404, "Id", "Company not found with this Id");
 
-        //        //var carsToDelete = brand.Models.SelectMany(m => m.Cars).ToList();
-        //        //if (carsToDelete.Count > 0)
-        //        //    await _unitOfWork.CarRepository.DeleteRangeAsync(carsToDelete);
-
-        //        //var modelsToDelete = brand.Models.ToList();
-        //        //if (modelsToDelete.Count > 0)
-        //        //    await _unitOfWork.ModelRepository.DeleteRangeAsync(modelsToDelete);
-
-        //        await _unitOfWork.BrandRepository.Delete(brand);
-
-        //        await _unitOfWork.CommitTransactionAsync();
-        //    }
-        //    catch
-        //    {
-        //        await _unitOfWork.RollbackTransactionAsync();
-        //        throw;
-        //    }
-        //}
+            await _unitOfWork.CompanyRepository.Delete(company);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         public async Task<PagedResponse<CompanyListItemDto>> GetAllCompaniesAsync(int pageNumber, int pageSize)
         {
