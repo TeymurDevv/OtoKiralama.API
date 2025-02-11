@@ -10,8 +10,13 @@ public class EmailService : IEmailService
     {
         _resend = resend;
     }
-    public Task SendEmailAsync(string to, string subject, string body, bool isHtml = true)
+    public async Task SendEmailAsync(string to, string subject, string body, bool isHtml = true)
     {
-        throw new NotImplementedException();
-    }
+        var message = new EmailMessage();
+        message.From = "teymursuleymanli2008@gmail.com";
+        message.To.Add(to);
+        message.Subject =subject;
+        message.HtmlBody = body;
+
+        await _resend.EmailSendAsync(message);    }
 }
