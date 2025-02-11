@@ -43,5 +43,12 @@ namespace OtoKiralama.Presentation.Controllers
             await _modelService.DeleteModelAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateModel(int id,ModelUpdateDto modelUpdateDto)
+        {
+            await _modelService.UpdateAsync(id, modelUpdateDto);
+            return StatusCode(StatusCodes.Status200OK);
+
+        }
     }
 }

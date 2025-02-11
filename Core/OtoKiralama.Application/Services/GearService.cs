@@ -70,7 +70,7 @@ namespace OtoKiralama.Application.Services
             var existedGear = await _unitOfWork.GearRepository.GetEntity(s => s.Id == id);
             if (existedGear is null)
                 throw new CustomException(404, "Gear", "Not found");
-            var isExistedGear = await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == gearUpdateDto.Name.ToLower());
+            var isExistedGear = await _unitOfWork.GearRepository.isExists(s => s.Name.ToLower() == gearUpdateDto.Name.ToLower());
                 if (isExistedGear)
                     throw new CustomException(400, "Name", "This Fuel name already exists");
                 

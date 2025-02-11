@@ -11,5 +11,6 @@ namespace OtoKiralama.Application.Interfaces
         Task<ModelReturnDto> GetModelByIdAsync(int id);
         Task CreateModelAsync(ModelCreateDto modelCreateDto);
         Task DeleteModelAsync(int id);
+        Task UpdateAsync(int id, ModelUpdateDto modelUpdateDto);
     }
 }

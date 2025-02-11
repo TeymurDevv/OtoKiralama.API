@@ -71,7 +71,7 @@ namespace OtoKiralama.Application.Services
             var existedDeliveryType = await _unitOfWork.DeliveryTypeRepository.GetEntity(s => s.Id == id);
             if (existedDeliveryType is null)
                 throw new CustomException(404, "DeliveryType", "Not found");
-            var isExistedDeliveryType = await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower());
+            var isExistedDeliveryType = await _unitOfWork.DeliveryTypeRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower());
                 if (isExistedDeliveryType)
                     throw new CustomException(400, "Name", "This DeliveryType name already exists");
                 
