@@ -37,7 +37,6 @@ namespace OtoKiralama.Presentation.Controllers
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
         }
-
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -98,7 +97,6 @@ namespace OtoKiralama.Presentation.Controllers
             await _userManager.AddToRoleAsync(appUser, "companyAdmin");
             return StatusCode(StatusCodes.Status201Created);
         }
-
         [HttpPost("Login")]
         public async Task<IActionResult> LogIn(LoginDto loginDto)
         {
@@ -123,7 +121,6 @@ namespace OtoKiralama.Presentation.Controllers
             await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
             return Ok();
         }
-
         [HttpPost("ValidateToken")]
         [Authorize(Roles = "admin")]
         public IActionResult ValidateToken([FromHeader] string Authorization)
@@ -163,7 +160,6 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "admin",
             });
         }
-
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
         public IActionResult ValidateAgentToken([FromHeader] string Authorization)
@@ -204,7 +200,6 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "companyAdmin",
             });
         }
-
         [HttpPost("ValidateUserToken")]
         [Authorize(Roles = "member")]
         public IActionResult ValidateUserToken([FromHeader] string Authorization)
