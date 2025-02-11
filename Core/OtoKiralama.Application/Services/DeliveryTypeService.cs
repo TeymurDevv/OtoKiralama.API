@@ -71,20 +71,14 @@ namespace OtoKiralama.Application.Services
             var existedDeliveryType = await _unitOfWork.DeliveryTypeRepository.GetEntity(s => s.Id == id);
             if (existedDeliveryType is null)
                 throw new CustomException(404, "DeliveryType", "Not found");
-            if (!string.IsNullOrEmpty(deliveryTypeUpdateDto.Name) && !existedDeliveryType.Name.Equals(deliveryTypeUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower()))
-                {
-                    throw new CustomException(400, "Name", "This Fuel name already exists");
-                }
-            }
+            var isExistedDeliveryType = await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower());
+                if (isExistedDeliveryType)
+                    throw new CustomException(400, "Name", "This DeliveryType name already exists");
+                
+            
             _mapper.Map(deliveryTypeUpdateDto,existedDeliveryType);
-            await _unitOfWork.DeliveryTypeRepository.Update(existedDeliveryType);
             await _unitOfWork.SaveChangesAsync();
         }
-        public async Task UpdateMethod()
-        {
-
-        }    
+        
     }
 }

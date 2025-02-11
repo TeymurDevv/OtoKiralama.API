@@ -71,15 +71,10 @@ namespace OtoKiralama.Application.Services
             var existedFuel = await _unitOfWork.FuelRepository.GetEntity(s => s.Id == id);
             if (existedFuel is null)
                 throw new CustomException(404, "Fuel", "Not found");
-            if (!string.IsNullOrEmpty(fuelUpdateDto.Name) && !existedFuel.Name.Equals(fuelUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == fuelUpdateDto.Name.ToLower()))
-                {
+            var isExistedFuel = await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == fuelUpdateDto.Name.ToLower());
+             if (isExistedFuel)
                     throw new CustomException(400, "Name", "This Fuel name already exists");
-                }
-            }
             _mapper.Map(fuelUpdateDto,existedFuel);
-            await _unitOfWork.FuelRepository.Update(existedFuel);
             await _unitOfWork.SaveChangesAsync();
 
         }
