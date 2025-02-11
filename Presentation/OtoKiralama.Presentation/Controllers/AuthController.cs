@@ -244,29 +244,6 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "member",
             });
         }
-
-        [Authorize]
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateUserDto updateUserDto)
-        {
-
-            var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
-            var existedUser = await _userManager.FindByIdAsync(userId);
-            if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
-            if (updateUserDto.UserIdentityInformation.Value != UserIdentityInformation.TCKimlik && updateUserDto.UserIdentityInformation != UserIdentityInformation.Passport)
-                throw new CustomException(400, "UsUserIdentityInformation", "UsUserIdentityInformation is wrong");
-            _mapper.Map(updateUserDto, existedUser);
-            var result = await _userManager.UpdateAsync(existedUser);
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new CustomException(400, "Update Failed", errors);
-            }
-            var mappedExistedUser = _mapper.Map<UserGetDto>(existedUser);
-            return Ok(mappedExistedUser);
-        }
-
     }
 }
 
