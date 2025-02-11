@@ -73,9 +73,29 @@ public class AuthService : IAuthService
         await _userManager.AddToRoleAsync(appUser, "companyPersonel");
     }
 
-    public Task CompanyAdminRegisterAsync(RegisterCompanyUserDto registerCompanyUserDto)
+    public async Task CompanyAdminRegisterAsync(RegisterCompanyUserDto registerCompanyUserDto)
     {
-        throw new NotImplementedException();
+        var existCompany = await _unitOfWork.CompanyRepository.GetEntity(c => c.Id == registerCompanyUserDto.CompanyId);
+        if (existCompany is null)
+            throw new CustomException(400, "CompanyId", "Company does not exist with this name");
+        if (_userManager.Users.Any(u => u.Email == registerCompanyUserDto.Email))
+            throw new CustomException(400, "Email", "Email already in use");
+        var existUser = await _userManager.FindByNameAsync(registerCompanyUserDto.UserName);
+        if (existUser != null)
+            throw new CustomException(400, "Username", "Username already in use");
+        AppUser appUser = new AppUser();
+        appUser.UserName = registerCompanyUserDto.UserName;
+        appUser.Email = registerCompanyUserDto.Email;
+        appUser.FullName = registerCompanyUserDto.FullName;
+        appUser.CompanyId = registerCompanyUserDto.CompanyId;
+        var result = await _userManager.CreateAsync(appUser, registerCompanyUserDto.Password);
+        if (!result.Succeeded)
+        {
+            var errorMessages = result.Errors.ToDictionary(e => e.Code, e => e.Description);
+
+            throw new CustomException(400, errorMessages);
+        }        
+        await _userManager.AddToRoleAsync(appUser, "companyAdmin");
     }
 
     public Task LogInAsync(LoginDto loginDto)
