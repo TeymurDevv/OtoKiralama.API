@@ -36,9 +36,13 @@ public class ProfileService : IProfileService
         return mappedUser;
     }
 
-    public Task DeleteUser()
+    public async Task DeleteUser()
     {
-        throw new NotImplementedException();
+        var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+        var existUser = await _userManager.FindByIdAsync(userId);
+        if (existUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur");
+        await _userManager.DeleteAsync(existUser);
     }
 
     public Task<PagedResponse<ReservationListItemDto>> GetUserReservations(int pageNumber, int pageSize)
