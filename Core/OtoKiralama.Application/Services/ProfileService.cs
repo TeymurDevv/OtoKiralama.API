@@ -15,14 +15,14 @@ public class ProfileService : IProfileService
     private readonly UserManager<AppUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public ProfileService(UserManager<AppUser> userManager, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        _httpContextAccessor = httpContextAccessor;
+        _contextAccessor = httpContextAccessor;
     }
     public Task<UserGetDto> GetUserInformationAsync()
     {
