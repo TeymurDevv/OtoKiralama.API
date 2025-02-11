@@ -10,6 +10,7 @@ using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Repositories;
 using System.Security.Claims;
+using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -17,6 +18,13 @@ namespace OtoKiralama.Presentation.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
+        private readonly IProfileService _profileService;
+
+        public ProfileController(IProfileService profileService)
+        {
+            _profileService = profileService;
+        }
+        
         [HttpGet("GetUserInformation")]
         [Authorize]
         public async Task<IActionResult> GetUserInformation()
