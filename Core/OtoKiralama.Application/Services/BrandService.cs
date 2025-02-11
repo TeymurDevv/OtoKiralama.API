@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Brand;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
@@ -43,43 +42,17 @@ namespace OtoKiralama.Application.Services
 
 
             _mapper.Map(brandUpdateDto, brand);
-            _unitOfWork.BrandRepository.Update(brand);
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteBrandAsync(int id)
         {
-            await _unitOfWork.BeginTransactionAsync();
-            try
-            {
-                var brand = await _unitOfWork.BrandRepository.GetEntity(
-                    b => b.Id == id,
-                    includes: query => query
-                        .Include(b => b.Models)
-                        .ThenInclude(m => m.Cars)
-                );
+            var brand = await _unitOfWork.BrandRepository.GetEntity(b => b.Id == id);
 
-                if (brand is null)
-                    throw new CustomException(404, "Id", "Brand not found with this Id");
-
-                var carsToDelete = brand.Models.SelectMany(m => m.Cars).ToList();
-                if (carsToDelete.Count > 0)
-                    await _unitOfWork.CarRepository.DeleteRangeAsync(carsToDelete);
-
-                var modelsToDelete = brand.Models.ToList();
-                if (modelsToDelete.Count > 0)
-                    await _unitOfWork.ModelRepository.DeleteRangeAsync(modelsToDelete);
-
-                await _unitOfWork.BrandRepository.Delete(brand);
-
-                await _unitOfWork.CommitTransactionAsync();
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync();
-                throw;
-            }
+            if (brand is null)
+                throw new CustomException(404, "Id", "Brand not found with this Id");
+            await _unitOfWork.BrandRepository.Delete(brand);
+            await _unitOfWork.SaveChangesAsync();
         }
-
 
 
         public async Task<PagedResponse<BrandListItemDto>> GetAllBrandsAsync(int pageNumber, int pageSize)

@@ -12,8 +12,8 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250202200835_Initial")]
-    partial class Initial
+    [Migration("20250211133200_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,100 @@ namespace OtoKiralama.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 2, 11, 17, 31, 59, 539, DateTimeKind.Local).AddTicks(7324));
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEmailSubscribed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSmsSubscribed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TcKimlik")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Body", b =>
                 {
                     b.Property<int>("Id")
@@ -199,9 +293,6 @@ namespace OtoKiralama.Persistance.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BodyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClassId")
@@ -263,8 +354,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BodyId");
-
-                    b.HasIndex("BrandId");
 
                     b.HasIndex("ClassId");
 
@@ -335,7 +424,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 127, DateTimeKind.Local).AddTicks(410));
+                        .HasDefaultValue(new DateTime(2025, 2, 11, 17, 31, 59, 551, DateTimeKind.Local).AddTicks(1042));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -478,6 +567,9 @@ namespace OtoKiralama.Persistance.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("ReservationNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -518,98 +610,25 @@ namespace OtoKiralama.Persistance.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("OtoKiralama.Persistance.Entities.AppUser", b =>
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.Subscriber", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 3, 0, 8, 35, 113, DateTimeKind.Local).AddTicks(1140));
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsEmailSubscribed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsSmsSubscribed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TcKimlik")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(228)
+                        .HasColumnType("nvarchar(228)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
+                    b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Subscribers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -623,7 +642,7 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", null)
+                    b.HasOne("OtoKiralama.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -632,7 +651,7 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", null)
+                    b.HasOne("OtoKiralama.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -647,7 +666,7 @@ namespace OtoKiralama.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", null)
+                    b.HasOne("OtoKiralama.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -656,11 +675,20 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", null)
+                    b.HasOne("OtoKiralama.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.AppUser", b =>
+                {
+                    b.HasOne("OtoKiralama.Domain.Entities.Company", "Company")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Car", b =>
@@ -671,10 +699,6 @@ namespace OtoKiralama.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OtoKiralama.Domain.Entities.Brand", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("BrandId");
-
                     b.HasOne("OtoKiralama.Domain.Entities.Class", "Class")
                         .WithMany("Cars")
                         .HasForeignKey("ClassId")
@@ -682,7 +706,7 @@ namespace OtoKiralama.Persistance.Migrations
                         .IsRequired();
 
                     b.HasOne("OtoKiralama.Domain.Entities.Company", "Company")
-                        .WithMany()
+                        .WithMany("Cars")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -758,7 +782,7 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("OtoKiralama.Persistance.Entities.AppUser", "AppUser")
+                    b.HasOne("OtoKiralama.Domain.Entities.AppUser", "AppUser")
                         .WithMany("Reservations")
                         .HasForeignKey("AppUserId");
 
@@ -773,13 +797,9 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("OtoKiralama.Persistance.Entities.AppUser", b =>
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("OtoKiralama.Domain.Entities.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Body", b =>
@@ -789,8 +809,6 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Brand", b =>
                 {
-                    b.Navigation("Cars");
-
                     b.Navigation("Models");
                 });
 
@@ -801,6 +819,13 @@ namespace OtoKiralama.Persistance.Migrations
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Class", b =>
                 {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("OtoKiralama.Domain.Entities.Company", b =>
+                {
+                    b.Navigation("AppUsers");
+
                     b.Navigation("Cars");
                 });
 
@@ -829,11 +854,6 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Navigation("CarPhoto");
 
                     b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("OtoKiralama.Persistance.Entities.AppUser", b =>
-                {
-                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OtoKiralama.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,7 +78,7 @@ namespace OtoKiralama.Persistance.Migrations
                     Trust = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Essentials = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 3, 0, 8, 35, 127, DateTimeKind.Local).AddTicks(410))
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 11, 17, 31, 59, 551, DateTimeKind.Local).AddTicks(1042))
                 },
                 constraints: table =>
                 {
@@ -153,6 +153,19 @@ namespace OtoKiralama.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Subscribers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(228)", maxLength: 228, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscribers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -200,7 +213,7 @@ namespace OtoKiralama.Persistance.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 3, 0, 8, 35, 113, DateTimeKind.Local).AddTicks(1140)),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2025, 2, 11, 17, 31, 59, 539, DateTimeKind.Local).AddTicks(7324)),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TcKimlik = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsEmailSubscribed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -274,8 +287,7 @@ namespace OtoKiralama.Persistance.Migrations
                     IsLimited = table.Column<bool>(type: "bit", nullable: false),
                     Limit = table.Column<int>(type: "int", nullable: true),
                     DeliveryTypeId = table.Column<int>(type: "int", nullable: false),
-                    DepositAmount = table.Column<int>(type: "int", nullable: false),
-                    BrandId = table.Column<int>(type: "int", nullable: true)
+                    DepositAmount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -286,11 +298,6 @@ namespace OtoKiralama.Persistance.Migrations
                         principalTable: "Bodies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cars_Brands_BrandId",
-                        column: x => x.BrandId,
-                        principalTable: "Brands",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cars_Classes_ClassId",
                         column: x => x.ClassId,
@@ -426,6 +433,7 @@ namespace OtoKiralama.Persistance.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ReservationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -508,11 +516,6 @@ namespace OtoKiralama.Persistance.Migrations
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_BrandId",
-                table: "Cars",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cars_ClassId",
                 table: "Cars",
                 column: "ClassId");
@@ -561,6 +564,13 @@ namespace OtoKiralama.Persistance.Migrations
                 name: "IX_Reservations_CarId",
                 table: "Reservations",
                 column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscribers_Email",
+                table: "Subscribers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -589,6 +599,9 @@ namespace OtoKiralama.Persistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Subscribers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
