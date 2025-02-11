@@ -41,7 +41,7 @@ namespace OtoKiralama.Application.Services
             string imageUrl = await _photoService.UploadPhotoAsync(companyCreateDto.ImageFile);
             company.ImageUrl = imageUrl;
             await _unitOfWork.CompanyRepository.Create(company);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateCompanyAsync(int id, string userId, CompanyUpdateDto companyUpdateDto)
@@ -57,7 +57,7 @@ namespace OtoKiralama.Application.Services
 
             _mapper.Map(companyUpdateDto, existCompany);
             _unitOfWork.CompanyRepository.Update(existCompany);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateCompanyFullAsync(int id, CompanyFullUpdateDto companyFullUpdateDto)
@@ -71,7 +71,7 @@ namespace OtoKiralama.Application.Services
             _mapper.Map(companyFullUpdateDto, existCompany);
             string imageUrl = await _photoService.UploadPhotoAsync(companyFullUpdateDto.ImageFile);
             existCompany.ImageUrl = imageUrl;
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteCompanyAsyncs(int id)
         {
@@ -80,7 +80,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Company not found with this Id");
             await _unitOfWork.CompanyRepository.Delete(company);
             await _photoService.DeletePhotoAsync(company.ImageUrl);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         //public async Task DeleteCompanyAsync(int id)

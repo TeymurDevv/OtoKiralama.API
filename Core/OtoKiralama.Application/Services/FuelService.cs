@@ -28,7 +28,7 @@ namespace OtoKiralama.Application.Services
             if (existFuel)
                 throw new CustomException(400, "Name", "Fuel already exist with this name");
             await _unitOfWork.FuelRepository.Create(fuel);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteFuelAsync(int id)
@@ -37,7 +37,7 @@ namespace OtoKiralama.Application.Services
             if (fuel is null)
                 throw new CustomException(404, "Id", "Fuel not found with this Id");
             await _unitOfWork.FuelRepository.Delete(fuel);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<FuelListItemDto>> GetAllFuelsAsync(int pageNumber, int pageSize)
@@ -80,7 +80,7 @@ namespace OtoKiralama.Application.Services
             }
             _mapper.Map(fuelUpdateDto,existedFuel);
             await _unitOfWork.FuelRepository.Update(existedFuel);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
     }

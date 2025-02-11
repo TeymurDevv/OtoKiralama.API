@@ -28,7 +28,7 @@ namespace OtoKiralama.Application.Services
 
             var body = _mapper.Map<Body>(bodyCreateDto);
             await _unitOfWork.BodyRepository.Create(body);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -38,7 +38,7 @@ namespace OtoKiralama.Application.Services
             if (body is null)
                 throw new CustomException(404, "Id", "Body not found with this Id");
             await _unitOfWork.BodyRepository.Delete(body);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -55,7 +55,7 @@ namespace OtoKiralama.Application.Services
             _mapper.Map(bodyUpdateDto, body);
 
             _unitOfWork.BodyRepository.Update(body);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<BodyListItemDto>> GetAllBodiesAsync(int pageNumber, int pageSize)

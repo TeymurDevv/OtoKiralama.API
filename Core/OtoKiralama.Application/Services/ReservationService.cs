@@ -130,7 +130,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(400, "Id", "Cannot delete a reservation that is in progress");
 
             await _unitOfWork.ReservationRepository.Delete(existReservation);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<ReservationListItemDto>> GetAllReservationsAsync(int pageNumber, int pageSize)

@@ -74,7 +74,7 @@ namespace OtoKiralama.Application.Services
 
             var car = _mapper.Map<Car>(carCreateDto);
             await _unitOfWork.CarRepository.Create(car);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -125,7 +125,7 @@ namespace OtoKiralama.Application.Services
             _mapper.Map(carUpdateDto, car);
 
             await _unitOfWork.CarRepository.Update(car);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteCarAsync(int id, string userId)
@@ -144,7 +144,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Company", "This company no access for delete this car");
 
             await _unitOfWork.CarRepository.Delete(car);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -208,7 +208,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Car not found with this Id");
             car.IsActive = !car.IsActive;
             await _unitOfWork.CarRepository.Update(car);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task MarkAsDeactıve(int id)
@@ -218,7 +218,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Car not found with this Id");
             car.IsActive = false;
             car.IsReserved = false;
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 

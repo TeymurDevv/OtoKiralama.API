@@ -30,7 +30,7 @@ namespace OtoKiralama.Application.Services
             if (existLocation)
                 throw new CustomException(400, "Name", "Location already exist with this name");
             await _unitOfWork.LocationRepository.Create(location);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteLocationAsync(int id)
         {
@@ -38,7 +38,7 @@ namespace OtoKiralama.Application.Services
             if (location is null)
                 throw new CustomException(404, "Id", "Location not found with this Id");
             await _unitOfWork.LocationRepository.Delete(location);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task<PagedResponse<LocationListItemDto>> GetAllLocationsAsync(int pageNumber, int pageSize)
         {
@@ -110,7 +110,7 @@ namespace OtoKiralama.Application.Services
             }
             _mapper.Map(locationUpdateDto,existedLocation);
             await _unitOfWork.LocationRepository.Update(existedLocation);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

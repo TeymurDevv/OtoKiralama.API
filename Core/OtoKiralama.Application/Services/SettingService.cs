@@ -29,7 +29,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(400, "Key", "Setting with this key already exists");
             var setting = _mapper.Map<Setting>(settingCreateDto);
             await _unitOfWork.SettingRepository.Create(setting);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<SettingListItemDto>> GetAllSettingsAsync(int pageNumber, int pageSize)
@@ -70,7 +70,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(404, "Id", "Setting not found with this Id");
             _mapper.Map(settingUpdateDto, existSetting);
             await _unitOfWork.SettingRepository.Update(existSetting);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
     }
