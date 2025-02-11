@@ -172,7 +172,7 @@ public class AuthService : IAuthService
             first_name = user.FullName,
             id = user.Id,
             last_name = user.FullName,
-            roles = "admin",
+            roles = "companyAdmin",
             username = user.UserName
         };
         return tokenValidationReturnDto;
