@@ -86,10 +86,16 @@ public class ProfileService : IProfileService
             CurrentPage = pageNumber
         };
     }
-    
 
-    public Task ChangeSubscribtionStatus(ChangeSubscribtionStatusDto changeSubscribtionStatusDto)
+
+    public async Task ChangeSubscribtionStatus(ChangeSubscribtionStatusDto changeSubscribtionStatusDto)
     {
-        throw new NotImplementedException();
+        var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+        var existedUser = await _userManager.FindByIdAsync(userId);
+        if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+        existedUser.IsEmailSubscribed = changeSubscribtionStatusDto.IsEmailSubscribed;
+        existedUser.IsSmsSubscribed = changeSubscribtionStatusDto.IsSmsSubscribed;
+        await _userManager.UpdateAsync(existedUser);
     }
 }
