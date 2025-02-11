@@ -101,15 +101,11 @@ namespace OtoKiralama.Application.Services
             var existedLocation=await _unitOfWork.LocationRepository.GetEntity(s=>s.Id == id);
             if (existedLocation is null)
                 throw new CustomException(404, "Location", "not found");
-            if (!string.IsNullOrEmpty(locationUpdateDto.Name) && !existedLocation.Name.Equals(locationUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == locationUpdateDto.Name.ToLower()))
-                {
+            var isExistedLocation = await _unitOfWork.LocationRepository.isExists(s => s.Name.ToLower() == locationUpdateDto.Name.ToLower());
+                if (isExistedLocation)
                     throw new CustomException(400, "Name", "This location name already exists");
-                }
-            }
+                
             _mapper.Map(locationUpdateDto,existedLocation);
-            await _unitOfWork.LocationRepository.Update(existedLocation);
             await _unitOfWork.SaveChangesAsync();
         }
     }

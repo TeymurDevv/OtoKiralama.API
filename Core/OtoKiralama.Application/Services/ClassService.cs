@@ -68,15 +68,11 @@ namespace OtoKiralama.Application.Services
             var existedClass = await _unitOfWork.ClassRepository.GetEntity(s => s.Id == id);
             if (existedClass is null)
                 throw new CustomException(404, "Class", "Not found");
-            if (!string.IsNullOrEmpty(classUpdateDto.Name) && !existedClass.Name.Equals(classUpdateDto.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                if (await _unitOfWork.FuelRepository.isExists(s => s.Name.ToLower() == classUpdateDto.Name.ToLower()))
-                {
+            var isExistedClass = await _unitOfWork.ClassRepository.isExists(s => s.Name.ToLower() == classUpdateDto.Name.ToLower());
+                if (isExistedClass)
                     throw new CustomException(400, "Name", "This Class name already exists");
-                }
-            }
+                
             _mapper.Map(classUpdateDto, existedClass);
-            await _unitOfWork.ClassRepository.Update(existedClass);
             await _unitOfWork.SaveChangesAsync();
         }
     }

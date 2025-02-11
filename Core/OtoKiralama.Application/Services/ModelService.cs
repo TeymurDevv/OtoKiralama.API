@@ -22,7 +22,7 @@ namespace OtoKiralama.Application.Services
 
         public async Task CreateModelAsync(ModelCreateDto modelCreateDto)
         {
-            var existBrand = await _unitOfWork.BrandRepository.isExists(b => b.Id == modelCreateDto.BrandId);
+            var existBrand = await _unitOfWork.ModelRepository.isExists(b => b.Id == modelCreateDto.BrandId);
             if (!existBrand)
                 throw new CustomException(404, "BrandId", "Brand not found with this Id");
             var model = _mapper.Map<Model>(modelCreateDto);
@@ -85,6 +85,21 @@ namespace OtoKiralama.Application.Services
             if (model is null)
                 throw new CustomException(404, "Id", "Model not found with this Id");
             return _mapper.Map<ModelReturnDto>(model);
+        }
+        public async Task UpdateAsync(int id,ModelUpdateDto modelUpdateDto)
+        {
+            var existedModel= await _unitOfWork.ModelRepository.GetEntity(s=>s.Id== id);
+            if (existedModel is null)
+                throw new CustomException(404, "Model", "Not Found");
+            var isExistedBrand=await _unitOfWork.BrandRepository.isExists(s=>s.Id == modelUpdateDto.BrandId);
+            if (!isExistedBrand)
+                throw new CustomException(400, "Brand", "Invalid brand id");
+            var isExistedModel=await _unitOfWork.ModelRepository.isExists(s=>s.Name.ToLower()==modelUpdateDto.Name.ToLower());
+            if (isExistedModel)
+                throw new CustomException(400, "Model", "Model name already exists");
+            _mapper.Map(modelUpdateDto, existedModel);
+            await _unitOfWork.SaveChangesAsync();
+         
         }
     }
 }
