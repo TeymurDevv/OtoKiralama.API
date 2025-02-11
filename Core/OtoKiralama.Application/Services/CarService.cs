@@ -6,8 +6,7 @@ using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data.Implementations;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Domain.Repositories;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
@@ -125,10 +124,7 @@ namespace OtoKiralama.Application.Services
 
             _mapper.Map(carUpdateDto, car);
 
-            car.IsLimited = carUpdateDto.Limit.HasValue;
-            car.Limit = carUpdateDto.Limit;
-
-            _unitOfWork.CarRepository.Update(car);
+            await _unitOfWork.CarRepository.Update(car);
             await _unitOfWork.CommitAsync();
         }
 
@@ -346,7 +342,7 @@ namespace OtoKiralama.Application.Services
                 query = query.Where(c => c.Limit >= carSearchListDto.LimitRange.MinLimit.Value &&
                                          c.Limit <= carSearchListDto.LimitRange.MaxLimit.Value);
             }
-
+            // DailyPrice filtr
             if (carSearchListDto.DailyPriceRange.MinPrice.HasValue && carSearchListDto.DailyPriceRange.MaxPrice.HasValue)
             {
                 query = query.Where(c => c.DailyPrice >= carSearchListDto.DailyPriceRange.MinPrice.Value &&

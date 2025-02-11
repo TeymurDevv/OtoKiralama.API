@@ -4,7 +4,7 @@ using OtoKiralama.Application.Dtos.Setting;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data.Implementations;
+using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Application.Services
 {

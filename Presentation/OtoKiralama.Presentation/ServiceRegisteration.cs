@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using OtoKiralama.Application.Profiles;
+using OtoKiralama.Domain.Entities;
 using OtoKiralama.Persistance.Data;
-using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Presentation
 {

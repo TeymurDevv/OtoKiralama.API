@@ -1,6 +1,4 @@
-﻿using OtoKiralama.Domain.Repositories;
-
-namespace OtoKiralama.Persistance.Data.Implementations
+﻿namespace OtoKiralama.Domain.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {

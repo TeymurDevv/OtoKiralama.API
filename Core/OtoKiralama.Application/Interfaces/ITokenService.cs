@@ -1,4 +1,4 @@
-﻿using OtoKiralama.Persistance.Entities;
+﻿using OtoKiralama.Domain.Entities;
 using System.Security.Claims;
 
 namespace OtoKiralama.Application.Interfaces

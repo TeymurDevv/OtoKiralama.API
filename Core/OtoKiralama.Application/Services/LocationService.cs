@@ -5,8 +5,7 @@ using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data;
-using OtoKiralama.Persistance.Data.Implementations;
+using OtoKiralama.Domain.Repositories;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace OtoKiralama.Application.Services
@@ -17,7 +16,7 @@ namespace OtoKiralama.Application.Services
         private readonly IMapper _mapper;
         private readonly IFusionCache _fusionCache;
 
-        public LocationService(AppDbContext context, IMapper mapper, IUnitOfWork unitOfWork, IFusionCache fusionCache)
+        public LocationService(IMapper mapper, IUnitOfWork unitOfWork, IFusionCache fusionCache)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -74,7 +73,7 @@ namespace OtoKiralama.Application.Services
                     .Take(pageSize)
             );
 
-            int totalCount = await _unitOfWork.LocationRepository.CountAsync(l=>l.Name.Contains(name));
+            int totalCount = await _unitOfWork.LocationRepository.CountAsync(l => l.Name.Contains(name));
 
             var pagedResponse = new PagedResponse<LocationListItemDto>
             {

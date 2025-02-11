@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Entities;
 using System.Reflection;
 
 namespace OtoKiralama.Persistance.Data
@@ -54,6 +53,7 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<DeliveryType> DeliveryTypes { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }

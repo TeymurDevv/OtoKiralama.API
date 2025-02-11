@@ -2,19 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using OtoKiralama.Application.Dtos.Car;
-using OtoKiralama.Application.Dtos.Pagination;
-using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Settings;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Enums;
-using OtoKiralama.Persistance.Data.Implementations;
-using OtoKiralama.Persistance.Entities; 
+using OtoKiralama.Domain.Repositories;
 using System.Security.Claims;
 
 namespace OtoKiralama.Presentation.Controllers
@@ -46,10 +41,10 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            if(_userManager.Users.Any(u => u.Email == registerDto.Email))
-                throw new CustomException(400,"Email", "Email already in use");
-            if(_userManager.Users.Any(u => u.UserName == registerDto.UserName))
-                throw new CustomException(400,"Username", "Username already in use");
+            if (_userManager.Users.Any(u => u.Email == registerDto.Email))
+                throw new CustomException(400, "Email", "Email already in use");
+            if (_userManager.Users.Any(u => u.UserName == registerDto.UserName))
+                throw new CustomException(400, "Username", "Username already in use");
             var existUser = await _userManager.FindByNameAsync(registerDto.UserName);
             if (existUser != null) return BadRequest();
             AppUser appUser = new AppUser();
@@ -62,7 +57,8 @@ namespace OtoKiralama.Presentation.Controllers
                 var errorMessages = result.Errors.ToDictionary(e => e.Code, e => e.Description);
 
                 throw new CustomException(400, errorMessages);
-            }            await _userManager.AddToRoleAsync(appUser, "member");
+            }
+            await _userManager.AddToRoleAsync(appUser, "member");
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPost("CompanyPersonelRegister")]
@@ -127,9 +123,9 @@ namespace OtoKiralama.Presentation.Controllers
             await _roleManager.CreateAsync(new IdentityRole("companyPersonel"));
             return Ok();
         }
-        
+
         [HttpPost("ValidateToken")]
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult ValidateToken([FromHeader] string Authorization)
         {
             if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
@@ -151,7 +147,7 @@ namespace OtoKiralama.Presentation.Controllers
                 return Unauthorized(new { message = "User ID not found in token." });
             }
 
-            var user = _userManager.Users.FirstOrDefault(u=>u.Id==userId);
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
             if (user == null)
             {
                 return Unauthorized(new { message = "User not found." });
@@ -167,7 +163,7 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "admin",
             });
         }
-        
+
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
         public IActionResult ValidateAgentToken([FromHeader] string Authorization)
@@ -208,7 +204,7 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "companyAdmin",
             });
         }
-        
+
         [HttpPost("ValidateUserToken")]
         [Authorize(Roles = "member")]
         public IActionResult ValidateUserToken([FromHeader] string Authorization)
@@ -248,7 +244,7 @@ namespace OtoKiralama.Presentation.Controllers
                 roles = "member",
             });
         }
-       
+
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserDto updateUserDto)
@@ -267,10 +263,10 @@ namespace OtoKiralama.Presentation.Controllers
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new CustomException(400, "Update Failed", errors);
             }
-            var mappedExistedUser=_mapper.Map<UserGetDto>(existedUser);
+            var mappedExistedUser = _mapper.Map<UserGetDto>(existedUser);
             return Ok(mappedExistedUser);
         }
-        
+
     }
 }
 

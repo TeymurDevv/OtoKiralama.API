@@ -8,8 +8,7 @@ using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data.Implementations;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Domain.Repositories;
 using System.Security.Claims;
 
 namespace OtoKiralama.Presentation.Controllers
@@ -49,10 +48,10 @@ namespace OtoKiralama.Presentation.Controllers
             var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
             var existUser = await _userManager.FindByIdAsync(userId);
-            if(existUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur");
+            if (existUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur");
             await _userManager.DeleteAsync(existUser);
             return Ok(StatusCode(StatusCodes.Status204NoContent));
-            
+
         }
         [HttpGet("GetUserReservations")]
         [Authorize]

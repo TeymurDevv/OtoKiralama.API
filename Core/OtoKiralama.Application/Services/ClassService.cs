@@ -5,7 +5,7 @@ using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data.Implementations;
+using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Application.Services
 {
@@ -22,11 +22,26 @@ namespace OtoKiralama.Application.Services
 
         public async Task CreateClassAsync(ClassCreateDto classCreateDto)
         {
-            var @class = _mapper.Map<Class>(classCreateDto);
-            var existClass = await _unitOfWork.ClassRepository.isExists(c => c.Name == classCreateDto.Name);
+            var existClass = await _unitOfWork.ClassRepository.isExists(c => c.Name.ToLower() == classCreateDto.Name.ToLower());
             if (existClass)
                 throw new CustomException(400, "Name", "Class already exist with this name");
+            var @class = _mapper.Map<Class>(classCreateDto);
+
             await _unitOfWork.ClassRepository.Create(@class);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task UpdateClassAsync(int id, ClassUpdateDto classUpdateDto)
+        {
+            var @class = await _unitOfWork.ClassRepository.GetEntity(c => c.Id == id);
+            if (@class is null)
+                throw new CustomException(404, "Class", "Class not found with this Id");
+            var existClass = await _unitOfWork.ClassRepository.isExists(c => c.Name.ToLower() == classUpdateDto.Name.ToLower() && c.Id != id);
+            if (existClass)
+                throw new CustomException(400, "Name", "Another class already exists with this name");
+
+            _mapper.Map(classUpdateDto, @class);
+
             await _unitOfWork.CommitAsync();
         }
 

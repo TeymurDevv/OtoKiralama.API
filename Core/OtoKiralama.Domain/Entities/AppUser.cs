@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OtoKiralama.Domain.Entities;
 
-namespace OtoKiralama.Persistance.Entities
+namespace OtoKiralama.Domain.Entities
 {
-    public class AppUser : IdentityUser, IAppUser
+    public class AppUser : IdentityUser
     {
         public string FullName { get; set; }
         public int? CompanyId { get; set; }

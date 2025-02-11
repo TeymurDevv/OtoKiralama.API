@@ -20,11 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\OtoKiralama.Domain\OtoKiralama.Domain.csproj" />
+    <Folder Include="Entities\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\..\Core\OtoKiralama.Application\OtoKiralama.Application.csproj" />
   </ItemGroup>
 
 </Project>
