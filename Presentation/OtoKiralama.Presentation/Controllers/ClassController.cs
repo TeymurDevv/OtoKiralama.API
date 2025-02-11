@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Interfaces;
 
@@ -38,6 +37,13 @@ namespace OtoKiralama.Presentation.Controllers
             await _classService.DeleteClassAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        public async Task<IActionResult> UpdateClass(int id, ClassUpdateDto classUpdateDto)
+        {
+            await _classService.UpdateAsync(id, classUpdateDto);
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int? id, ClassUpdateDto classUpdateDto)
         {

@@ -1,7 +1,4 @@
-﻿using OtoKiralama.Application.Dtos.Car;
-using OtoKiralama.Persistance.Entities;
-
-namespace OtoKiralama.Application.Dtos.Reservation
+﻿namespace OtoKiralama.Application.Dtos.Reservation
 {
     public class ReservationCreateDto
     {

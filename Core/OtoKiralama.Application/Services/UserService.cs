@@ -5,7 +5,7 @@ using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Domain.Entities;
 
 namespace OtoKiralama.Application.Services
 {
@@ -40,7 +40,7 @@ namespace OtoKiralama.Application.Services
                 .Take(pageSize)
                 .ToListAsync();
             var totalUsers = await _userManager.Users.CountAsync();
-            
+
 
             return new PagedResponse<UserListItemDto>
             {

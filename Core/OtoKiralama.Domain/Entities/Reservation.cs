@@ -9,7 +9,7 @@ namespace OtoKiralama.Domain.Entities
         public int CarId { get; set; }
         public Car Car { get; set; }
         public string AppUserId { get; set; }
-        public IAppUser AppUser { get; set; }
+        public AppUser AppUser { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double TotalPrice { get; set; }

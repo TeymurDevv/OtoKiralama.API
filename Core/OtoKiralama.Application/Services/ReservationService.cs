@@ -6,8 +6,7 @@ using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Data.Implementations;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Application.Services
 {

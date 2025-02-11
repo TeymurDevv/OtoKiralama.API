@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Persistance.Entities;
+using OtoKiralama.Domain.Entities;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -43,19 +41,26 @@ namespace OtoKiralama.Presentation.Controllers
             await _companyService.CreateCompanyAsync(companyCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompanyById(int id)
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteCompanyById(int id)
+        //{
+        //    List<AppUser> companyUsers = await _userManager
+        //        .Users
+        //        .Where(u => u.CompanyId == id)
+        //        .ToListAsync();
+        //    foreach (var user in companyUsers)
+        //    {
+        //        await _userManager.DeleteAsync(user);
+        //    }
+        //    await _companyService.DeleteCompanyAsync(id);
+        //    return StatusCode(StatusCodes.Status204NoContent);
+        //}
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCompany(int id, string userId, CompanyUpdateDto companyUpdateDto)
         {
-            List<AppUser> companyUsers = await _userManager
-                .Users
-                .Where(u => u.CompanyId == id)
-                .ToListAsync();
-            foreach (var user in companyUsers)
-            {
-                await _userManager.DeleteAsync(user);
-            }
-            await _companyService.DeleteCompanyAsync(id);
-            return StatusCode(StatusCodes.Status204NoContent);
+            await _companyService.UpdateCompanyAsync(id, userId, companyUpdateDto);
+            return NoContent();
         }
     }
 }

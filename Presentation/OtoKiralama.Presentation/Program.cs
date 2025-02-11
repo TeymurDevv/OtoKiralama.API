@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OtoKiralama.Application;
 using OtoKiralama.Application.Settings;
+using OtoKiralama.Infrastructure;
+using OtoKiralama.Persistance;
+using OtoKiralama.Persistance.Data;
+using OtoKiralama.Persistance.Seeding;
 using OtoKiralama.Presentation;
 using OtoKiralama.Presentation.Middlewares;
 using System.Text;
-using OtoKiralama.Persistance;
-using OtoKiralama.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OtoKiralama.Persistance.Data;
-using OtoKiralama.Persistance.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -41,7 +41,7 @@ builder.Services.AddControllersWithViews()
 
             return new BadRequestObjectResult(response);
         };
-    });    builder.Services.AddAuthentication(options =>
+    }); builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,7 +70,8 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
-builder.Services.AddSwaggerGen(c => {
+builder.Services.AddSwaggerGen(c =>
+{
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "OtoKiralama.Presentation",

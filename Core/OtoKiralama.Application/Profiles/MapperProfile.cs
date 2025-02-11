@@ -16,7 +16,6 @@ using OtoKiralama.Application.Dtos.Role;
 using OtoKiralama.Application.Dtos.Setting;
 using OtoKiralama.Application.Dtos.User;
 using OtoKiralama.Domain.Entities;
-using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Application.Profiles
 {
@@ -103,12 +102,14 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.Limit, opt => opt.MapFrom(src => src.Limit ?? null))
                 .ReverseMap();
 
-
-
             CreateMap<CompanyCreateDto, Company>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
             CreateMap<Company, CompanyReturnDto>();
             CreateMap<Company, CompanyListItemDto>();
+            CreateMap<CompanyUpdateDto, Company>();
+            CreateMap<CompanyFullUpdateDto, Company>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
             CreateMap<Model, ModelReturnDto>();
             CreateMap<Model, ModelListItemDto>();
             CreateMap<ModelCreateDto, Model>();

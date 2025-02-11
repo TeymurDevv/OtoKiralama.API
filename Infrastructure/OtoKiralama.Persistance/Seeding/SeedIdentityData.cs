@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Enums;
 using OtoKiralama.Persistance.Data;
-using OtoKiralama.Persistance.Entities;
 
 namespace OtoKiralama.Persistance.Seeding;
 

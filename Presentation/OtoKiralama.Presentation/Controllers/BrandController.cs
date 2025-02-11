@@ -37,12 +37,7 @@ namespace OtoKiralama.Presentation.Controllers
             await _brandService.UpdateBrandAsync(id, brandUpdateDto);
             return NoContent();
         }
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoryUpdateDto categoryUpdateDto)
-        //{
-        //    await _categoryService.UpdateCategoryAsync(id, categoryUpdateDto);
-        //    return StatusCode(StatusCodes.Status200OK);
-        //}
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrandById(int id)
         {
