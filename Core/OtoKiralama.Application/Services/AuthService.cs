@@ -148,9 +148,34 @@ public class AuthService : IAuthService
         return tokenValidationReturnDto;
     }
 
-    public Task ValidateAgentToken(string Authorization)
+    public async Task<TokenValidationReturnDto> ValidateAgentToken(string Authorization)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            throw new CustomException(401, "Authorization", "Authorization header is not valid");
+
+        var token = Authorization.Substring("Bearer ".Length).Trim();
+        var principal = _tokenService.ValidateToken(token);
+
+        if (principal == null)
+            throw new CustomException(401, "Authorization", "Token is not valid");
+
+        var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+            throw new CustomException(401, "Authorization", "User id is not found");
+
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+            throw new CustomException(401, "Authorization", "User is not found");
+        TokenValidationReturnDto tokenValidationReturnDto = new()
+        {
+            email = user.Email,
+            first_name = user.FullName,
+            id = user.Id,
+            last_name = user.FullName,
+            roles = "admin",
+            username = user.UserName
+        };
+        return tokenValidationReturnDto;
     }
 
     public Task ValidateUserToken(string Authorization)
