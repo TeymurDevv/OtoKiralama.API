@@ -98,4 +98,14 @@ public class ProfileService : IProfileService
         existedUser.IsSmsSubscribed = changeSubscribtionStatusDto.IsSmsSubscribed;
         await _userManager.UpdateAsync(existedUser);
     }
+
+    public async Task UpdateUserInformation(UpdateUserDto updateUserDto)
+    {
+        var userId = _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new CustomException(401, "UserId", "Kullanici id bos gelemez");
+        var existedUser = await _userManager.FindByIdAsync(userId);
+        if (existedUser is null) throw new CustomException(404, "User", " Boyle kullanici yoktur ");
+        updateUserDto.
+        await _userManager.UpdateAsync(existedUser);
+    }
 }
