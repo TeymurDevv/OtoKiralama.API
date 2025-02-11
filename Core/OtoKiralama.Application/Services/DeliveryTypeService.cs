@@ -28,7 +28,7 @@ namespace OtoKiralama.Application.Services
                 throw new CustomException(400, "Name", "Delivery type already exist with this name");
             var deliveryType = _mapper.Map<DeliveryType>(deliveryTypeCreateDto);
             await _unitOfWork.DeliveryTypeRepository.Create(deliveryType);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteDeliveryTypeAsync(int id)
@@ -37,7 +37,7 @@ namespace OtoKiralama.Application.Services
             if (existDeliveryType is null)
                 throw new CustomException(404, "Id", "Delivery type not found with this Id");
             await _unitOfWork.DeliveryTypeRepository.Delete(existDeliveryType);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<DeliveryTypeListItemDto>> GetAllDeliveryTypesAsync(int pageNumber, int pageSize)
@@ -80,7 +80,7 @@ namespace OtoKiralama.Application.Services
             }
             _mapper.Map(deliveryTypeUpdateDto,existedDeliveryType);
             await _unitOfWork.DeliveryTypeRepository.Update(existedDeliveryType);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

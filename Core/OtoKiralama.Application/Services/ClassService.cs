@@ -28,7 +28,7 @@ namespace OtoKiralama.Application.Services
             var @class = _mapper.Map<Class>(classCreateDto);
 
             await _unitOfWork.ClassRepository.Create(@class);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateClassAsync(int id, ClassUpdateDto classUpdateDto)
@@ -42,7 +42,7 @@ namespace OtoKiralama.Application.Services
 
             _mapper.Map(classUpdateDto, @class);
 
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteClassAsync(int id)
@@ -51,7 +51,7 @@ namespace OtoKiralama.Application.Services
             if (@class is null)
                 throw new CustomException(404, "Id", "Class not found with this Id");
             await _unitOfWork.ClassRepository.Delete(@class);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -95,7 +95,7 @@ namespace OtoKiralama.Application.Services
             }
             _mapper.Map(classUpdateDto,existedClass);
             await _unitOfWork.ClassRepository.Update(existedClass);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

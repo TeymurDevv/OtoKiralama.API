@@ -28,7 +28,7 @@ namespace OtoKiralama.Application.Services
             var brand = _mapper.Map<Brand>(brandCreateDto);
 
             await _unitOfWork.BrandRepository.Create(brand);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -44,7 +44,7 @@ namespace OtoKiralama.Application.Services
 
             _mapper.Map(brandUpdateDto, brand);
             _unitOfWork.BrandRepository.Update(brand);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteBrandAsync(int id)
         {

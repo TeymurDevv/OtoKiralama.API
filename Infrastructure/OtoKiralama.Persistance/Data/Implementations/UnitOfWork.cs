@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using OtoKiralama.Domain.Repositories;
+﻿using OtoKiralama.Domain.Repositories;
 
 namespace OtoKiralama.Persistance.Data.Implementations
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        private IDbContextTransaction _transaction;
+        private bool _disposed;
 
         public UnitOfWork(AppDbContext context,
             ILocationRepository locationRepository,
@@ -53,54 +52,55 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public IReservationRepository ReservationRepository { get; private set; }
         public IDeliveryTypeRepository DeliveryTypeRepository { get; private set; }
 
-        // Tranzaksiyanı başlatmaq
-        public async Task BeginTransactionAsync()
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_transaction == null)
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction == null)
             {
-                _transaction = await _context.Database.BeginTransactionAsync();
+                await _context.Database.BeginTransactionAsync(cancellationToken);
             }
         }
 
-        // Əməliyyatları təsdiqləmək
-        public async Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
-            try
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
             {
-                await _context.SaveChangesAsync();
-                if (_transaction != null)
-                {
-                    await _transaction.CommitAsync();
-                    await _transaction.DisposeAsync();
-                    _transaction = null;
-                }
-            }
-            catch
-            {
-                await RollbackTransactionAsync();
-                throw;
+                await transaction.CommitAsync();
             }
         }
 
-        // Əməliyyatı geri qaytarmaq (rollback etmək)
-        public async Task RollbackTransactionAsync()
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_transaction != null)
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
             {
-                await _transaction.RollbackAsync();
-                await _transaction.DisposeAsync();
-                _transaction = null;
+                await transaction.RollbackAsync();
             }
         }
 
-        public async Task CommitAsync()
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
-
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+
+        private void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+
+            _disposed = true;
         }
     }
 }

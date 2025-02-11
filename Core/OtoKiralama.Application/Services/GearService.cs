@@ -27,7 +27,7 @@ namespace OtoKiralama.Application.Services
             if (existGear)
                 throw new CustomException(400, "Name", "Gear already exist with this name");
             await _unitOfWork.GearRepository.Create(gear);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteGearAsync(int id)
@@ -36,7 +36,7 @@ namespace OtoKiralama.Application.Services
             if (gear is null)
                 throw new CustomException(404, "Id", "Gear not found with this Id");
             await _unitOfWork.GearRepository.Delete(gear);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PagedResponse<GearListItemDto>> GetAllGearsAsync(int pageNumber, int pageSize)
@@ -79,7 +79,7 @@ namespace OtoKiralama.Application.Services
             }
             _mapper.Map(gearUpdateDto, existedGear);
             await _unitOfWork.GearRepository.Update(existedGear);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
