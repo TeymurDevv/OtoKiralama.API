@@ -13,5 +13,7 @@ namespace OtoKiralama.Domain.Entities
         public string? TcKimlik { get; set; }
         public bool IsEmailSubscribed { get; set; }
         public bool IsSmsSubscribed { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
     }
 }
