@@ -9,6 +9,7 @@ namespace OtoKiralama.Persistance.Data
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+          
             base.OnModelCreating(modelBuilder);
 
             // When a Brand is deleted, all related Models will be deleted.
