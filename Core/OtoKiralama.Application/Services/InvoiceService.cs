@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+
+using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
 using OtoKiralama.Application.Dtos.Invoice;
 using OtoKiralama.Application.Exceptions;
@@ -7,7 +9,8 @@ using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Enums;
 using OtoKiralama.Domain.Repositories;
-using System.Data.Entity;
+
+
 
 namespace OtoKiralama.Application.Services;
 
@@ -45,17 +48,10 @@ public class InvoiceService : IInvoiceService
         if (existUser == null)
             throw new CustomException(404, "UserId", "User not found");
 
-        var individualCompanyInvoice = await _unitOfWork.IndividualCompanyInvoiceRepository.GetEntity(i => i.AppUserId == dto.AppUserId);
-        if (individualCompanyInvoice == null)
+        if (existUser.Invoice != null)
             throw new CustomException(404, "UserId", "This User already has any invoice");
 
-        var individualInvoiceRepository = await _unitOfWork.IndividualInvoiceRepository.GetEntity(i => i.AppUserId == dto.AppUserId);
-        if (individualInvoiceRepository == null)
-            throw new CustomException(404, "UserId", "This User already has any invoice");
 
-        var corporateInvoiceRepository = await _unitOfWork.CorporateInvoiceRepository.GetEntity(i => i.AppUserId == dto.AppUserId);
-        if (corporateInvoiceRepository == null)
-            throw new CustomException(404, "UserId", "This User already has any invoice");
         var existCountry = await _unitOfWork.CountryRepository.GetEntity(c => c.Id == dto.CountryId);
         if (existCountry == null)
             throw new CustomException(404, "CountryId", "Country not found by this id");
