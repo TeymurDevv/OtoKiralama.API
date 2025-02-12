@@ -18,6 +18,7 @@ var config = builder.Configuration;
 builder.Services.Register(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(config);
+builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
 

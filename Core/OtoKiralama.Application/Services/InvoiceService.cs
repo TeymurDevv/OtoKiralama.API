@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Enums;
 using OtoKiralama.Domain.Repositories;
+using System.Security.Claims;
 
 
 
@@ -19,6 +21,8 @@ public class InvoiceService : IInvoiceService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
 
     public InvoiceService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager)
     {
@@ -79,6 +83,42 @@ public class InvoiceService : IInvoiceService
         }
 
         await _unitOfWork.SaveChangesAsync();
+    }
+    public async Task DeleteInvoice(int id,InvoiceType invoiceType)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new CustomException(403,"UserId", "User ID cannot be null");
+        }
+        var existedUser=await _userManager.FindByIdAsync(userId);
+        if (existedUser is null)
+            throw new CustomException(404,"User", "User  not found");
+        switch (invoiceType)
+        {
+            case InvoiceType.IndividualInvoice:
+               var existedIndividualInvoice= await _unitOfWork.IndividualInvoiceRepository.GetEntity(s=>s.Id== id&&s.AppUserId==userId);
+                if(existedIndividualInvoice is null)
+                    throw new CustomException(404, "Invoice", "Invoice  not found");
+                await _unitOfWork.IndividualInvoiceRepository.Delete(existedIndividualInvoice);
+                break;
+                case InvoiceType.IndividualCompanyInvoice:
+                var existedIndividualCompanyInvoice = await _unitOfWork.IndividualCompanyInvoiceRepository.GetEntity(s => s.Id == id && s.AppUserId == userId);
+                if (existedIndividualCompanyInvoice is null)
+                    throw new CustomException(404, "Invoice", "Invoice  not found");
+                await _unitOfWork.IndividualCompanyInvoiceRepository.Delete(existedIndividualCompanyInvoice);
+                break;
+                case InvoiceType.CompanyInvoice:
+                var existedCompanyInvoice = await _unitOfWork.CorporateInvoiceRepository.GetEntity(s => s.Id == id && s.AppUserId == userId);
+                if (existedCompanyInvoice is null)
+                    throw new CustomException(404, "Invoice", "Invoice  not found");
+                await _unitOfWork.CorporateInvoiceRepository.Delete(existedCompanyInvoice);
+                break;
+            default:
+                throw new ArgumentException("wrong one");
+
+
+        }
     }
 
 
