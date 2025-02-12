@@ -20,7 +20,13 @@ namespace OtoKiralama.Persistance.Data.Implementations
             ICarPhotoRepository carPhotoRepository,
             ISettingRepository settingRepository,
             IReservationRepository reservationRepository,
-            IDeliveryTypeRepository deliveryTypeRepository)
+            IDeliveryTypeRepository deliveryTypeRepository,
+            IIndividualInvoiceRepository individualInvoiceRepository,
+            IIndividualCompanyInvoiceRepository individualCompanyInvoiceRepository,
+            ICorporateInvoiceRepository corporateInvoiceRepository,
+            ICountryRepository countryRepository
+            
+            )
         {
             _context = context;
             LocationRepository = locationRepository;
@@ -36,6 +42,10 @@ namespace OtoKiralama.Persistance.Data.Implementations
             SettingRepository = settingRepository;
             ReservationRepository = reservationRepository;
             DeliveryTypeRepository = deliveryTypeRepository;
+            IndividualInvoiceRepository = individualInvoiceRepository;
+            IndividualCompanyInvoiceRepository = individualCompanyInvoiceRepository;
+            CorporateInvoiceRepository = corporateInvoiceRepository;
+            CountryRepository = countryRepository;
         }
 
         public ILocationRepository LocationRepository { get; private set; }
@@ -51,6 +61,10 @@ namespace OtoKiralama.Persistance.Data.Implementations
         public ISettingRepository SettingRepository { get; private set; }
         public IReservationRepository ReservationRepository { get; private set; }
         public IDeliveryTypeRepository DeliveryTypeRepository { get; private set; }
+        public IIndividualInvoiceRepository IndividualInvoiceRepository { get; private set; }
+        public IIndividualCompanyInvoiceRepository IndividualCompanyInvoiceRepository { get; private set; }
+        public ICorporateInvoiceRepository CorporateInvoiceRepository { get; private set; }
+        public ICountryRepository CountryRepository { get; private set; }
 
         public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {

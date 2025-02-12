@@ -37,6 +37,16 @@ namespace OtoKiralama.Persistance.Data
                 .WithMany(u => u.Reservations)
                 .HasForeignKey(r => r.AppUserId);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            
+            // TPT (Table-per-Type) Inheritance istifadə edirik
+            modelBuilder.Entity<IndividualInvoice>().ToTable("IndividualInvoices");
+            modelBuilder.Entity<CorporateInvoice>().ToTable("CorporateInvoices");
+            modelBuilder.Entity<IndividualCompanyInvoice>().ToTable("IndividualCompanyInvoices");
+
+            modelBuilder.Entity<AppUser>()
+                .HasOne(u => u.Invoice)
+                .WithOne(f => f.AppUser)
+                .HasForeignKey<Invoice>(f => f.AppUserId);
             base.OnModelCreating(modelBuilder);
         }
 
@@ -54,6 +64,9 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<DeliveryType> DeliveryTypes { get; set; }
         public DbSet<Subscriber> Subscribers { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }

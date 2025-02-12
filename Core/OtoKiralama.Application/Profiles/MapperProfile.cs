@@ -9,6 +9,7 @@ using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.DeliveryType;
 using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
+using OtoKiralama.Application.Dtos.IndividualInvoice;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Model;
 using OtoKiralama.Application.Dtos.Reservation;
@@ -163,6 +164,7 @@ namespace OtoKiralama.Application.Profiles
 
             CreateMap<DeliveryTypeCreateDto, DeliveryType>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            CreateMap<IndividualInvoiceCreateDto, IndividualInvoice>();
 
         }
     }

@@ -15,6 +15,12 @@
         ISettingRepository SettingRepository { get; }
         IReservationRepository ReservationRepository { get; }
         IDeliveryTypeRepository DeliveryTypeRepository { get; }
+        IIndividualInvoiceRepository IndividualInvoiceRepository { get; }
+        IIndividualCompanyInvoiceRepository IndividualCompanyInvoiceRepository { get; }
+        ICorporateInvoiceRepository CorporateInvoiceRepository { get; }
+        ICountryRepository CountryRepository { get; }
+        
+
 
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
