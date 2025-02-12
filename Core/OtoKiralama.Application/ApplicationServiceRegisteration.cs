@@ -32,6 +32,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<ICountryService, CountryService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();

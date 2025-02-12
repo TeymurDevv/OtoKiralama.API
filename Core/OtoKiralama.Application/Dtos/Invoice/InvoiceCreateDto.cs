@@ -2,7 +2,7 @@ using OtoKiralama.Domain.Enums;
 
 namespace OtoKiralama.Application.Dtos.IndividualInvoice;
 
-public class IndividualInvoiceCreateDto
+public class InvoiceCreateDto
 {
     public string AppUserId { get; set; }
     public string Title { get; set; }
@@ -12,4 +12,6 @@ public class IndividualInvoiceCreateDto
     public string Area { get; set; }
     public string PostalCode { get; set; }
     public InvoiceType InvoiceType { get; set; }
+    public string? TaxCompany { get; set; }
+    public string? TaxNumber { get; set; }
 }

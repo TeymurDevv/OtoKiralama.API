@@ -16,5 +16,6 @@ namespace OtoKiralama.Persistance.Data.Implementations
         {
             return await _context.Set<Brand>().CountAsync();
         }
+
     }
 }

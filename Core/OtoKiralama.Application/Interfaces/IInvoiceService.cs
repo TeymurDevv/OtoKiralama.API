@@ -1,10 +1,10 @@
 using OtoKiralama.Application.Dtos.IndividualInvoice;
-using OtoKiralama.Domain.Entities;
+using OtoKiralama.Application.Dtos.Invoice;
 
 namespace OtoKiralama.Application.Interfaces;
 
 public interface IInvoiceService
 {
-    Task<List<IndividualInvoice>> GetAllInvoicesAsync();
-    Task CreateInvoiceAsync(IndividualInvoiceCreateDto individualInvoiceCreateDto);
+    Task<List<InvoiceReturnDto>> GetAllInvoicesAsync();
+    Task CreateInvoiceAsync(InvoiceCreateDto individualInvoiceCreateDto);
 }
