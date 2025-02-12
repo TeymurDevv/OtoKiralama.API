@@ -6,10 +6,12 @@ using OtoKiralama.Application.Dtos.Car;
 using OtoKiralama.Application.Dtos.CarPhoto;
 using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Company;
+using OtoKiralama.Application.Dtos.Country;
 using OtoKiralama.Application.Dtos.DeliveryType;
 using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
+using OtoKiralama.Application.Dtos.Invoice;
 using OtoKiralama.Application.Dtos.Location;
 using OtoKiralama.Application.Dtos.Model;
 using OtoKiralama.Application.Dtos.Reservation;
@@ -52,7 +54,7 @@ namespace OtoKiralama.Application.Profiles
                  ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                                     srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
                                 ));
-            CreateMap < DeliveryTypeUpdateDto, DeliveryType>().
+            CreateMap<DeliveryTypeUpdateDto, DeliveryType>().
              ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                                 srcMember != null && (!(srcMember is string str) || !string.IsNullOrWhiteSpace(str))
                             ));
@@ -164,8 +166,32 @@ namespace OtoKiralama.Application.Profiles
 
             CreateMap<DeliveryTypeCreateDto, DeliveryType>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
-            CreateMap<IndividualInvoiceCreateDto, IndividualInvoice>();
 
+            //Invoice mapping
+
+            CreateMap<InvoiceCreateDto, Invoice>()
+           .ForMember(dest => dest.InvoiceType, opt => opt.MapFrom(src => src.InvoiceType));
+
+            CreateMap<InvoiceCreateDto, IndividualInvoice>().IncludeBase<InvoiceCreateDto, Invoice>();
+            CreateMap<InvoiceCreateDto, IndividualCompanyInvoice>().IncludeBase<InvoiceCreateDto, Invoice>();
+            CreateMap<InvoiceCreateDto, CorporateInvoice>()
+                .IncludeBase<InvoiceCreateDto, Invoice>()
+                .ForMember(dest => dest.TaxCompany, opt => opt.MapFrom(src => src.TaxCompany))
+                .ForMember(dest => dest.TaxNumber, opt => opt.MapFrom(src => src.TaxNumber));
+
+
+            CreateMap<Invoice, InvoiceReturnDto>();
+
+            CreateMap<IndividualInvoice, InvoiceReturnDto>().IncludeBase<Invoice, InvoiceReturnDto>();
+            CreateMap<IndividualCompanyInvoice, InvoiceReturnDto>().IncludeBase<Invoice, InvoiceReturnDto>();
+            CreateMap<CorporateInvoice, InvoiceReturnDto>()
+                .IncludeBase<Invoice, InvoiceReturnDto>()
+                .ForMember(dest => dest.TaxCompany, opt => opt.MapFrom(src => src.TaxCompany))
+                .ForMember(dest => dest.TaxNumber, opt => opt.MapFrom(src => src.TaxNumber));
+
+            //country mapping
+            CreateMap<CountryCreateDto, Country>();
+            CreateMap<Country, CountryListItemDto>();
         }
     }
 }

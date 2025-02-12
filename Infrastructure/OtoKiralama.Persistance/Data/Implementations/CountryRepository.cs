@@ -1,6 +1,8 @@
-using System.Data.Entity;
+
+
 using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Repositories;
+using System.Data.Entity;
 
 namespace OtoKiralama.Persistance.Data.Implementations;
 
