@@ -66,6 +66,18 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(_authService.ValidateUserToken(Authorization));
         }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            await _authService.ForgotPassword(forgotPasswordDto);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            await _authService.ResetPassword(resetPasswordDto);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }
 
