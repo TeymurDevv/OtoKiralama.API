@@ -22,6 +22,10 @@ namespace OtoKiralama.Persistance
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IDeliveryTypeRepository, DeliveryTypeRepository>();
+            services.AddScoped<IIndividualInvoiceRepository, IndividualInvoiceRepository>();
+            services.AddScoped<IIndividualCompanyInvoiceRepository, IndividualCompanyInvoiceRepository>();
+            services.AddScoped<ICorporateInvoiceRepository, CorporateInvoiceRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
         }
     }
 }

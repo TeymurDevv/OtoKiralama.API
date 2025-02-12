@@ -15,5 +15,6 @@ namespace OtoKiralama.Domain.Entities
         public bool IsSmsSubscribed { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiry { get; set; }
+        public Invoice Invoice { get; set; }
     }
 }
