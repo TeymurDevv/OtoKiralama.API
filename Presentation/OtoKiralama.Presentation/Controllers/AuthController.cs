@@ -66,7 +66,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(_authService.ValidateUserToken(Authorization));
         }
-        [HttpPost]
+        [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
             await _authService.ForgotPassword(forgotPasswordDto);
