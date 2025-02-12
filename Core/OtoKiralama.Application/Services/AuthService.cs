@@ -20,13 +20,16 @@ public class AuthService : IAuthService
     private readonly ITokenService _tokenService;
     private readonly JwtSettings _jwtSettings;
     private readonly IUnitOfWork _unitOfWork;
-    public AuthService(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService, IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
+    private readonly IEmailService _emailService;
+    public AuthService(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService, IUnitOfWork unitOfWork, IEmailService emailService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _tokenService = tokenService;
         _jwtSettings = jwtSettings.Value;
         _unitOfWork = unitOfWork;
+        _emailService = emailService;
+        
     }
     public async Task RegisterAsync(RegisterDto registerDto)
     {
@@ -206,5 +209,42 @@ public class AuthService : IAuthService
             username = user.UserName
         };
         return tokenValidationReturnDto;
+    }
+
+    public async Task ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    {
+        var existUser = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
+        if (existUser is null)
+            throw new CustomException(400, "User", "User not found");
+        var token = await _userManager.GeneratePasswordResetTokenAsync(existUser);
+        existUser.PasswordResetToken = token;
+        existUser.PasswordResetTokenExpiry = DateTime.UtcNow.AddMinutes(5); // Token 5 deqiqe muddetinde aktivdir.
+        await _userManager.UpdateAsync(existUser);
+        var resetLink = $"https://kuzeygo.com/reset-password?email={forgotPasswordDto.Email}&token={Uri.EscapeDataString(token)}";
+        await _emailService.SendEmailAsync(forgotPasswordDto.Email, "Reset Password", $"Please reset your password by clicking this link: <a href='{resetLink}'>Reset Password</a>");
+    }
+
+    public async Task ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+        if (user is null)
+            throw new CustomException(400, "User", "User not found");
+        
+        if (user.PasswordResetTokenExpiry == null || DateTime.UtcNow > user.PasswordResetTokenExpiry)
+            throw new CustomException(400, "User", "Token is expired");
+        
+        if (user.PasswordResetToken != resetPasswordDto.Token)
+            throw new CustomException(400, "User", "Token is invalid");
+        
+        var resetResult = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.NewPassword);
+        
+        if (!resetResult.Succeeded)
+        {
+            var errors = resetResult.Errors.Select(e => e.Description);
+            throw new CustomException(400, "ResetPassword", string.Join(", ", errors));
+        }
+        user.PasswordResetToken = null;
+        user.PasswordResetTokenExpiry = null;
+        await _userManager.UpdateAsync(user);
     }
 }
