@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-
 using Microsoft.EntityFrameworkCore;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
 using OtoKiralama.Application.Dtos.Invoice;
@@ -101,18 +100,21 @@ public class InvoiceService : IInvoiceService
                 if(existedIndividualInvoice is null)
                     throw new CustomException(404, "Invoice", "Invoice  not found");
                 await _unitOfWork.IndividualInvoiceRepository.Delete(existedIndividualInvoice);
+               await _unitOfWork.SaveChangesAsync();
                 break;
                 case InvoiceType.IndividualCompanyInvoice:
                 var existedIndividualCompanyInvoice = await _unitOfWork.IndividualCompanyInvoiceRepository.GetEntity(s => s.Id == id && s.AppUserId == userId);
                 if (existedIndividualCompanyInvoice is null)
                     throw new CustomException(404, "Invoice", "Invoice  not found");
                 await _unitOfWork.IndividualCompanyInvoiceRepository.Delete(existedIndividualCompanyInvoice);
+                await _unitOfWork.SaveChangesAsync();
                 break;
                 case InvoiceType.CompanyInvoice:
                 var existedCompanyInvoice = await _unitOfWork.CorporateInvoiceRepository.GetEntity(s => s.Id == id && s.AppUserId == userId);
                 if (existedCompanyInvoice is null)
                     throw new CustomException(404, "Invoice", "Invoice  not found");
                 await _unitOfWork.CorporateInvoiceRepository.Delete(existedCompanyInvoice);
+                await _unitOfWork.SaveChangesAsync();
                 break;
             default:
                 throw new ArgumentException("wrong one");

@@ -268,7 +268,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bodies");
+                    b.ToTable("Bodies", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Brand", b =>
@@ -284,7 +284,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Car", b =>
@@ -372,7 +372,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.CarPhoto", b =>
@@ -394,7 +394,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.HasIndex("ModelId")
                         .IsUnique();
 
-                    b.ToTable("CarPhotos");
+                    b.ToTable("CarPhotos", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Class", b =>
@@ -410,7 +410,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Classes", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Company", b =>
@@ -452,7 +452,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Country", b =>
@@ -468,7 +468,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.DeliveryType", b =>
@@ -484,7 +484,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryTypes");
+                    b.ToTable("DeliveryTypes", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Fuel", b =>
@@ -500,7 +500,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fuels");
+                    b.ToTable("Fuels", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Gear", b =>
@@ -516,7 +516,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gears");
+                    b.ToTable("Gears", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Invoice", b =>
@@ -559,7 +559,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -577,7 +577,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Model", b =>
@@ -598,7 +598,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Models");
+                    b.ToTable("Models", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Reservation", b =>
@@ -649,7 +649,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Setting", b =>
@@ -671,7 +671,7 @@ namespace OtoKiralama.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.Subscriber", b =>
@@ -692,7 +692,7 @@ namespace OtoKiralama.Persistance.Migrations
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("Subscribers");
+                    b.ToTable("Subscribers", (string)null);
                 });
 
             modelBuilder.Entity("OtoKiralama.Domain.Entities.CorporateInvoice", b =>
