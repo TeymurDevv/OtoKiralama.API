@@ -12,4 +12,6 @@ public interface IAuthService
     Task<TokenValidationReturnDto> ValidateToken([FromHeader] string Authorization);
     Task<TokenValidationReturnDto> ValidateAgentToken([FromHeader] string Authorization);
     Task<TokenValidationReturnDto> ValidateUserToken([FromHeader] string Authorization);
+    Task ForgotPassword(ForgotPasswordDto forgotPasswordDto);
+    Task ResetPassword(ResetPasswordDto resetPasswordDto);
 }
