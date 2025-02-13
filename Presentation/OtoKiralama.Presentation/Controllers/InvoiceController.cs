@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
+using OtoKiralama.Application.Dtos.Invoice;
 using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers;
@@ -23,5 +24,18 @@ public class InvoiceController : ControllerBase
     public async Task<IActionResult> GetAllInvoices()
     {
         return Ok(await _invoiceService.GetAllInvoicesAsync());
+    }
+
+    [HttpGet("userId")]
+    public async Task<IActionResult> GetInvoiceByUser()
+    {
+        return Ok(await _invoiceService.GetInvoiceByUserIdAsync());
+    }
+
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateInvoice([FromBody] InvoiceUpdateDto dto)
+    {
+        await _invoiceService.UpdateInvoiceAsync(dto);
+        return Ok(new { message = "Invoice successfully updated" });
     }
 }
