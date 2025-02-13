@@ -26,7 +26,28 @@ namespace OtoKiralama.Application.Validators.UserValidator
             RuleFor(s => s.Email).EmailAddress().When(s => !string.IsNullOrWhiteSpace(s.Email));
             RuleFor(s => s.BirthDate).Must(birthDate => CalculateAge(birthDate) >= 18)
             .WithMessage("The person must be at least 18 years old.").When(s => s.BirthDate is not null);
-           
+            RuleFor(p => p.BirthDate)
+                .NotEmpty()
+                .NotEmpty()
+                .WithMessage("Birth date is required.");
+            RuleFor(p => p.FullName
+                )
+                .NotEmpty()
+                .NotEmpty()
+                .WithMessage("FullName is required.");
+            RuleFor(p => p.PhoneNumber)
+                .NotEmpty()
+                .NotEmpty()
+                .WithMessage("PhoneNumber is required.");
+            RuleFor(p => p.TcKimlik)
+                .NotEmpty()
+                .NotEmpty()
+                .WithMessage("TcKimlik is required.");
+            RuleFor(p => p.Email)
+                .NotEmpty()
+                .NotEmpty()
+                .WithMessage("Email is required.");
+
         }
     }
 }
