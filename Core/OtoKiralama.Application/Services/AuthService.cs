@@ -220,7 +220,7 @@ public class AuthService : IAuthService
         existUser.PasswordResetToken = token;
         existUser.PasswordResetTokenExpiry = DateTime.UtcNow.AddMinutes(5); // Token 5 deqiqe muddetinde aktivdir.
         await _userManager.UpdateAsync(existUser);
-        var resetLink = $"https://kuzeygo.com/reset-password?email={forgotPasswordDto.Email}&token={Uri.EscapeDataString(token)}";
+        var resetLink = $"http://localhost:8080/reset-password?email={forgotPasswordDto.Email}&token={Uri.EscapeDataString(token)}";
         await _emailService.SendEmailAsync(forgotPasswordDto.Email, "Reset Password", $"Please reset your password by clicking this link: <a href='{resetLink}'>Reset Password</a>");
     }
 
