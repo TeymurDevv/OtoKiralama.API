@@ -16,5 +16,7 @@ namespace OtoKiralama.Application.Dtos.User
         public string Email { get; init; }
         public string TcKimlik { get; init; }
         public DateTime? BirthDate { get; set; }
+        public bool IsEmailSubscribed { get; set; }
+        public bool IsSmsSubscribed { get; set; }
     }
 }
