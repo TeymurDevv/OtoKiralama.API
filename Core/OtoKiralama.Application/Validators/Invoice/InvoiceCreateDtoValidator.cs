@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
 using OtoKiralama.Domain.Enums;
 
@@ -9,10 +8,6 @@ namespace OtoKiralama.Application.Validators.Invoice
     {
         public InvoiceCreateDtoValidator()
         {
-            RuleFor(x => x.AppUserId)
-                .NotEmpty().WithMessage("Kullanıcı kimliği gereklidir.")
-                .Must(x => Guid.TryParse(x, out _))
-                .WithMessage("Kullanıcı kimliği geçerli bir GUID olmalıdır.");
 
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Başlık gereklidir.")

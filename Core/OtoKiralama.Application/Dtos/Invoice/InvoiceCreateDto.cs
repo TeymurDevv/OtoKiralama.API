@@ -4,7 +4,6 @@ namespace OtoKiralama.Application.Dtos.IndividualInvoice;
 
 public class InvoiceCreateDto
 {
-    public string AppUserId { get; set; }
     public string Title { get; set; }
     public string Address { get; set; }
     public int CountryId { get; set; }

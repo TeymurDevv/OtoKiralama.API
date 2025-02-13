@@ -13,6 +13,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             _userService = userService;
         }
+
         [HttpGet("")]
         public async Task<IActionResult> GetAllUsers(int pageNumber = 1, int pageSize = 10)
         {

@@ -21,6 +21,7 @@ namespace OtoKiralama.Infrastructure
             });
             services.AddTransient<IResend, ResendClient>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IUserResolverService, UserResolverService>();
         }
     }
 }

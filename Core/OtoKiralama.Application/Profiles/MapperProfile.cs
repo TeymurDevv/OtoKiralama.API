@@ -169,6 +169,22 @@ namespace OtoKiralama.Application.Profiles
 
             //Invoice mapping
 
+            CreateMap<InvoiceUpdateDto, Invoice>()
+             .ForMember(dest => dest.InvoiceType, opt => opt.MapFrom(src => src.InvoiceType));
+
+            CreateMap<InvoiceUpdateDto, IndividualInvoice>()
+                .IncludeBase<InvoiceUpdateDto, Invoice>();
+
+            CreateMap<InvoiceUpdateDto, IndividualCompanyInvoice>()
+                .IncludeBase<InvoiceUpdateDto, Invoice>();
+
+            CreateMap<InvoiceUpdateDto, CorporateInvoice>()
+                .IncludeBase<InvoiceUpdateDto, Invoice>()
+                .ForMember(dest => dest.TaxCompany, opt => opt.MapFrom(src => src.TaxCompany))
+                .ForMember(dest => dest.TaxNumber, opt => opt.MapFrom(src => src.TaxNumber));
+
+
+
             CreateMap<InvoiceCreateDto, Invoice>()
            .ForMember(dest => dest.InvoiceType, opt => opt.MapFrom(src => src.InvoiceType));
 
