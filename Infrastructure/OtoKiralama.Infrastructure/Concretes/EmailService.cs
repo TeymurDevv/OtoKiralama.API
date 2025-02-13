@@ -13,7 +13,7 @@ public class EmailService : IEmailService
     public async Task SendEmailAsync(string to, string subject, string body, bool isHtml = true)
     {
         var message = new EmailMessage();
-        message.From = "teymursuleymanli2008@gmail.com";
+        message.From = "info@kuzeygo.com";
         message.To.Add(to);
         message.Subject =subject;
         message.HtmlBody = body;

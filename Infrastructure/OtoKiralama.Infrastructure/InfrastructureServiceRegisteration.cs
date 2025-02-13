@@ -15,13 +15,11 @@ namespace OtoKiralama.Infrastructure
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddOptions();
             services.AddHttpClient<ResendClient>();
-            services.Configure<ResendClientOptions>(o =>
-            {
-                o.ApiToken = Environment.GetEnvironmentVariable("Resend:ApiKey")!;
-            });
+
+            services.Configure<ResendClientOptions>(configuration.GetSection("Resend"));
+
             services.AddTransient<IResend, ResendClient>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IUserResolverService, UserResolverService>();
         }
-    }
-}
+    }}
