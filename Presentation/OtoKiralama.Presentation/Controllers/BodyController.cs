@@ -32,7 +32,7 @@ namespace OtoKiralama.Presentation.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGearById(int id)
+        public async Task<IActionResult> DeleteBodyById(int id)
         {
             await _bodyService.DeleteBodyAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);

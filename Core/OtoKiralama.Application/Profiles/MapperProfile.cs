@@ -192,6 +192,8 @@ namespace OtoKiralama.Application.Profiles
             //country mapping
             CreateMap<CountryCreateDto, Country>();
             CreateMap<Country, CountryListItemDto>();
+            CreateMap<CountryUpdateDto, Country>();
+            CreateMap<Country, CountryReturnDto>();
         }
     }
 }

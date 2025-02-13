@@ -7,5 +7,9 @@ namespace OtoKiralama.Application.Interfaces
     {
         Task CreateCountryAsync(CountryCreateDto countryCreateDto);
         Task<PagedResponse<CountryListItemDto>> GetAllCountriesAsync(int pageNumber, int pageSize);
+        Task UpdateCountryAsync(int id, CountryUpdateDto countryUpdateDto);
+        Task DeleteCountryAsync(int id);
+        Task<CountryReturnDto> GetCountryByIdAsync(int id);
+
     }
 }
