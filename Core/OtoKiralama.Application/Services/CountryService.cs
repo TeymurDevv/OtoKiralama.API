@@ -45,5 +45,38 @@ namespace OtoKiralama.Application.Services
                 CurrentPage = pageNumber
             };
         }
+
+        public async Task DeleteCountryAsync(int id)
+        {
+            var country = await _unitOfWork.CountryRepository.GetEntity(c => c.Id == id);
+            if (country is null)
+                throw new CustomException(404, "Id", "Country not found with this Id");
+            await _unitOfWork.CountryRepository.Delete(country);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UpdateCountryAsync(int id, CountryUpdateDto countryUpdateDto)
+        {
+            var existCountry = await _unitOfWork.CountryRepository.GetEntity(c => c.Id == id);
+            if (existCountry is null)
+                throw new CustomException(404, "Id", "Country not found with this Id");
+
+            var existCountryByName = await _unitOfWork.CountryRepository.isExists(c => c.Name.ToLower() == countryUpdateDto.Name.ToLower() && c.Id != id);
+            if (existCountryByName)
+                throw new CustomException(400, "Name", "Another Country already exists with this name");
+
+            _mapper.Map(countryUpdateDto, existCountry);
+
+            _unitOfWork.CountryRepository.Update(existCountry);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<CountryReturnDto> GetCountryByIdAsync(int id)
+        {
+            var existCountry = await _unitOfWork.CountryRepository.GetEntity(c => c.Id == id);
+            if (existCountry is null)
+                throw new CustomException(404, "Id", "Country not found with this Id");
+            return _mapper.Map<CountryReturnDto>(existCountry);
+        }
     }
 }

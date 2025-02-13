@@ -24,5 +24,25 @@ namespace OtoKiralama.Presentation.Controllers
         {
             return Ok(await _countryService.GetAllCountriesAsync(pageNumber, pageSize));
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCountryById(int id)
+        {
+            return Ok(await _countryService.GetCountryByIdAsync(id));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCountryById(int id)
+        {
+            await _countryService.DeleteCountryAsync(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCountry(int id, CountryUpdateDto countryUpdateDto)
+        {
+            await _countryService.UpdateCountryAsync(id, countryUpdateDto);
+            return NoContent();
+        }
     }
 }
