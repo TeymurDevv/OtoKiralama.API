@@ -14,7 +14,7 @@ namespace OtoKiralama.Application.Dtos.User
         public string UserName { get; init; }
         public string PhoneNumber { get; init; }
         public string Email { get; init; }
+        public string TcKimlik { get; init; }
         public DateTime? BirthDate { get; set; }
-        public UserIdentityInformation? UserIdentityInformation { get; set; }
     }
 }
