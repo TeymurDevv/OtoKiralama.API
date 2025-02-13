@@ -2,6 +2,8 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using OtoKiralama.Application.Dtos.User;
@@ -105,8 +107,6 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> LogInAsync(LoginDto loginDto)
     {
         var existUser = await _userManager.FindByNameAsync(loginDto.UserName);
-        if (existUser == null)
-            throw new CustomException(400, "UserName", "User not found with this name");
         var result = await _userManager.CheckPasswordAsync(existUser, loginDto.Password);
         if (!result)
             throw new CustomException(400, "Password", "Password is incorrect");
@@ -121,7 +121,7 @@ public class AuthService : IAuthService
         return authResponseDto;
     }
 
-    public async Task<TokenValidationReturnDto> ValidateToken(string Authorization)
+    public async Task<TokenValidationReturnDto> ValidateToken([FromHeader] string Authorization)
     {
         if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
             throw new CustomException(401, "Authorization", "Authorization header is not valid");
@@ -151,7 +151,7 @@ public class AuthService : IAuthService
         return tokenValidationReturnDto;
     }
 
-    public async Task<TokenValidationReturnDto> ValidateAgentToken(string Authorization)
+    public async Task<TokenValidationReturnDto> ValidateAgentToken([FromHeader] string Authorization)
     {
         if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
             throw new CustomException(401, "Authorization", "Authorization header is not valid");
@@ -181,7 +181,7 @@ public class AuthService : IAuthService
         return tokenValidationReturnDto;
     }
 
-    public async Task<TokenValidationReturnDto> ValidateUserToken(string Authorization)
+    public async Task<TokenValidationReturnDto> ValidateUserToken([FromHeader] string Authorization)
     {
         if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
             throw new CustomException(401, "Authorization", "Authorization header is not valid");
@@ -196,7 +196,7 @@ public class AuthService : IAuthService
         if (string.IsNullOrEmpty(userId))
             throw new CustomException(401, "Authorization", "User id is not found");
 
-        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
             throw new CustomException(401, "Authorization", "User is not found");
         TokenValidationReturnDto tokenValidationReturnDto = new()

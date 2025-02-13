@@ -50,21 +50,21 @@ namespace OtoKiralama.Presentation.Controllers
         }
         [HttpPost("ValidateToken")]
         [Authorize(Roles = "admin")]
-        public IActionResult ValidateToken([FromHeader] string Authorization)
+        public async Task<IActionResult> ValidateToken([FromHeader] string Authorization)
         {
-            return Ok(_authService.ValidateToken(Authorization));
+            return Ok(await _authService.ValidateUserToken(Authorization));
         }
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
-        public IActionResult ValidateAgentToken([FromHeader] string Authorization)
+        public async Task<IActionResult> ValidateAgentToken([FromHeader] string Authorization)
         {
-            return Ok(_authService.ValidateAgentToken(Authorization));
+            return Ok(await _authService.ValidateUserToken(Authorization));
         }
         [HttpPost("ValidateUserToken")]
-        [Authorize(Roles = "member")]
-        public IActionResult ValidateUserToken([FromHeader] string Authorization)
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> ValidateUserToken([FromHeader] string Authorization)
         {
-            return Ok(_authService.ValidateUserToken(Authorization));
+            return Ok(await _authService.ValidateUserToken(Authorization));
         }
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)

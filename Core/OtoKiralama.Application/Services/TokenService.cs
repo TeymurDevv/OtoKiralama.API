@@ -46,11 +46,11 @@ namespace OtoKiralama.Application.Services
                 var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4250034f-c024-41f3-a10e-f7fd5ccc0671")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4250034f-c024-41f3-a1xw0e-f7fd5ccc0671")),
                     ValidateIssuer = true,
-                    ValidIssuer = "https://api.kuzeygo.com",
+                    ValidIssuer = "http://localhost:7140",
                     ValidateAudience = true,
-                    ValidAudience = "https://api.kuzeygo.com",
+                    ValidAudience = "http://localhost:7140",
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
