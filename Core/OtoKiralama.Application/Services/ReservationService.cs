@@ -15,12 +15,14 @@ namespace OtoKiralama.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUserResolverService _userResolverService;
 
-        public ReservationService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager)
+        public ReservationService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager, IUserResolverService userResolverService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
+            _userResolverService = userResolverService;
         }
 
         public async Task CancelReservation(int id)
@@ -39,7 +41,7 @@ namespace OtoKiralama.Application.Services
 
                 var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
                 existCar.IsReserved = false;
-
+                await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitTransactionAsync();
             }
             catch
@@ -69,6 +71,9 @@ namespace OtoKiralama.Application.Services
                 var existCar = await _unitOfWork.CarRepository.GetEntity(c => c.Id == existReservation.CarId);
                 existCar.IsReserved = false;
 
+                existCar.LocationId = existReservation.DropOfLocationId ?? existCar.LocationId;
+
+                await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitTransactionAsync();
             }
             catch
@@ -83,6 +88,9 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.BeginTransactionAsync();
             try
             {
+                var currentUserId = await _userResolverService.GetCurrentUserIdAsync();
+                if (currentUserId is null)
+                    throw new CustomException(401, "User", "Please login system");
                 var existCar = await _unitOfWork.CarRepository.isExists(c => c.Id == reservationCreateDto.CarId);
                 if (!existCar)
                     throw new CustomException(404, "CarId", "Car not found with this Id");
@@ -94,12 +102,12 @@ namespace OtoKiralama.Application.Services
                 if (!existCarEntity.IsActive)
                     throw new CustomException(400, "CarId", "Car is not active");
 
-                var existUser = await _userManager.FindByIdAsync(reservationCreateDto.UserId);
+                var existUser = await _userManager.FindByIdAsync(currentUserId);
                 if (existUser is null)
                     throw new CustomException(404, "UserId", "User not found with this Id");
 
                 var reservation = _mapper.Map<Reservation>(reservationCreateDto);
-                reservation.AppUserId = reservationCreateDto.UserId;
+                reservation.AppUserId = currentUserId;
 
                 int currentYear = DateTime.UtcNow.Year;
                 int lastNumber = await _unitOfWork.ReservationRepository.GetLastReservationNumberForYear(currentYear);
@@ -111,6 +119,7 @@ namespace OtoKiralama.Application.Services
                 existCarEntity.IsReserved = true;
 
                 await _unitOfWork.ReservationRepository.Create(reservation);
+                await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitTransactionAsync();
             }
             catch
