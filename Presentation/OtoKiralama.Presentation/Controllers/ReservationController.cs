@@ -52,7 +52,7 @@ namespace OtoKiralama.Presentation.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpGet("FindReservation")]
+        [HttpPost("FindReservation")]
         public async Task<IActionResult> GetReservationByReservationNumberAndEmail(ReservationGetByEmailAndNumberDto reservationGetByEmailAndNumberDto)
         {
             var reservation = await _reservationService.GetReservationByReservationNumberAndEmail(reservationGetByEmailAndNumberDto);
