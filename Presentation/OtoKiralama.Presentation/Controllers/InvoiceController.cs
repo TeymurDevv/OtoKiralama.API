@@ -17,8 +17,8 @@ public class InvoiceController : ControllerBase
     [HttpPost("")]
     public async Task<IActionResult> CreateInvoiceAsync(InvoiceCreateDto invoiceCreateDto)
     {
-        await _invoiceService.CreateInvoiceAsync(invoiceCreateDto);
-        return StatusCode(StatusCodes.Status201Created);
+        var createdInvoice = await _invoiceService.CreateInvoiceAsync(invoiceCreateDto);
+        return Ok(createdInvoice);
     }
     [HttpGet("")]
     public async Task<IActionResult> GetAllInvoices()

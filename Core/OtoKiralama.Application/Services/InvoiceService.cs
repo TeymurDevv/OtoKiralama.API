@@ -54,7 +54,7 @@ public class InvoiceService : IInvoiceService
 
         return _mapper.Map<List<InvoiceReturnDto>>(allInvoices);
     }
-    public async Task CreateInvoiceAsync(InvoiceCreateDto dto)
+    public async Task<InvoiceReturnDto> CreateInvoiceAsync(InvoiceCreateDto dto)
     {
         var userId = await _userResolverService.GetCurrentUserIdAsync();
         var existUser = await _userManager.Users.Include(u => u.Invoice).FirstOrDefaultAsync(u => u.Id == userId);
@@ -92,6 +92,7 @@ public class InvoiceService : IInvoiceService
         }
         existUser.Invoice = invoice;
         await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<InvoiceReturnDto>(existUser.Invoice);
     }
 
     public async Task UpdateInvoiceAsync(InvoiceUpdateDto dto)
