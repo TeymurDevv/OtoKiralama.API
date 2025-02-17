@@ -16,6 +16,8 @@ namespace OtoKiralama.Domain.Entities
         public bool IsPaid { get; set; }
         public bool IsCanceled { get; set; }
         public bool IsCompleted { get; set; }
+        public int? DropOfLocationId { get; set; }
+
         private ReservationStatus _status;
 
         public ReservationStatus Status
