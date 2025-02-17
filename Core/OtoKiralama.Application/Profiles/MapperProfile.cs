@@ -196,7 +196,7 @@ namespace OtoKiralama.Application.Profiles
                 .ForMember(dest => dest.TaxNumber, opt => opt.MapFrom(src => src.TaxNumber));
 
 
-            CreateMap<Invoice, InvoiceReturnDto>();
+            CreateMap<Invoice, InvoiceReturnDto>().ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.Name));
 
             CreateMap<IndividualInvoice, InvoiceReturnDto>().IncludeBase<Invoice, InvoiceReturnDto>();
             CreateMap<IndividualCompanyInvoice, InvoiceReturnDto>().IncludeBase<Invoice, InvoiceReturnDto>();

@@ -33,7 +33,7 @@ public class InvoiceService : IInvoiceService
     {
         var userId = await _userResolverService.GetCurrentUserIdAsync();
 
-        var existUser = await _userManager.Users.Include(u => u.Invoice).FirstOrDefaultAsync(u => u.Id == userId);
+        var existUser = await _userManager.Users.Include(u => u.Invoice).ThenInclude(i => i.Country).FirstOrDefaultAsync(u => u.Id == userId);
         if (existUser == null)
             throw new CustomException(404, "UserId", "User not found");
 
@@ -90,7 +90,7 @@ public class InvoiceService : IInvoiceService
                 await _unitOfWork.CorporateInvoiceRepository.Create(corporate);
                 break;
         }
-
+        existUser.Invoice = invoice;
         await _unitOfWork.SaveChangesAsync();
     }
 
