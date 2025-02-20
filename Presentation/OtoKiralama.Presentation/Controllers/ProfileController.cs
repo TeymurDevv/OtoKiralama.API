@@ -1,15 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OtoKiralama.Application.Dtos.Pagination;
-using OtoKiralama.Application.Dtos.Reservation;
 using OtoKiralama.Application.Dtos.User;
-using OtoKiralama.Application.Exceptions;
-using OtoKiralama.Domain.Entities;
-using OtoKiralama.Domain.Repositories;
-using System.Security.Claims;
 using OtoKiralama.Application.Interfaces;
 
 namespace OtoKiralama.Presentation.Controllers
@@ -24,7 +15,7 @@ namespace OtoKiralama.Presentation.Controllers
         {
             _profileService = profileService;
         }
-        
+
         [HttpGet("GetUserInformation")]
         [Authorize]
         public async Task<IActionResult> GetUserInformation()
@@ -41,7 +32,7 @@ namespace OtoKiralama.Presentation.Controllers
         }
         [HttpGet("GetUserReservations")]
         [Authorize]
-        public async Task<IActionResult> GetUserReservations(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetUserReservations(int pageNumber = 1, int pageSize = 10)
         {
             var reservations = await _profileService.GetUserReservations(pageNumber, pageSize);
             return Ok(reservations);

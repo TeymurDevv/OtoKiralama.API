@@ -14,6 +14,8 @@ namespace OtoKiralama.Application.Dtos.Reservation
         public double TotalPrice { get; set; }
         public bool IsPaid { get; set; }
         public bool IsCanceled { get; set; }
+        public string DropOfLocationName { get; set; }
+        public int DropOfLocationId { get; set; }
 
         // Rezervasyon Durumu
         public ReservationStatus Status
