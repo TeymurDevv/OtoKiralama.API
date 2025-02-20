@@ -18,6 +18,7 @@ namespace OtoKiralama.Application.Dtos.Reservation
         public int DropOfLocationId { get; set; }
         public string ReservationNumber { get; set; }
 
+
         // Rezervasyon Durumu
         public ReservationStatus Status
         {
