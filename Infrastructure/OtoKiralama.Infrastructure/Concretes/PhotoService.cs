@@ -8,7 +8,7 @@ using OtoKiralama.Application.Settings;
 
 namespace OtoKiralama.Infrastructure.Concretes
 {
-    public class PhotoService:IPhotoService
+    public class PhotoService : IPhotoService
     {
         private readonly Cloudinary _cloudinary;
 
@@ -44,7 +44,6 @@ namespace OtoKiralama.Infrastructure.Concretes
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Width(500).Height(500).Crop("fill")
                 };
 
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
