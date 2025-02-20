@@ -16,12 +16,15 @@ namespace OtoKiralama.Application.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUserResolverService _userResolverService;
 
-        public CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService)
+        public CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService, IUserResolverService userResolverService, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _photoService = photoService;
+            _userResolverService = userResolverService;
+            _userManager = userManager;
         }
 
         public async Task<CompanyReturnDto> GetCompanyByNameAsync(string name)
@@ -44,9 +47,13 @@ namespace OtoKiralama.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateCompanyAsync(int id, string userId, CompanyUpdateDto companyUpdateDto)
+        public async Task UpdateCompanyAsync(int id, CompanyUpdateDto companyUpdateDto)
         {
-            var existUser = await _userManager.FindByIdAsync(userId);
+            var existUserId = await _userResolverService.GetCurrentUserIdAsync();
+            if (existUserId is null)
+                throw new CustomException(404, "UserId", "User not found");
+
+            var existUser = await _userManager.FindByIdAsync(existUserId);
             if (existUser == null)
                 throw new CustomException(404, "UserId", "User not found");
 
@@ -89,23 +96,13 @@ namespace OtoKiralama.Application.Services
             }
             await _unitOfWork.SaveChangesAsync();
         }
-        public async Task DeleteCompanyAsyncs(int id)
+        public async Task DeleteCompanyAsync(int id)
         {
             var company = await _unitOfWork.CompanyRepository.GetEntity(c => c.Id == id);
             if (company is null)
                 throw new CustomException(404, "Id", "Company not found with this Id");
-            await _unitOfWork.CompanyRepository.Delete(company);
+
             await _photoService.DeletePhotoAsync(company.ImageUrl);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
-        public async Task DeleteCompanyAsync(int id)
-        {
-            var company = await _unitOfWork.CompanyRepository.GetEntity(b => b.Id == id);
-
-            if (company is null)
-                throw new CustomException(404, "Id", "Company not found with this Id");
-
             await _unitOfWork.CompanyRepository.Delete(company);
             await _unitOfWork.SaveChangesAsync();
         }

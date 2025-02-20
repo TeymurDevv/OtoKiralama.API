@@ -10,7 +10,7 @@ namespace OtoKiralama.Application.Interfaces
         Task<CompanyReturnDto> GetCompanyByNameAsync(string name);
         Task CreateCompanyAsync(CompanyCreateDto companyCreateDto);
         Task DeleteCompanyAsync(int id);
-        Task UpdateCompanyAsync(int id, string userId, CompanyUpdateDto companyUpdateDto);
+        Task UpdateCompanyAsync(int id, CompanyUpdateDto companyUpdateDto);
         Task UpdateCompanyFullAsync(int id, CompanyFullUpdateDto companyFullUpdateDto);
     }
 }

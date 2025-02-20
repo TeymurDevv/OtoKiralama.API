@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Interfaces;
-using OtoKiralama.Domain.Entities;
 
 namespace OtoKiralama.Presentation.Controllers
 {
@@ -11,12 +9,10 @@ namespace OtoKiralama.Presentation.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly UserManager<AppUser> _userManager;
 
-        public CompanyController(ICompanyService companyService, UserManager<AppUser> userManager)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _userManager = userManager;
         }
         [HttpGet("")]
         public async Task<IActionResult> GetAllCompanies(int pageNumber = 1, int pageSize = 10)
@@ -41,25 +37,25 @@ namespace OtoKiralama.Presentation.Controllers
             await _companyService.CreateCompanyAsync(companyCreateDto);
             return StatusCode(StatusCodes.Status201Created);
         }
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCompanyById(int id)
-        //{
-        //    List<AppUser> companyUsers = await _userManager
-        //        .Users
-        //        .Where(u => u.CompanyId == id)
-        //        .ToListAsync();
-        //    foreach (var user in companyUsers)
-        //    {
-        //        await _userManager.DeleteAsync(user);
-        //    }
-        //    await _companyService.DeleteCompanyAsync(id);
-        //    return StatusCode(StatusCodes.Status204NoContent);
-        //}
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCompanyById(int id)
+        {
+            await _companyService.DeleteCompanyAsync(id);
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCompany(int id, string userId, CompanyUpdateDto companyUpdateDto)
+        public async Task<IActionResult> UpdateCompany(int id, CompanyUpdateDto companyUpdateDto)
         {
-            await _companyService.UpdateCompanyAsync(id, userId, companyUpdateDto);
+            await _companyService.UpdateCompanyAsync(id, companyUpdateDto);
+            return NoContent();
+        }
+
+        [HttpPut("FullUpdate/{id}")]
+        public async Task<IActionResult> UpdateFullCompany(int id, CompanyFullUpdateDto companyFullUpdateDto)
+        {
+            await _companyService.UpdateCompanyFullAsync(id, companyFullUpdateDto);
             return NoContent();
         }
     }
