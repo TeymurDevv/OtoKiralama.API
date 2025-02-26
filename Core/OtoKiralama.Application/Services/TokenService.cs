@@ -26,7 +26,7 @@ namespace OtoKiralama.Application.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 SigningCredentials = credentials,
-                Expires = DateTime.UtcNow.AddSeconds(10),
+                Expires = DateTime.UtcNow.AddHours(1),
                 Subject = ci,
                 Audience = Audience,
                 Issuer = Issuer,

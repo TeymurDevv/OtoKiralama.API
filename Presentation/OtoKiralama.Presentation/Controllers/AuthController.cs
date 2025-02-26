@@ -52,7 +52,7 @@ namespace OtoKiralama.Presentation.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> ValidateToken([FromHeader] string Authorization)
         {
-            return Ok(await _authService.ValidateUserToken(Authorization));
+            return Ok(await _authService.ValidateToken(Authorization));
         }
         [HttpPost("ValidateAgentToken")]
         [Authorize(Roles = "companyAdmin,companyPersonel")]
@@ -61,7 +61,7 @@ namespace OtoKiralama.Presentation.Controllers
             return Ok(await _authService.ValidateUserToken(Authorization));
         }
         [HttpPost("ValidateUserToken")]
-        [Authorize(Roles = "Member")]
+        [Authorize(Roles = "member")]
         public async Task<IActionResult> ValidateUserToken([FromHeader] string Authorization)
         {
             return Ok(await _authService.ValidateUserToken(Authorization));

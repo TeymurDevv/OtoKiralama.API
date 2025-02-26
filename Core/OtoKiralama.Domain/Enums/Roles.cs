@@ -2,8 +2,8 @@ namespace OtoKiralama.Domain.Enums;
 
 public enum Roles
 {
-    Admin,
-    Member,
-    CompanyAdmin,
+    admin,
+    member,
+    companyAdmin,
     companyPersonel
 }
