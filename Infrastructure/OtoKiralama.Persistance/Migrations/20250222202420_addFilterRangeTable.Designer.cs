@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OtoKiralama.Persistance.Data;
 
@@ -11,9 +12,11 @@ using OtoKiralama.Persistance.Data;
 namespace OtoKiralama.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250222202420_addFilterRangeTable")]
+    partial class addFilterRangeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +179,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 24, 13, 13, 28, 731, DateTimeKind.Local).AddTicks(1648));
+                        .HasDefaultValue(new DateTime(2025, 2, 23, 0, 24, 19, 0, DateTimeKind.Local).AddTicks(9831));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -310,8 +313,8 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<int>("DeliveryTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("DepositAmount")
-                        .HasColumnType("float");
+                    b.Property<int>("DepositAmount")
+                        .HasColumnType("int");
 
                     b.Property<int>("FuelId")
                         .HasColumnType("int");
@@ -336,8 +339,8 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<bool>("IsReserved")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("Limit")
-                        .HasColumnType("float");
+                    b.Property<int?>("Limit")
+                        .HasColumnType("int");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -427,7 +430,7 @@ namespace OtoKiralama.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 2, 24, 13, 13, 28, 739, DateTimeKind.Local).AddTicks(9509));
+                        .HasDefaultValue(new DateTime(2025, 2, 23, 0, 24, 19, 13, DateTimeKind.Local).AddTicks(3020));
 
                     b.Property<string>("Essentials")
                         .HasColumnType("nvarchar(max)");
@@ -495,11 +498,13 @@ namespace OtoKiralama.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("MaxValue")
-                        .HasColumnType("float");
+                    b.Property<decimal>("MaxValue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("MinValue")
-                        .HasColumnType("float");
+                    b.Property<decimal>("MinValue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");

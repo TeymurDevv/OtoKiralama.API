@@ -19,7 +19,8 @@
         IIndividualCompanyInvoiceRepository IndividualCompanyInvoiceRepository { get; }
         ICorporateInvoiceRepository CorporateInvoiceRepository { get; }
         ICountryRepository CountryRepository { get; }
-        
+        IFilterRangeRepository FilterRangeRepository { get; }
+
 
 
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);

@@ -1,4 +1,5 @@
 ﻿using OtoKiralama.Application.Dtos.Car;
+using OtoKiralama.Application.Dtos.Car.CarSearchDtos;
 using OtoKiralama.Application.Dtos.Pagination;
 
 namespace OtoKiralama.Application.Interfaces
@@ -14,7 +15,7 @@ namespace OtoKiralama.Application.Interfaces
 
         Task<List<CarListItemDto>> GetAllFilteredCarsAsync(int pickupLocationId, int? dropoffLocationId, DateTime startDate,
             DateTime endDate);
-        Task<List<CarListItemDto>> GetAllFilteredListCarsAsync(CarSearchListDto carSearchListDto);
+        Task<CarSearchResultDto> SearchCarsAsync(CarSearchListDto carSearchListDto);
 
         Task UpdateCarAsync(int id, string userId, CarUpdateDto carUpdateDto);
 

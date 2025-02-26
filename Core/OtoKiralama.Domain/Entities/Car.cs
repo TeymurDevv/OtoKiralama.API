@@ -29,10 +29,10 @@ namespace OtoKiralama.Domain.Entities
 
         //yeni yaradilan entitiler
         public bool IsLimited { get; set; } = false;
-        public int? Limit { get; set; }
+        public double? Limit { get; set; }
         public int DeliveryTypeId { get; set; }
         public DeliveryType DeliveryType { get; set; }
-        public int DepositAmount { get; set; }
+        public double DepositAmount { get; set; }
 
 
         // Rezervasyonlar

@@ -24,8 +24,10 @@ namespace OtoKiralama.Persistance.Data.Implementations
             IIndividualInvoiceRepository individualInvoiceRepository,
             IIndividualCompanyInvoiceRepository individualCompanyInvoiceRepository,
             ICorporateInvoiceRepository corporateInvoiceRepository,
-            ICountryRepository countryRepository
-            
+            ICountryRepository countryRepository,
+            IFilterRangeRepository filterRangeRepository
+
+
             )
         {
             _context = context;
@@ -46,8 +48,9 @@ namespace OtoKiralama.Persistance.Data.Implementations
             IndividualCompanyInvoiceRepository = individualCompanyInvoiceRepository;
             CorporateInvoiceRepository = corporateInvoiceRepository;
             CountryRepository = countryRepository;
+            FilterRangeRepository = filterRangeRepository;
         }
-
+        public IFilterRangeRepository FilterRangeRepository { get; private set; }
         public ILocationRepository LocationRepository { get; private set; }
         public IBrandRepository BrandRepository { get; private set; }
         public IGearRepository GearRepository { get; private set; }

@@ -69,7 +69,7 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("SearchAll")]
         public async Task<IActionResult> SearchCarsAll(CarSearchListDto carSearchListDto)
         {
-            return Ok(await _carService.GetAllFilteredListCarsAsync(carSearchListDto));
+            return Ok(await _carService.SearchCarsAsync(carSearchListDto));
         }
     }
 }

@@ -26,6 +26,7 @@ namespace OtoKiralama.Persistance
             services.AddScoped<IIndividualCompanyInvoiceRepository, IndividualCompanyInvoiceRepository>();
             services.AddScoped<ICorporateInvoiceRepository, CorporateInvoiceRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IFilterRangeRepository, FilterRangeRepository>();
         }
     }
 }

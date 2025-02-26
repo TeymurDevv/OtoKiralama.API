@@ -16,10 +16,11 @@ namespace OtoKiralama.Application.Dtos.Car
         public int SeatCount { get; set; }
         public double DailyPrice { get; set; }
         public int Year { get; set; }
-        public bool IsInstantConfirm { get; set; } // Rezervasyon onayı gerekli mi?
-        public bool IsFreeRefund { get; set; } // İptal durumunda ücretsiz geri ödeme var mı?
-        public bool IsActive { get; set; } // Araç aktif mi, kullanıma hazır mı?
-        public bool IsReserved { get; set; } // Şu anda rezervasyonlu mu?
+        public bool IsInstantConfirm { get; set; }  // Rezervasyon onayı lazım olub-olmaması
+        public bool IsFreeRefund { get; set; }  // İptal üçün ödəniş olub-olmaması
+        public bool IsActive { get; set; }
+        public bool IsReserved { get; set; }
+
         public BodyReturnDto Body { get; set; }
         public ModelReturnDto Model { get; set; }
         public ClassReturnDto Class { get; set; }
@@ -27,11 +28,10 @@ namespace OtoKiralama.Application.Dtos.Car
         public GearReturnDto Gear { get; set; }
         public LocationReturnDto Location { get; set; }
         public CompanyReturnDto Company { get; set; }
+        public DeliveryTypeReturnDto DeliveryType { get; set; }
 
-        //yeni yaradilan entitiler
+        public int DepositAmount { get; set; }
         public bool IsLimited { get; private set; } = false;
         public int? Limit { get; private set; }
-        public DeliveryTypeReturnDto DeliveryType { get; set; }
-        public int DepositAmount { get; set; }
     }
 }

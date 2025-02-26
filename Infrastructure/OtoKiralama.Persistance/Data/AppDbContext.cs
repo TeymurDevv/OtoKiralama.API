@@ -39,7 +39,7 @@ namespace OtoKiralama.Persistance.Data
                 .WithMany(u => u.Reservations)
                 .HasForeignKey(r => r.AppUserId);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            
+
             // TPT (Table-per-Type) Inheritance istifadə edirik
             modelBuilder.Entity<IndividualInvoice>().ToTable("IndividualInvoices");
             modelBuilder.Entity<CorporateInvoice>().ToTable("CorporateInvoices");
@@ -68,7 +68,8 @@ namespace OtoKiralama.Persistance.Data
         public DbSet<Subscriber> Subscribers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Country> Countries { get; set; }
-        
+        public DbSet<FilterRange> FilterRanges { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
