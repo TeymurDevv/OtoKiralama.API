@@ -71,6 +71,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
