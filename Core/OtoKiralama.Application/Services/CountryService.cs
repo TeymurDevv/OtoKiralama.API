@@ -40,7 +40,7 @@ namespace OtoKiralama.Application.Services
             return new PagedResponse<CountryListItemDto>
             {
                 Data = _mapper.Map<List<CountryListItemDto>>(countries),
-                TotalCount = 10,
+                TotalCount = totalCountries,
                 PageSize = pageSize,
                 CurrentPage = pageNumber
             };

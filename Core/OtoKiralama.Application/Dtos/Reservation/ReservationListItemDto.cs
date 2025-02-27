@@ -11,12 +11,12 @@ namespace OtoKiralama.Application.Dtos.Reservation
         public UserReturnDto User { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string ReservationNumber { get; set; }
         public double TotalPrice { get; set; }
         public bool IsPaid { get; set; }
         public bool IsCanceled { get; set; }
         public string DropOfLocationName { get; set; }
         public int DropOfLocationId { get; set; }
-        public string ReservationNumber { get; set; }
 
 
         // Rezervasyon Durumu
