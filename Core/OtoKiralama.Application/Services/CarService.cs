@@ -274,19 +274,39 @@ namespace OtoKiralama.Application.Services
 
         public async Task<CarSearchResultDto> SearchCarsAsync(CarSearchListDto carSearchListDto)
         {
+            var pickupLocation = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == carSearchListDto.PickupLocationId);
+            if (pickupLocation is null)
+                throw new CustomException(404, "Id", "PickupLocation not found");
+
+            carSearchListDto.DropoffLocationId ??= pickupLocation.Id;
+
+            var dropoffLocation = await _unitOfWork.LocationRepository.GetEntity(l => l.Id == carSearchListDto.DropoffLocationId);
+            if (dropoffLocation is null)
+                throw new CustomException(404, "Id", "DropoffLocation not found");
+
             var mainQuery = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Model).ThenInclude(m => m.CarPhoto)
+                predicate: c => c.LocationId == pickupLocation.Id &&
+                                !c.IsReserved &&
+                                !c.Reservations.Any(b => (carSearchListDto.FromDate >= b.StartDate && carSearchListDto.FromDate <= b.EndDate) ||
+                                                         (carSearchListDto.ToDate >= b.StartDate && carSearchListDto.ToDate <= b.EndDate) ||
+                                                         (carSearchListDto.FromDate <= b.StartDate && carSearchListDto.ToDate >= b.EndDate)),
+                includes: query => query
+                .Include(c => c.Model)
+                    .ThenInclude(m => m.Brand)
+                    .Include(c => c.Model)
+                    .ThenInclude(m => m.CarPhoto)
+                    .Include(c => c.Body)
+                    .Include(c => c.Class)
                     .Include(c => c.Fuel)
                     .Include(c => c.Gear)
                     .Include(c => c.Location)
                     .Include(c => c.Company)
                     .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
             );
 
             mainQuery = mainQuery.Where(c => c.IsActive && !c.IsReserved);
+
+            var originalQuery = mainQuery;
 
             if (carSearchListDto.BrandIds?.Any() == true)
                 mainQuery = mainQuery.Where(c => carSearchListDto.BrandIds.Contains(c.Model.Brand.Id));
@@ -345,47 +365,33 @@ namespace OtoKiralama.Application.Services
             var result = new CarSearchResultDto
             {
                 Cars = mappedCars,
-                FilterCounts = await CalculateFilterCountsAsync(carSearchListDto)
+                FilterCounts = await CalculateFilterCountsAsync(carSearchListDto, originalQuery)
             };
 
             return result;
         }
-        private async Task<CarFilterCountsDto> CalculateFilterCountsAsync(CarSearchListDto dto)
+        private async Task<CarFilterCountsDto> CalculateFilterCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
             var filterCounts = new CarFilterCountsDto
             {
-                GearCounts = await CalculateGearCountsAsync(dto),
-                CompanyCounts = await CalculateCompanyCountsAsync(dto),
-                FuelCounts = await CalculateFuelCountsAsync(dto),
-                BrandCounts = await CalculateBrandCountsAsync(dto),
-                ModelCounts = await CalculateModelCountsAsync(dto),
-                DeliveryTypeCounts = await CalculateDeliveryTypeCountsAsync(dto),
-                ClassCounts = await CaculateClasCountsAsync(dto),
+                GearCounts = await CalculateGearCountsAsync(dto, query),
+                CompanyCounts = await CalculateCompanyCountsAsync(dto, query),
+                FuelCounts = await CalculateFuelCountsAsync(dto, query),
+                BrandCounts = await CalculateBrandCountsAsync(dto, query),
+                ModelCounts = await CalculateModelCountsAsync(dto, query),
+                DeliveryTypeCounts = await CalculateDeliveryTypeCountsAsync(dto, query),
+                ClassCounts = await CaculateClasCountsAsync(dto, query),
 
-                DepositRangeCounts = await CalculateRangeCountsAsync(dto, FilterRangeType.Deposit),
-                LimitRangeCounts = await CalculateRangeCountsAsync(dto, FilterRangeType.Limit),
-                DailyPriceRangeCounts = await CalculateRangeCountsAsync(dto, FilterRangeType.Price)
+                DepositRangeCounts = await CalculateRangeCountsAsync(dto, query, FilterRangeType.Deposit),
+                LimitRangeCounts = await CalculateRangeCountsAsync(dto, query, FilterRangeType.Limit),
+                DailyPriceRangeCounts = await CalculateRangeCountsAsync(dto, query, FilterRangeType.Price)
             };
 
             return filterCounts;
         }
-        private async Task<List<FilterCountDto>> CalculateGearCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateGearCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            // 1) Yenidən bazadan query götürürük, eynilə SearchCarsAsync-dəki includes-lər
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
-
-            // 2) BÜTÜN digər filtrləri tətbiq edirik, AMMA GearIds-i yox!
             // Brand
             if (dto.BrandIds?.Any() == true)
                 query = query.Where(c => dto.BrandIds.Contains(c.Model.Brand.Id));
@@ -446,23 +452,9 @@ namespace OtoKiralama.Application.Services
 
             return gearCounts;
         }
-
-        private async Task<List<FilterCountDto>> CaculateClasCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CaculateClasCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
-
-            // 2) BÜTÜN digər filtrləri tətbiq edirik, AMMA classIds-i yox!
             // Gear
             if (dto.GearIds?.Any() == true)
                 query = query.Where(c => dto.GearIds.Contains(c.GearId));
@@ -523,20 +515,9 @@ namespace OtoKiralama.Application.Services
 
             return classCounts;
         }
-        private async Task<List<FilterCountDto>> CalculateBrandCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateBrandCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
 
             // Class
             if (dto.ClassIds?.Any() == true)
@@ -579,25 +560,9 @@ namespace OtoKiralama.Application.Services
 
             return brandCounts;
         }
-        private async Task<List<FilterRangeCountDto>> CalculateRangeCountsAsync(CarSearchListDto dto, FilterRangeType type)
+        private async Task<List<FilterRangeCountDto>> CalculateRangeCountsAsync(CarSearchListDto dto, IQueryable<Car> query, FilterRangeType type)
         {
-            // 1) Yenidən query al
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
-            query = query.Where(c => c.IsActive && !c.IsReserved);
 
-            // 2) Qalan filtrləri tətbiq edirik, AMMA öz range filterini yox
-            // Məsələn, əgər type = FilterRangeType.Price isə, dailyPriceRangeId tətbiq etmirik!
-            // Amma brand, gear, fuel, depositRange, seatCounts, ... hamısı qalır.
-            // Class
             if (dto.ClassIds?.Any() == true)
                 query = query.Where(c => dto.ClassIds.Contains(c.ClassId));
             // brand
@@ -676,22 +641,9 @@ namespace OtoKiralama.Application.Services
 
             return result;
         }
-        private async Task<List<FilterCountDto>> CalculateCompanyCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateCompanyCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
-
-            // Bütün filtrlər tətbiq, AMMA companyIds yox!
             // Class
             if (dto.ClassIds?.Any() == true)
                 query = query.Where(c => dto.ClassIds.Contains(c.ClassId));
@@ -753,22 +705,9 @@ namespace OtoKiralama.Application.Services
 
             return companyCounts;
         }
-        private async Task<List<FilterCountDto>> CalculateFuelCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateFuelCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
-
-            // Bütün filtrlər, AMMA FuelIds olmadan
             if (dto.ClassIds?.Any() == true)
                 query = query.Where(c => dto.ClassIds.Contains(c.ClassId));
 
@@ -828,20 +767,9 @@ namespace OtoKiralama.Application.Services
 
             return fuelCounts;
         }
-        private async Task<List<FilterCountDto>> CalculateModelCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateModelCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
 
-            query = query.Where(c => c.IsActive && !c.IsReserved);
 
             // Bütün filtrlər, AMMA ModelIds yox
             if (dto.ClassIds?.Any() == true)
@@ -898,20 +826,8 @@ namespace OtoKiralama.Application.Services
 
             return modelCounts;
         }
-        private async Task<List<FilterCountDto>> CalculateDeliveryTypeCountsAsync(CarSearchListDto dto)
+        private async Task<List<FilterCountDto>> CalculateDeliveryTypeCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
         {
-            var query = await _unitOfWork.CarRepository.GetQuery(
-                includes: q => q
-                    .Include(c => c.Model).ThenInclude(m => m.Brand)
-                    .Include(c => c.Fuel)
-                    .Include(c => c.Gear)
-                    .Include(c => c.Location)
-                    .Include(c => c.Company)
-                    .Include(c => c.DeliveryType)
-                    .Include(c => c.Class)
-            );
-
-            query = query.Where(c => c.IsActive && !c.IsReserved);
 
             // Bütün filtrlər, AMMA DeliveryTypeIds yox
             if (dto.ClassIds?.Any() == true)
