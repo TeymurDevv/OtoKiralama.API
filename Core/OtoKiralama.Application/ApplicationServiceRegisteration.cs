@@ -1,14 +1,11 @@
-﻿using System.Configuration;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Services;
-using OtoKiralama.Application.Settings;
 using OtoKiralama.Application.Validators.BrandValidator;
 using Stripe;
 using ZiggyCreatures.Caching.Fusion;
@@ -43,6 +40,7 @@ namespace OtoKiralama.Application
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IFilterRangeService, FilterRangeService>();
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters()
                 .AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
@@ -57,9 +55,9 @@ namespace OtoKiralama.Application
                 });
             services.AddResponseCompression(opt =>
             {
-                    opt.EnableForHttps = true;
-                    opt.Providers.Add<BrotliCompressionProvider>();
-                    opt.Providers.Add<GzipCompressionProvider>();            
+                opt.EnableForHttps = true;
+                opt.Providers.Add<BrotliCompressionProvider>();
+                opt.Providers.Add<GzipCompressionProvider>();
             });
             services.AddScoped<ProductService>();
             services.AddScoped<ChargeService>();

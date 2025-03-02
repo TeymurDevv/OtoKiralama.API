@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using OtoKiralama.Application.Dtos.DeliveryType;
-using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Pagination;
 using OtoKiralama.Application.Exceptions;
 using OtoKiralama.Application.Interfaces;
@@ -72,13 +71,13 @@ namespace OtoKiralama.Application.Services
             if (existedDeliveryType is null)
                 throw new CustomException(404, "DeliveryType", "Not found");
             var isExistedDeliveryType = await _unitOfWork.DeliveryTypeRepository.isExists(s => s.Name.ToLower() == deliveryTypeUpdateDto.Name.ToLower());
-                if (isExistedDeliveryType)
-                    throw new CustomException(400, "Name", "This DeliveryType name already exists");
-                
-            
-            _mapper.Map(deliveryTypeUpdateDto,existedDeliveryType);
+            if (isExistedDeliveryType)
+                throw new CustomException(400, "Name", "This DeliveryType name already exists");
+
+
+            _mapper.Map(deliveryTypeUpdateDto, existedDeliveryType);
             await _unitOfWork.SaveChangesAsync();
         }
-        
+
     }
 }

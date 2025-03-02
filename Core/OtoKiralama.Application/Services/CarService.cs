@@ -381,6 +381,7 @@ namespace OtoKiralama.Application.Services
                 ModelCounts = await CalculateModelCountsAsync(dto, query),
                 DeliveryTypeCounts = await CalculateDeliveryTypeCountsAsync(dto, query),
                 ClassCounts = await CaculateClasCountsAsync(dto, query),
+                SeatCounts = await CalculateSeatCountsAsync(dto, query),
 
                 DepositRangeCounts = await CalculateRangeCountsAsync(dto, query, FilterRangeType.Deposit),
                 LimitRangeCounts = await CalculateRangeCountsAsync(dto, query, FilterRangeType.Limit),
@@ -884,6 +885,67 @@ namespace OtoKiralama.Application.Services
 
             return deliveryTypeCounts;
         }
+
+        private async Task<List<FilterCountDto>> CalculateSeatCountsAsync(CarSearchListDto dto, IQueryable<Car> query)
+        {
+
+
+            // Bütün filtrlər, AMMA ModelIds yox
+            if (dto.ClassIds?.Any() == true)
+                query = query.Where(c => dto.ClassIds.Contains(c.ClassId));
+            if (dto.GearIds?.Any() == true)
+                query = query.Where(c => dto.GearIds.Contains(c.GearId));
+            if (dto.CompanyIds?.Any() == true)
+                query = query.Where(c => dto.CompanyIds.Contains(c.CompanyId));
+            if (dto.FuelIds?.Any() == true)
+                query = query.Where(c => dto.FuelIds.Contains(c.FuelId));
+            if (dto.BrandIds?.Any() == true)
+                query = query.Where(c => dto.BrandIds.Contains(c.Model.Brand.Id));
+            if (dto.DeliveryTypeIds?.Any() == true)
+                query = query.Where(c => dto.DeliveryTypeIds.Contains(c.DeliveryTypeId));
+            if (dto.ModelIds?.Any() == true)
+                query = query.Where(c => dto.ModelIds.Contains(c.ModelId));
+
+            // Range-lər
+            if (dto.LimitRangeId.HasValue)
+            {
+                var limitRange = await _unitOfWork.FilterRangeRepository.GetEntity(r => r.Id == dto.LimitRangeId.Value);
+                if (limitRange != null)
+                {
+                    query = query.Where(c => c.Limit >= limitRange.MinValue && c.Limit <= limitRange.MaxValue);
+                }
+            }
+            if (dto.DailyPriceRangeId.HasValue)
+            {
+                var priceRange = await _unitOfWork.FilterRangeRepository.GetEntity(r => r.Id == dto.DailyPriceRangeId.Value);
+                if (priceRange != null)
+                {
+                    query = query.Where(c => c.DailyPrice >= priceRange.MinValue && c.DailyPrice <= priceRange.MaxValue);
+                }
+            }
+            if (dto.DepositAmountRangeId.HasValue)
+            {
+                var depositRange = await _unitOfWork.FilterRangeRepository.GetEntity(r => r.Id == dto.DepositAmountRangeId.Value);
+                if (depositRange != null)
+                {
+                    query = query.Where(c => c.DepositAmount >= depositRange.MinValue && c.DepositAmount <= depositRange.MaxValue);
+                }
+            }
+
+
+            var modelCounts = await query
+                .GroupBy(c => c.SeatCount)
+                .Select(g => new FilterCountDto
+                {
+                    Id = g.First().SeatCount,
+                    Name = g.First().SeatCount.ToString(),
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            return modelCounts;
+        }
+
 
 
 

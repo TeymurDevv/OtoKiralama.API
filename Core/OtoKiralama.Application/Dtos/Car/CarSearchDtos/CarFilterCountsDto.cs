@@ -9,6 +9,7 @@
         public List<FilterCountDto> ModelCounts { get; set; }
         public List<FilterCountDto> DeliveryTypeCounts { get; set; }
         public List<FilterCountDto> ClassCounts { get; set; }
+        public List<FilterCountDto> SeatCounts { get; set; }
 
         // Range-lərə görə saylar
         public List<FilterRangeCountDto> DepositRangeCounts { get; set; }
