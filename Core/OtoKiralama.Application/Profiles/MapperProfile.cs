@@ -8,6 +8,7 @@ using OtoKiralama.Application.Dtos.Class;
 using OtoKiralama.Application.Dtos.Company;
 using OtoKiralama.Application.Dtos.Country;
 using OtoKiralama.Application.Dtos.DeliveryType;
+using OtoKiralama.Application.Dtos.FilterRange;
 using OtoKiralama.Application.Dtos.Fuel;
 using OtoKiralama.Application.Dtos.Gear;
 using OtoKiralama.Application.Dtos.IndividualInvoice;
@@ -210,6 +211,11 @@ namespace OtoKiralama.Application.Profiles
             CreateMap<Country, CountryListItemDto>();
             CreateMap<CountryUpdateDto, Country>();
             CreateMap<Country, CountryReturnDto>();
+
+            //Filter Range mapping
+            CreateMap<FilterRangeCreateDto, FilterRange>();
+            CreateMap<FilterRange, FilterRangeReturnDto>();
+            CreateMap<FilterRangeUpdateDto, FilterRange>();
         }
     }
 }

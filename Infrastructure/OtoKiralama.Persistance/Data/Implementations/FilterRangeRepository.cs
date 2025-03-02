@@ -1,7 +1,6 @@
-﻿using OtoKiralama.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using OtoKiralama.Domain.Entities;
 using OtoKiralama.Domain.Repositories;
-using System.Data.Entity;
-
 namespace OtoKiralama.Persistance.Data.Implementations
 {
     internal class FilterRangeRepository : Repository<FilterRange>, IFilterRangeRepository
