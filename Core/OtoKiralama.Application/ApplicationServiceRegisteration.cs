@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using OtoKiralama.Application.BackgroundServices;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Services;
 using OtoKiralama.Application.Validators.BrandValidator;
@@ -63,6 +65,7 @@ namespace OtoKiralama.Application
             services.AddScoped<ChargeService>();
             services.AddScoped<CustomerService>();
             services.AddScoped<Stripe.Issuing.TokenService>();
+           services.AddHostedService<ReservationDeleteBackgroundService>();
         }
     }
 }
