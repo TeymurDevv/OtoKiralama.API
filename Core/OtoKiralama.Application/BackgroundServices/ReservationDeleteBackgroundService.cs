@@ -21,11 +21,10 @@ namespace OtoKiralama.Application.BackgroundServices
                 try
                 {
                     DateTime now = DateTime.Now;
-                    if (now.Day == 1)
-                    {
-                        _logger.LogInformation("Triggering ReservationDeleteBackgroundService for All reservations.");
-                        await DeleteAllUnPaidReservations(stoppingToken);
-                    }
+                    
+                    _logger.LogInformation("Triggering ReservationDeleteBackgroundService for All reservations.");
+                    await DeleteAllUnPaidReservations(stoppingToken);
+                    
 
                     await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken); 
 
