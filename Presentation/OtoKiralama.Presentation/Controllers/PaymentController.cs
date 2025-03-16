@@ -16,9 +16,9 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("Pay")]
-    public IActionResult Pay(PaymentRequestDto paymentRequestDto)
+    public async Task<IActionResult> Pay(PaymentRequestDto paymentRequestDto)
     {
-        _paymentService.Pay(paymentRequestDto);
+        await _paymentService.Pay(paymentRequestDto);
         return Ok();
     }
 }

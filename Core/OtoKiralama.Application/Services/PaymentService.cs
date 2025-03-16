@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using OtoKiralama.Application.Dtos.Payment;
 using OtoKiralama.Application.Exceptions;
-using Microsoft.Extensions.Options;
 using OtoKiralama.Application.Interfaces;
 using OtoKiralama.Application.Settings;
 using OtoKiralama.Domain.Entities;
