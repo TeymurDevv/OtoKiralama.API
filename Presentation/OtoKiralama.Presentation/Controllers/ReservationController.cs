@@ -29,8 +29,8 @@ namespace OtoKiralama.Presentation.Controllers
         [HttpPost("")]
         public async Task<IActionResult> CreateReservation(ReservationCreateDto reservationCreateDto)
         {
-            await _reservationService.CreateReservationAsync(reservationCreateDto);
-            return StatusCode(StatusCodes.Status201Created);
+            int reservationId =  await _reservationService.CreateReservationAsync(reservationCreateDto);
+            return StatusCode(StatusCodes.Status201Created,reservationId);
         }
 
         [HttpDelete("{id}")]

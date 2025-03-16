@@ -83,7 +83,7 @@ namespace OtoKiralama.Application.Services
             }
         }
 
-        public async Task CreateReservationAsync(ReservationCreateDto reservationCreateDto)
+        public async Task<int> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
             await _unitOfWork.BeginTransactionAsync();
             try
@@ -115,12 +115,13 @@ namespace OtoKiralama.Application.Services
 
                 reservation.ReservationNumber = $"{currentYear}-{nextNumber:D6}";
 
-                reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays * existCarEntity.DailyPrice;
+                reservation.TotalPrice = (reservation.EndDate - reservation.StartDate).TotalDays + 1 * existCarEntity.DailyPrice;
                 existCarEntity.IsReserved = true;
 
                 await _unitOfWork.ReservationRepository.Create(reservation);
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitTransactionAsync();
+                return reservation.Id;
             }
             catch
             {

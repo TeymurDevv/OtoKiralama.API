@@ -7,7 +7,7 @@ namespace OtoKiralama.Application.Interfaces
     {
         Task<PagedResponse<ReservationListItemDto>> GetAllReservationsAsync(int pageNumber, int pageSize);
         Task<ReservationReturnDto> GetReservationByIdAsync(int id);
-        Task CreateReservationAsync(ReservationCreateDto reservationCreateDto);
+        Task<int> CreateReservationAsync(ReservationCreateDto reservationCreateDto);
         Task DeleteReservationAsync(int id);
         Task CancelReservation(int id);
         Task CompleteReservation(int id);
